@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Pwn学习</title>
+      <link href="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="第一节：可执行文件、ELF文件结构"><a href="#第一节：可执行文件、ELF文件结构" class="headerlink" title="第一节：可执行文件、ELF文件结构"></a>第一节：可执行文件、ELF文件结构</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络安全 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Pwn </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF中SQL注入writeup</title>
       <link href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/"/>
       <url>/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/</url>
