@@ -173,11 +173,11 @@
 <p>虚拟内存<strong>用户空间</strong>每个进程一份</p>
 <p>虚拟内存<strong>内核空间</strong>所有进程共享一份</p>
 <p>虚拟内存mmap段中的<strong>动态链接库</strong>仅在物理内存中装载一份</p>
-<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><style>.koiqsqdjlnur{zoom: 50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116153505516.png" class="koiqsqdjlnur" alt="image-20241116153505516">
+<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><style>.qmisfxnovhmw{zoom: 50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116153505516.png" class="qmisfxnovhmw" alt="image-20241116153505516">
 
 <p>x86-LInux    一共4GB（整个4GB对应内存中的ELF）</p>
 <p>用户空间分3GB，1GB共享内核空间。（节省资源的目的） </p>
-<style>.gkobgnjhfnzy{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116154309783.png" class="gkobgnjhfnzy" alt="image-20241116154309783">
+<style>.cxjdnklzfmsf{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116154309783.png" class="cxjdnklzfmsf" alt="image-20241116154309783">
 
 <h5 id="段与节"><a href="#段与节" class="headerlink" title="段与节"></a>段与节</h5><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116231329387.png" class="" title="image-20241116231329387">
 
@@ -200,19 +200,19 @@
 <h1 id="第四节：装载与汇编"><a href="#第四节：装载与汇编" class="headerlink" title="第四节：装载与汇编"></a>第四节：装载与汇编</h1><p>汇编这个，课堂任务，懒得写</p>
 <p>装载这个，没学会，写不出来</p>
 <h1 id="第五节：栈溢出基础"><a href="#第五节：栈溢出基础" class="headerlink" title="第五节：栈溢出基础"></a>第五节：栈溢出基础</h1><h3 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h3><p>研究的是x86嗷</p>
-<style>.ptfqtvvbhwuz{zoom: 67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141336080.png" class="ptfqtvvbhwuz" alt="image-20241117141336080"><img src="C:Pwn学习/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;" />
+<style>.mlrapgwemnkz{zoom: 67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141336080.png" class="mlrapgwemnkz" alt="image-20241117141336080"><img src="C:Pwn学习/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;" />
 
 
 
 
 
-<style>.gkzfqhmhcrll{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143029165.png" class="gkzfqhmhcrll" alt="image-20241117143029165"><style>.unynfoeaybrr{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143135103.png" class="unynfoeaybrr" alt="image-20241117143135103">
+<style>.uihoupwhqvzk{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143029165.png" class="uihoupwhqvzk" alt="image-20241117143029165"><style>.wlwtpxpdalbd{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143135103.png" class="wlwtpxpdalbd" alt="image-20241117143135103">
 
 
 
 
 
-<style>.qzeuujslnqte{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143257088.png" class="qzeuujslnqte" alt="image-20241117143257088"><style>.srnedleeluxr{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143429165.png" class="srnedleeluxr" alt="image-20241117143429165">
+<style>.grgpoxcwybnd{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143257088.png" class="grgpoxcwybnd" alt="image-20241117143257088"><style>.nwyloabpunjx{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143429165.png" class="nwyloabpunjx" alt="image-20241117143429165">
 
 
 
