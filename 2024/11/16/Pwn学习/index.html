@@ -173,11 +173,11 @@
 <p>虚拟内存<strong>用户空间</strong>每个进程一份</p>
 <p>虚拟内存<strong>内核空间</strong>所有进程共享一份</p>
 <p>虚拟内存mmap段中的<strong>动态链接库</strong>仅在物理内存中装载一份</p>
-<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><style>.qljlwyzvfeue{zoom: 50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116153505516.png" class="qljlwyzvfeue" alt="image-20241116153505516">
+<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><style>.diixtdlfkeri{zoom: 50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116153505516.png" class="diixtdlfkeri" alt="image-20241116153505516">
 
 <p>x86-LInux（32位的进程虚拟地址空间）    一共4GB（整个4GB对应内存中的ELF）</p>
 <p>用户空间分3GB，1GB共享内核空间。（节省资源的目的） </p>
-<style>.wcysryhcjcbc{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116154309783.png" class="wcysryhcjcbc" alt="image-20241116154309783">
+<style>.qyeqcfvdobbd{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241116154309783.png" class="qyeqcfvdobbd" alt="image-20241116154309783">
 
 
 
@@ -203,19 +203,19 @@
 <h1 id="第四节：装载与汇编"><a href="#第四节：装载与汇编" class="headerlink" title="第四节：装载与汇编"></a>第四节：装载与汇编</h1><p>汇编这个，课堂任务，懒得写</p>
 <p>装载这个，没学会，写不出来</p>
 <h1 id="第五节：栈溢出基础"><a href="#第五节：栈溢出基础" class="headerlink" title="第五节：栈溢出基础"></a>第五节：栈溢出基础</h1><h3 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h3><p>研究的是x86嗷</p>
-<style>.egxocecyjdqs{zoom: 67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141336080.png" class="egxocecyjdqs" alt="image-20241117141336080"><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;">
+<style>.lnstnbcdpumn{zoom: 67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141336080.png" class="lnstnbcdpumn" alt="image-20241117141336080"><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;">
 
 
 
 
 
-<style>.lndxmhdyesuy{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143029165.png" class="lndxmhdyesuy" alt="image-20241117143029165"><style>.ospoctxakxry{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143135103.png" class="ospoctxakxry" alt="image-20241117143135103">
+<style>.eteoeirujhcy{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143029165.png" class="eteoeirujhcy" alt="image-20241117143029165"><style>.oukyxnmekpei{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143135103.png" class="oukyxnmekpei" alt="image-20241117143135103">
 
 
 
 
 
-<style>.yzsmupdifndr{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143257088.png" class="yzsmupdifndr" alt="image-20241117143257088"><style>.bpvuhqolgwtg{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143429165.png" class="bpvuhqolgwtg" alt="image-20241117143429165">
+<style>.rnicmmvejgvb{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143257088.png" class="rnicmmvejgvb" alt="image-20241117143257088"><style>.krbtxcdqnrli{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241117143429165.png" class="krbtxcdqnrli" alt="image-20241117143429165">
 
 
 
@@ -361,14 +361,14 @@
 <p>不过，有这些程序片段也是可以的。</p>
 <p>这就是<strong>ROP</strong></p>
 <p><strong>让分离的代码连续执行，达到对应的效果</strong></p>
-<style>.zyckqopsqzgl{zoom:67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241127094818640.png" class="zyckqopsqzgl" alt="image-20241127094818640">
+<style>.hjdybzwhujlv{zoom:67%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241127094818640.png" class="hjdybzwhujlv" alt="image-20241127094818640">
 
 <p>左边是程序执行的过程。原来的基础栈溢出只需要返回到后门函数或是某一个特定位置就可以了。</p>
 <p>如今这个返回地址是一个<strong>链状</strong>的结构如今要执行四个不同片段（<strong>gadget</strong>）的代码，所以要跳转四次。</p>
 <p>这个<strong>gadget</strong>就是这种，先pop（或mov，lea）一个数据给到寄存器，再ret的函数</p>
 <p>不过pop比较好用。原因esp可以自动向上移，指向下一个IP地址。</p>
 <p>（这个还真像链表，数据成员作为函数参数，指针成员指向下一个执行的地址）</p>
-<style>.nckgenlyhtun{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241127190339914.png" class="nckgenlyhtun" alt="image-20241127190339914"> 
+<style>.qbphavqgjrnl{zoom:50%;}</style><img src="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/11/16/Pwn%E5%AD%A6%E4%B9%A0/image-20241127190339914.png" class="qbphavqgjrnl" alt="image-20241127190339914"> 
 
 <p>payload就像是一个个gadget搭起来的拼图</p>
 <h5 id="ROPgadget"><a href="#ROPgadget" class="headerlink" title="ROPgadget"></a>ROPgadget</h5><p>使用这个工具可以找到需要的指令以及它的地址</p>
