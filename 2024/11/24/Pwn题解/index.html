@@ -170,7 +170,7 @@
 
 <p>bss区域是可执行的，只需要在这里覆盖上我们需要执行的代码就好了</p>
 <p>返回地址覆盖位这个bss的地址</p>
-<style>.trkflqcmjfyw{zoom: 33%;}</style><img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241124213147737.png" class="trkflqcmjfyw" alt="image-20241124213147737">	
+<style>.nsoibclrrsor{zoom: 33%;}</style><img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241124213147737.png" class="nsoibclrrsor" alt="image-20241124213147737">	
 
 <p>所以我猜测应该是覆盖strcpy的返回地址到buf2数组的地址，数组内容应该是&#x2F;bin&#x2F;sh对应的机器码</p>
 <p>payload &#x3D; 0x64+4的无效数据加上&#x2F;bin&#x2F;sh的机器码</p>
@@ -277,9 +277,9 @@
 <img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241128152855316.png" class title="image-20241128152855316"> 
 
 <p>从下到上得看</p>
-<h5 id="动态调试尝试覆盖原有返回地址"><a href="#动态调试尝试覆盖原有返回地址" class="headerlink" title="动态调试尝试覆盖原有返回地址"></a>动态调试尝试覆盖原有返回地址</h5> 
+<h5 id="动态调试尝试覆盖原有返回地址"><a href="#动态调试尝试覆盖原有返回地址" class="headerlink" title="动态调试尝试覆盖原有返回地址"></a>动态调试尝试覆盖原有返回地址</h5> <img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241129101348955.png" class title="image-20241129101348955">
 
- 
+<img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241129101419976.png" class title="image-20241129101419976"> 
 
 <p>这又是一道动态调试和静态分析结果不相同得一道题。结果需要注入（0x88-0x1c+4）的垃圾数据</p>
 <h5 id="构建payload，编写exp"><a href="#构建payload，编写exp" class="headerlink" title="构建payload，编写exp"></a>构建payload，编写exp</h5><p><code>flat</code> 是 <code>pwntools</code> 提供的另一个函数，用于将传入的列表展平为一个连续的字节串。它会将列表中的元素（比如字节串、整数等）按顺序组合成一个连续的内存块。</p>
