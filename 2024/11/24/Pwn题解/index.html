@@ -170,7 +170,7 @@
 
 <p>bss区域是可执行的，只需要在这里覆盖上我们需要执行的代码就好了</p>
 <p>返回地址覆盖位这个bss的地址</p>
-<style>.wdsyvjlnrein{zoom: 33%;}</style><img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241124213147737.png" class="wdsyvjlnrein" alt="image-20241124213147737">	
+<style>.vjnlldubhmuo{zoom: 33%;}</style><img src="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/11/24/Pwn%E9%A2%98%E8%A7%A3/image-20241124213147737.png" class="vjnlldubhmuo" alt="image-20241124213147737">	
 
 <p>所以我猜测应该是覆盖strcpy的返回地址到buf2数组的地址，数组内容应该是&#x2F;bin&#x2F;sh对应的机器码</p>
 <p>payload &#x3D; 0x64+4的无效数据加上&#x2F;bin&#x2F;sh的机器码</p>
