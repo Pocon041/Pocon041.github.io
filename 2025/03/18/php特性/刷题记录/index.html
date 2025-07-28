@@ -250,7 +250,7 @@
 <p>模式部分很容易看懂。 <code>/</code>是分割符，<code>^</code>表示开头，<code>$</code>表示结尾。说明这里需要<strong>精确匹配</strong></p>
 <p>但这里需要理解修饰符的意思。<code>-i</code>表示不区分大小写，<code>-m</code>表示多行模式（<u>^和$会匹配每行的开始和结束</u>）</p>
 <p>分析题目，需要cmd多行包含php，但不能精确匹配到php</p>
-<p>使用<strong>换行符绕过</strong>：**%0a**</p>
+<p>使用<strong>换行符绕过</strong>：<strong>%0a</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?cmd=php%0ap</span><br></pre></td></tr></table></figure>
 
 
