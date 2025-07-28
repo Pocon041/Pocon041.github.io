@@ -1,163 +1,304 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Pwn学习 | Pocon's Blog</title><meta name="author" content="Pocon"><meta name="copyright" content="Pocon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="来源： [0002.哔哩哔哩-【个人向】CTF pwn 入门-P2高清版]_哔哩哔哩_bilibili  PPT链接PWN.pptx - Microsoft PowerPoint Online  第一节：可执行文件、ELF文件结构探讨从test.c到a.out的过程。研究一下a.out的结构 第二节：程序装载和运行内存 节视图是放在磁盘中划分功能的，段视图是程序装载到内存中来划分不同读写权限的。">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="来源： [0002.哔哩哔哩-【个人向】CTF pwn 入门-P2高清版]_哔哩哔哩_bilibili  PPT链接PWN.pptx - Microsoft PowerPoint Online">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pwn学习">
 <meta property="og:url" content="http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Pocon&#39;s Blog">
-<meta property="og:description" content="来源： [0002.哔哩哔哩-【个人向】CTF pwn 入门-P2高清版]_哔哩哔哩_bilibili  PPT链接PWN.pptx - Microsoft PowerPoint Online  第一节：可执行文件、ELF文件结构探讨从test.c到a.out的过程。研究一下a.out的结构 第二节：程序装载和运行内存 节视图是放在磁盘中划分功能的，段视图是程序装载到内存中来划分不同读写权限的。">
+<meta property="og:description" content="来源： [0002.哔哩哔哩-【个人向】CTF pwn 入门-P2高清版]_哔哩哔哩_bilibili  PPT链接PWN.pptx - Microsoft PowerPoint Online">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/3.ico">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150330270.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150619921.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116151250348.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116153505516.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116154309783.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116231329387.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116232159290.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116233739080.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141336080.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141635096.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143029165.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143135103.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143257088.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143429165.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117140052263.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118100801676.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118103900450.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202629020.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202840185.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241122111607229.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126213339533.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126221633861.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126222805442.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126224956779.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127094818640.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127190339914.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127185035223.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141239882.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141455136.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141630872.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128143137143.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317212557028.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317213827354.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317220404709.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317221821855.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223129869.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223325220.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223500836.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223706098.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084206153.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084411838.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085135125.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085412814.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085506819.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085926812.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318090244979.png">
 <meta property="article:published_time" content="2024-11-16T06:43:22.000Z">
-<meta property="article:modified_time" content="2025-03-18T01:27:13.634Z">
+<meta property="article:modified_time" content="2025-03-18T07:29:18.191Z">
 <meta property="article:author" content="Pocon">
 <meta property="article:tag" content="Pwn">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/3.ico"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150330270.png">
 
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
+<link rel="canonical" href="http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pwn学习 | Pocon's Blog</title>
   
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
 
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
 
-      const theme = saveToLocal.get('theme')
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
     
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
     
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
   
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: undefined,
-  translate: undefined,
-  noticeOutdate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: '复制成功',
-    error: '复制失败',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: undefined,
-  lightbox: 'null',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
-    buttonText: '加载更多'
-  },
-  isPhotoFigcaption: false,
-  islazyload: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'Pwn学习',
-  isPost: true,
-  isHome: false,
-  isHighlightShrink: false,
-  isToc: true,
-  postUpdate: '2025-03-18 09:27:13',
-  isShuoshuo: false
-}</script><link rel="stylesheet" href="APlayer.min.css"><div id="aplayer"></div><script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js" async></script><link rel="stylesheet" href="https://cdn2.codesign.qq.com/icons/XMx86jzlQw0brz3/latest/iconfont.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/3.ico" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Pocon's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Pwn学习</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Pwn学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-16T06:43:22.000Z" title="发表于 2024-11-16 14:43:22">2024-11-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-18T01:27:13.634Z" title="更新于 2025-03-18 09:27:13">2025-03-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pwn学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-16 14:43:22" itemprop="dateCreated datePublished" datetime="2024-11-16T14:43:22+08:00">2024-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-03-18 15:29:18" itemprop="dateModified" datetime="2025-03-18T15:29:18+08:00">2025-03-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
 <p>来源：</p>
 <p>[0002.哔哩哔哩-【个人向】CTF pwn 入门-P2<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1854y1y7Ro?vd_source=73decf7c030f3abfceb81f802abd8fd0&p=2&spm_id_from=333.788.videopod.episodes">高清版]_哔哩哔哩_bilibili</a></p>
 </blockquote>
 <h1 id="PPT链接"><a href="#PPT链接" class="headerlink" title="PPT链接"></a>PPT链接</h1><p><a target="_blank" rel="noopener" href="https://onedrive.live.com/edit.aspx?resid=4465402B41B4B710!seb0e4dd0494f4f52bef5c10a8eed95ec">PWN.pptx - Microsoft PowerPoint Online</a></p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150330270.png" alt="image 20241116150330270"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150330270.png" alt="image 20241116150330270"></p>
 <h1 id="第一节：可执行文件、ELF文件结构"><a href="#第一节：可执行文件、ELF文件结构" class="headerlink" title="第一节：可执行文件、ELF文件结构"></a>第一节：可执行文件、ELF文件结构</h1><p>探讨从test.c到a.out的过程。研究一下a.out的结构</p>
-<h1 id="第二节：程序装载和运行内存"><a href="#第二节：程序装载和运行内存" class="headerlink" title="第二节：程序装载和运行内存"></a>第二节：程序装载和运行内存</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150619921.png" alt="image-20241116150619921"></p>
+<h1 id="第二节：程序装载和运行内存"><a href="#第二节：程序装载和运行内存" class="headerlink" title="第二节：程序装载和运行内存"></a>第二节：程序装载和运行内存</h1><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150619921.png" alt="image-20241116150619921"></p>
 <p>节视图是放在磁盘中划分功能的，段视图是程序装载到内存中来划分不同读写权限的。</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116151250348.png" alt="image-20241116151250348"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116151250348.png" alt="image-20241116151250348"></p>
 <p><strong>看图说话：</strong></p>
 <blockquote>
 <p>[IMPORTANT]</p>
@@ -171,21 +312,21 @@
 <p>虚拟内存<strong>用户空间</strong>每个进程一份</p>
 <p>虚拟内存<strong>内核空间</strong>所有进程共享一份</p>
 <p>虚拟内存mmap段中的<strong>动态链接库</strong>仅在物理内存中装载一份</p>
-<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116153505516.png" alt="image-20241116153505516" style="zoom: 50%;">
+<h5 id="虚拟地址空间（虚拟内存）和物理内存"><a href="#虚拟地址空间（虚拟内存）和物理内存" class="headerlink" title="虚拟地址空间（虚拟内存）和物理内存"></a>虚拟地址空间（虚拟内存）和物理内存</h5><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116153505516.png" alt="image-20241116153505516" style="zoom: 50%;">
 
 <p>x86-LInux（32位的进程虚拟地址空间）    一共4GB（整个4GB对应内存中的ELF）</p>
 <p>用户空间分3GB，1GB共享内核空间。（节省资源的目的） </p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116154309783.png" alt="image-20241116154309783" style="zoom:50%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116154309783.png" alt="image-20241116154309783" style="zoom:50%;">
 
 
 
 <p>如果是64位进程虚拟地址空间，地址的有效位其实是6个字节。因为这足够大了</p>
-<h5 id="段与节"><a href="#段与节" class="headerlink" title="段与节"></a>段与节</h5><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116231329387.png" alt="image-20241116231329387"></p>
+<h5 id="段与节"><a href="#段与节" class="headerlink" title="段与节"></a>段与节</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116231329387.png" alt="image-20241116231329387"></p>
 <p>text节就是我们的主程序</p>
 <p>一个段是节的<strong>高层次</strong>。</p>
 <p>段视图用于进程的内存区域的rwx<strong>权限划分</strong></p>
 <p>节视图用于ELF文件编译链接时与磁盘上存储的文件结构的组织</p>
-<h5 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h5><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116232159290.png" alt="image-20241116232159290"></p>
+<h5 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116232159290.png" alt="image-20241116232159290"></p>
 <p><code>glb</code>作为没有赋初值的全局变量，不占磁盘空间但占由内存空间。储存在Bss中</p>
 <p><code>“Hello World”</code>虽然是一个字符串 常量，但是在<code>Text</code>段中（一般认为这是代码成分）。这是因为它只有可读性，属于Text段中的<code>.rodata</code>节</p>
 <p>函数被编译后还是数据，数据是被用来执行的代码。既然是代码段，所以在Text段。</p>
@@ -193,25 +334,25 @@
 <p>局部变量ptr在栈中</p>
 <p>malloc申请的空间在堆中</p>
 <p>x,y在哪儿与系统架构有关。AMD64在寄存器，x86在栈</p>
-<h1 id="第三节：CPU与进程的执行"><a href="#第三节：CPU与进程的执行" class="headerlink" title="第三节：CPU与进程的执行"></a>第三节：CPU与进程的执行</h1><p> <img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116233739080.png" alt="image-20241116233739080"></p>
+<h1 id="第三节：CPU与进程的执行"><a href="#第三节：CPU与进程的执行" class="headerlink" title="第三节：CPU与进程的执行"></a>第三节：CPU与进程的执行</h1><p> <img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116233739080.png" alt="image-20241116233739080"></p>
 <p>CPU通过总线向内存发送访存指令。</p>
 <h1 id="第四节：装载与汇编"><a href="#第四节：装载与汇编" class="headerlink" title="第四节：装载与汇编"></a>第四节：装载与汇编</h1><p>汇编这个，课堂任务，懒得写</p>
 <p>装载这个，没学会，写不出来</p>
 <h1 id="第五节：栈溢出基础"><a href="#第五节：栈溢出基础" class="headerlink" title="第五节：栈溢出基础"></a>第五节：栈溢出基础</h1><h3 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h3><p>研究的是x86嗷</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141336080.png" alt="image-20241117141336080" style="zoom: 67%;"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;"></p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143029165.png" alt="image-20241117143029165" style="zoom:50%;"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143135103.png" alt="image-20241117143135103" style="zoom:50%;"></p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143257088.png" alt="image-20241117143257088" style="zoom:50%;"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143429165.png" alt="image-20241117143429165" style="zoom:50%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141336080.png" alt="image-20241117141336080" style="zoom: 67%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141635096.png" alt="image-20241117141635096" style="zoom: 67%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143029165.png" alt="image-20241117143029165" style="zoom:50%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143135103.png" alt="image-20241117143135103" style="zoom:50%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143257088.png" alt="image-20241117143257088" style="zoom:50%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117143429165.png" alt="image-20241117143429165" style="zoom:50%;"></p>
 <p>函数状态主要涉及三个寄存器——<code>esp</code>、<code>ebp</code>、<code>eip</code>。</p>
 <p><code>esp</code><strong>用来存储函数调用栈的栈顶地址</strong>，在压栈和退栈的时候发生变化。</p>
 <p><code>ebp</code><strong>用来存储当前函数状态的基地址</strong>，在函数运行时不变，可以用来索引确定函数参数或局部变量的位置。</p>
 <p><code>eip</code><strong>用来存储即将执行的程序指令的地址</strong>，cpu依照eip的存储内容读取指令并执行，eip随之指向相邻的下一条指令。</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117140052263.png" alt="image-20241117140052263"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117140052263.png" alt="image-20241117140052263"></p>
 <p><code>return address</code>：返回地址</p>
 <p><code>stack frame pointer</code>：<strong>上一个栈帧的栈顶</strong>（ebp）的值。方便恢复父函数的栈顶指针</p>
 <p><code>local variables</code>：<strong>局部变量</strong></p>
 <p><code>arguments</code>：子函数所用到的<strong>形参</strong>。 子函数保存的参数实际上在父函数栈帧的末尾。</p>
 <p>能看出来吗，图中的例子是个循环结构</p>
-<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118100801676.png" alt="image-20241118100801676"></p>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118100801676.png" alt="image-20241118100801676"></p>
 <p>试试看能不能在没有讲解的情况下捋完整个过程。</p>
 <p>不行看PPT去</p>
 <p><strong>main函数的栈帧是第一个栈帧，在此之前运行的函数是没有栈帧的</strong></p>
@@ -222,7 +363,7 @@
 <p>栈溢出是<strong>缓冲区溢出</strong>的一种。</p>
 <p>缓冲区溢出的本质是向<strong>定长的缓冲区</strong>写入了<strong>超长的数据</strong>，造成超出的数据腹泻了合法内存区域</p>
 <p>缓冲区溢出分为<strong>栈溢出</strong>、<strong>堆溢出</strong>和<strong>BSS溢出</strong>三种</p>
-<h5 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h5><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118103900450.png" alt="image-20241118103900450"></p>
+<h5 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241118103900450.png" alt="image-20241118103900450"></p>
 <h1 id="第六节：熟练使用工具"><a href="#第六节：熟练使用工具" class="headerlink" title="第六节：熟练使用工具"></a>第六节：熟练使用工具</h1><p>一切的开端</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
 
@@ -231,10 +372,10 @@
 <p>执行文件</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">io = process(<span class="string">&quot;./文件名&quot;</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">&quot;IP&quot;</span>,Port)</span><br></pre></td></tr></table></figure>
 
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202629020.png" alt="image-20241120202629020"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202629020.png" alt="image-20241120202629020"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">io.recv()		//读取全部输出</span><br><span class="line"></span><br><span class="line">io.recvline()	//读取一行输出</span><br></pre></td></tr></table></figure>
 
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202840185.png" alt="image-20241120202840185"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241120202840185.png" alt="image-20241120202840185"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">io.sendline(p64<span class="string">&quot;15&quot;</span>)	//自带换行。若是<span class="number">32</span>位整数则是p32</span><br><span class="line"></span><br><span class="line">io.send(<span class="string">b&quot;135asdf\n&quot;</span>)	//send只能发送二进制数据。</span><br></pre></td></tr></table></figure>
 
 
@@ -265,6 +406,8 @@
 <p>&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;randomize_va_space &#x3D; <strong>0</strong>：<strong>没有随机化</strong>。即关闭 ASLR</p>
 <p>&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;randomize_va_space &#x3D; <strong>1</strong>：<strong>保留的随机化</strong>。共享库、栈、mmap() 以及 VDSO 将被随机化</p>
 <p>&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;randomize_va_space &#x3D; <strong>2</strong>：<strong>完全的随机化</strong>。在randomize_va_space &#x3D; 1的基础上，通过 brk() 分配的内存空间也将被随机化</p>
+<h5 id="攻击手段"><a href="#攻击手段" class="headerlink" title="攻击手段"></a>攻击手段</h5><p>总的来说，这种保护措施使得栈地址和内核空间有一段不可知的偏移，导致在栈上写的shellcode无法知道准确地址。</p>
+<p>如果缓冲区足够长，可以在shellcode下写入大量的nop指令（构造nop滑梯），一路向上执行直到运行shellcode</p>
 <h4 id="The-NX-bits-the-No-eXecute-bits"><a href="#The-NX-bits-the-No-eXecute-bits" class="headerlink" title="The NX bits (the No-eXecute bits)"></a>The NX bits (the No-eXecute bits)</h4><p>栈缓冲区不可执行</p>
 <p>只要不应该是代码的地方都不执行</p>
 <p>所以<strong>一般思路将shellcode写入bss</strong>。 写入堆很少。<del>但听说ctf很多</del></p>
@@ -273,12 +416,18 @@
 <p>在栈帧销毁时（leave指令前），会检测Canary数组的值是否改变，如果改变程序会寄掉</p>
 <h4 id="PIE"><a href="#PIE" class="headerlink" title="PIE"></a>PIE</h4><p>编译器编译时打开的开关，与ASLR区分</p>
 <p>随机化Data，Text和Bss</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241122111607229.png" alt="image-20241122111607229"></p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241122111607229.png" alt="image-20241122111607229" style="zoom:50%;">
+
+
+
 <p>在脚本头上写下</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line">gcc -fno-stack-protector -z execstack -no-pie -g -o ret2stack ret2stack.c</span><br></pre></td></tr></table></figure>
 
 <p>生成程序后，checksec一下</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126213339533.png" alt="image-20241126213339533"></p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126213339533.png" alt="image-20241126213339533" style="zoom: 33%;">
+
+
+
 <h1 id="第八节：返回导向编程"><a href="#第八节：返回导向编程" class="headerlink" title="第八节：返回导向编程"></a>第八节：返回导向编程</h1><p>多次篡改IP成我们想要的地址的过程</p>
 <p>和前面的栈溢出不同的是，以前的基础栈溢出可以一步到位（因为有后门函数或者可以注入shellcode）。而现在无了。</p>
 <h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><ul>
@@ -297,12 +446,12 @@
 
 <h3 id="动态链接库"><a href="#动态链接库" class="headerlink" title="动态链接库"></a>动态链接库</h3><p>什么是动态链接库？</p>
 <p>使用<code>ldd</code>指令可以看到使用到的所有链接库</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126221633861.png" alt="image-20241126221633861"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126221633861.png" alt="image-20241126221633861"></p>
 <p>最下面的那东西，把我们所需要的所有动态链接库，文件，全部<strong>装载到shared library</strong>中。</p>
 <p>我们要关注的是<code>libc.so</code>。这是一个<strong>软链接</strong>，不是一个具体的实现。</p>
 <p><strong>什么是软链接？</strong></p>
 <p>这好比我们的快捷方式。不管这个应用程序发生了什么样的改变，只要位置没变，这个快捷方式就可以打开这个应用程序。相比之，动态链接库也是在不断更新的，libc.so就充当了这个代名人。</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126222805442.png" alt="image-20241126222805442">	</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126222805442.png" alt="image-20241126222805442">	</p>
 <p>这里没绑定动态链接库啊。</p>
 <p>如果绑定了就可以直接执行，相当于直接执行这个动态链接库</p>
 <p>简而言之，<strong>动态链接库就是存放在lib目录的一些可执行文件</strong>而已，这些库里面已经包含了大量的已经写好的C语言代码。</p>
@@ -312,7 +461,7 @@
 <p>从<strong>Text</strong>到<strong>shared library</strong>再到<strong>Kernel</strong></p>
 <p>各个函数都有对应的系统调用号，如write的系统调用号是4 。write函数是对sys_write这样一个系统调用的一个封装</p>
 <h3 id="ROP"><a href="#ROP" class="headerlink" title="ROP"></a>ROP</h3><h5 id="一个重要的系统调用"><a href="#一个重要的系统调用" class="headerlink" title="一个重要的系统调用"></a>一个重要的系统调用</h5><p><code>execve</code></p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126224956779.png" alt="image-20241126224956779"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126224956779.png" alt="image-20241126224956779"> </p>
 <p>分析系统调用的过程：</p>
 <p>首先赋值一个<strong>系统调用号</strong>（<strong>eax</strong>）    （execev的系统调用号是11）</p>
 <p><strong>ebx，ecx，edx保存系统调用的参数</strong></p>
@@ -322,37 +471,37 @@
 <p>不过，有这些程序片段也是可以的。</p>
 <p>这就是<strong>ROP</strong></p>
 <p><strong>让分离的代码连续执行，达到对应的效果</strong></p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127094818640.png" alt="image-20241127094818640" style="zoom:67%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127094818640.png" alt="image-20241127094818640" style="zoom:67%;">
 
 <p>左边是程序执行的过程。原来的基础栈溢出只需要返回到后门函数或是某一个特定位置就可以了。</p>
 <p>如今这个返回地址是一个<strong>链状</strong>的结构如今要执行四个不同片段（<strong>gadget</strong>）的代码，所以要跳转四次。</p>
 <p>这个<strong>gadget</strong>就是这种，先pop（或mov，lea）一个数据给到寄存器，再ret的函数</p>
 <p>不过pop比较好用。原因esp可以自动向上移，指向下一个IP地址。</p>
 <p>（这个还真像链表，数据成员作为函数参数，指针成员指向下一个执行的地址）</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127190339914.png" alt="image-20241127190339914" style="zoom:50%;"> 
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127190339914.png" alt="image-20241127190339914" style="zoom:50%;"> 
 
 <p>payload就像是一个个gadget搭起来的拼图</p>
 <h5 id="ROPgadget"><a href="#ROPgadget" class="headerlink" title="ROPgadget"></a>ROPgadget</h5><p>使用这个工具可以找到需要的指令以及它的地址</p>
 <p>即找到我们的gadget</p>
 <p><code>ROPgadget --binary ret2syscall --only &quot;pop|ret&quot;</code></p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127185035223.png" alt="image-20241127185035223"> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241127185035223.png" alt="image-20241127185035223"> </p>
 <p>非常de好用</p>
 <h5 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h5><p>gadget是mov，ret或是pop ，ret都可以。只要最后有个ret就可以无限执行下去。</p>
 <p>因为ret可以<strong>改变程序的执行流</strong>（IP ）。我们只需要将一系列返回地址或者数据溢出到栈中，就可以不断跳跃在各个gadget中。</p>
 <ol>
 <li>栈溢出，让返回地址第一个gadget</li>
 </ol>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141239882.png" alt="image-20241128141239882"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141239882.png" alt="image-20241128141239882"></p>
 <ol start="2">
 <li>执行第一个gadget。将esp指向的元素赋值给edx，esp自增指向新的返回地址</li>
 </ol>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141455136.png" alt="image-20241128141455136"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141455136.png" alt="image-20241128141455136"></p>
 <ol start="3">
 <li>执行第二个gadget。将eax清空，返回esp所指向的地址</li>
 </ol>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141630872.png" alt="image-20241128141630872"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128141630872.png" alt="image-20241128141630872"></p>
 <p>最终执行过程就像这样</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128143137143.png" alt="image-20241128143137143" style="zoom:67%;"> 
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128143137143.png" alt="image-20241128143137143" style="zoom:67%;"> 
 
 <p>在栈中溢出一系列的返回地址，链式执行一系列的gadget。最后执行int 0x80指令，成功执行系统调用。这样就达到了攻击的目的。</p>
 <p>图中最后从Text段到Kernel中执行的系统调用。</p>
@@ -360,10 +509,10 @@
 <p>静态链接：本身将库函数全部写入elf文件本身。静态链接在链接（从目标文件到可执行文件）时可见。链接器在编译链接时将库代码加入可执行文件中</p>
 <p>所以两种文件大小差距很大。差的就是库的内容 </p>
 <p>可以在ida中看看两种不同方式中的函数数量</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317212557028.png" alt="image-20250317212557028"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317212557028.png" alt="image-20250317212557028"></p>
 <p>像这种粉色背景的函数，都是在程序中没有具体实现，只是一个符号而已。这个符号是用来解析函数在动态链接库中的位置。往往一个动态链接还要调用更底层的一些动态链接。</p>
 <p>所以ret2syscall这题要用静态链接，用来提供足够的gadget</p>
-<h3 id="动态链接的相关结构"><a href="#动态链接的相关结构" class="headerlink" title="动态链接的相关结构"></a>动态链接的相关结构</h3><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317213827354.png" alt="image-20250317213827354" style="zoom:50%;">
+<h3 id="动态链接的相关结构"><a href="#动态链接的相关结构" class="headerlink" title="动态链接的相关结构"></a>动态链接的相关结构</h3><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317213827354.png" alt="image-20250317213827354" style="zoom:50%;">
 
 <ul>
 <li><p>dynamic section：提供动态链接相关信息。包括整个动态链接的所有内容，包括其他的表，位置，如何组织</p>
@@ -378,7 +527,7 @@
 </li>
 </ul>
 <h3 id="动态链接过程"><a href="#动态链接过程" class="headerlink" title="动态链接过程"></a>动态链接过程</h3><p>例子：调用libc中的foo函数</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317220404709.png" alt="image-20250317220404709" style="zoom:67%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317220404709.png" alt="image-20250317220404709" style="zoom:67%;">
 
 <p>text是代码节</p>
 <p>foo是我们写的自定义函数</p>
@@ -390,52 +539,253 @@
 <p>因为foo是一个动态链接库中的代码。所以call foo不能够直接跳转到它自己的代码段里的库里。实际上在libc.so里的一段。但也不能直接跳到libc里，因为不知道具体位置</p>
 <p>code段里还有一个plt节（所以plt本质上也是一些代码）。每一个动态链接库中调用的函数，都会在plt节中创建一个表项。</p>
 <p>第一次调用foo时如下</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317221821855.png" alt="image-20250317221821855"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317221821855.png" alt="image-20250317221821855"></p>
 <p>plt中存储foo函数的表项位置，通过此再从got表取得foo的真实地址。但是由于是第一次调用foo函数，got表并没有经过特殊函数解析，所以并没有填写真实地址。此时填写表项位置，从got表跳回了plt位置。这个时候plt表就知道了got表没有真实地址，并开始寻找foo函数的真实地址，填入got表中。</p>
 <p>再回到最上面的那张图。</p>
 <p>jmp到got表发现没东西，于是回到plt表。执行下方指令</p>
 <p>首先push index。这个index就是在plt表中调用函数对应的索引。如上图为例，foo函数的index就是3。这里的意思就是说我要解析的是plt表中的第3个函数。</p>
 <p>接着push *(GOT + 4)。表示要去哪个动态链接库去找需要的内容。接着jmp (GOT + 8 )进入dl_resolve函数。如下图</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223129869.png" alt="image-20250317223129869" style="zoom:50%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223129869.png" alt="image-20250317223129869" style="zoom:50%;">
 
 <p>此时dl_runtime_resolve函数解析foo的真正地址填入.got.plt中</p>
 <p>解析过程就不说了</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223325220.png" alt="image-20250317223325220" style="zoom:50%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223325220.png" alt="image-20250317223325220" style="zoom:50%;">
 
 <p>解析完毕后，就将foo函数真实地址的值填入got表中</p>
 <p>如果变为第二次调用</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223500836.png" alt="image-20250317223500836"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223500836.png" alt="image-20250317223500836"></p>
 <p>整个过程如下：</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223706098.png" alt="image-20250317223706098"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317223706098.png" alt="image-20250317223706098"></p>
 <p>现新写一个程序，并使用动态链接</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="type">int</span> x = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">&#x27;first!&#x27;</span>);</span><br><span class="line">	x = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;second!&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;once&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <p>我们在ida中看看plt表</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084206153.png" alt="image-20250318084206153" style="zoom:50%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084206153.png" alt="image-20250318084206153" style="zoom:50%;">
 
 <p>索引0这块就是put的表项、索引1这块就是printf的表项、索引2这块就是exit的表项</p>
 <p>每个表项的长度都是16字节</p>
 <p>在pwndbg中输入plt即可查看plt表，或者使用二进制查看plt内容 如 x&#x2F;20 &lt;plt的地址&gt;</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084411838.png" alt="image-20250318084411838"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318084411838.png" alt="image-20250318084411838"></p>
 <p>plt存在text节或init节这些代码中，作为数据存在的got节和got.plt节，在data段中</p>
 <p>在ida中看看got表</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085135125.png" alt="image-20250318085135125"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085135125.png" alt="image-20250318085135125"></p>
 <p>这个got表实际上是一个数组，元素长度位8字节（64位程序地址长度）。每一个表项就是地址而已。</p>
 <p>直接输入plt可以看到三个表项</p>
-<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085412814.png" alt="image-20250318085412814" style="zoom:50%;">
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085412814.png" alt="image-20250318085412814" style="zoom:50%;">
 
 <p>一个表项是十六个字节</p>
 <p>再输入got</p>
 <p>这里是程序刚刚开始运行的时候</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085506819.png" alt="image-20250318085506819"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085506819.png" alt="image-20250318085506819"></p>
 <p>告诉我们got表中存了三个函数，每个函数8字节。每个地址都是0x000000000040……，并且告诉了我们再plt表中对应的索引</p>
 <p>这个地址对应代码段（看颜色也能看出来），还是plt中的位置，也就是说这个时候got并没有存储这些函数的真实地址</p>
 <p>接着步过调用puts函数后</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085926812.png" alt="image-20250318085926812"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318085926812.png" alt="image-20250318085926812"></p>
 <p>这个时候可以看到，got表中已经填入了puts函数的真实地址</p>
 <p>我们得到这个真实地址，并使用disass指令反汇编，就可以得到puts函数真正的代码</p>
 <p>如果我们disass没有调用的函数，得到的就是plt中的代码：</p>
-<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318090244979.png" alt="image-20250318090244979"></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Pocon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/">http://example.com/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Pocon's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Pwn/">Pwn</a></div><div class="post-share"><div class="social-share" data-image="/img/3.ico" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/" title="Pwn题解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Pwn题解</div></div><div class="info-2"><div class="info-item-1">从0开始的Pwn生活与其说是题解，不如说是萌新初次见面的哦哈呦 Ret2text没得说，复习的时候再写 更权威的查找后门函数方法：  ctrl + F搜索 system shift + F12看有没有字符串 &#x2F;bin&#x2F;sh  Ret2ShellCode第一次的思路查看保护	 保护 &#x3D;  ZERO 32位 IDA下静态调试  setvbuf是清空缓冲区。简单来说就是说不要设置输入输出缓冲区，不然没满发不出去。 这个gets很关键，基本判别是溢出解法。 执行内容位把s的值赋给buf2 让我们查看下buf2的位置 ​                                                                                                                                                                                                                               ...</div></div></div></a><a class="pagination-related" href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/" title="BUUCTF中SQL注入writeup"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">BUUCTF中SQL注入writeup</div></div><div class="info-2"><div class="info-item-1">[NewStarCTF 2023 公开赛道]ez_sql 判断闭合方式为 ’（单引号） 爆字段数，以成功联合注入  ​	?id=1&#39; order by 1 --+  ​	发现有WAF，这里使用大写绕过 ​	?id=1&#39; Order by 1 --+  ​	一直尝试直到?id=1&#39; Order by 6 --+没有回显，说明字段数为5   联合注入爆数据库名   ​	可见，数据库名就是ctf ​	到这里答案就是到手的鸭子了  顺藤摸瓜，找到表名  ?id=1&#39; UNION SELECT 1,2,3,4,GROUP_CONCAT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA =&#39;ctf&#39; --+ ​	 ​	显然flag在here_is_flag这个表中，但我们先要找到在哪个字段下（当然一般可以直接猜出来字段名为flag）  再找到字段名  ​	?id=1&#39; UNION SELECT 1,2,3,4,GROUP_CONCAT(column_name)...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/" title="Pwn题解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">Pwn题解</div></div><div class="info-2"><div class="info-item-1">从0开始的Pwn生活与其说是题解，不如说是萌新初次见面的哦哈呦 Ret2text没得说，复习的时候再写 更权威的查找后门函数方法：  ctrl + F搜索 system shift + F12看有没有字符串 &#x2F;bin&#x2F;sh  Ret2ShellCode第一次的思路查看保护	 保护 &#x3D;  ZERO 32位 IDA下静态调试  setvbuf是清空缓冲区。简单来说就是说不要设置输入输出缓冲区，不然没满发不出去。 这个gets很关键，基本判别是溢出解法。 执行内容位把s的值赋给buf2 让我们查看下buf2的位置 ​                                                                                                                                                                                                                               ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/3.ico" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Pocon</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Pocon041"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Pocon041" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/Pocon0401" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=1561061781&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:1561061781@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PPT%E9%93%BE%E6%8E%A5"><span class="toc-text">PPT链接</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E3%80%81ELF%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text">第一节：可执行文件、ELF文件结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E7%A8%8B%E5%BA%8F%E8%A3%85%E8%BD%BD%E5%92%8C%E8%BF%90%E8%A1%8C%E5%86%85%E5%AD%98"><span class="toc-text">第二节：程序装载和运行内存</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%89%E5%92%8C%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="toc-text">虚拟地址空间（虚拟内存）和物理内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AE%B5%E4%B8%8E%E8%8A%82"><span class="toc-text">段与节</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-text">举个例子</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9ACPU%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-text">第三节：CPU与进程的执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%EF%BC%9A%E8%A3%85%E8%BD%BD%E4%B8%8E%E6%B1%87%E7%BC%96"><span class="toc-text">第四节：装载与汇编</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E8%8A%82%EF%BC%9A%E6%A0%88%E6%BA%A2%E5%87%BA%E5%9F%BA%E7%A1%80"><span class="toc-text">第五节：栈溢出基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88"><span class="toc-text">函数调用栈</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90"><span class="toc-text">例子</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA%E6%94%BB%E5%87%BB"><span class="toc-text">栈溢出攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="toc-text">例子</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E8%8A%82%EF%BC%9A%E7%86%9F%E7%BB%83%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-text">第六节：熟练使用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IDA"><span class="toc-text">IDA</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#pwndbg"><span class="toc-text">pwndbg</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%BA%E5%99%A8%E7%A0%81"><span class="toc-text">机器码</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E8%8A%82%EF%BC%9A%E7%A8%8B%E5%BA%8F%E4%BF%9D%E6%8A%A4%E6%8E%AA%E6%96%BD"><span class="toc-text">第七节：程序保护措施</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ASLR%EF%BC%88Address-Space-Layout-Randomization%EF%BC%89"><span class="toc-text">ASLR（Address Space Layout Randomization）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#The-NX-bits-the-No-eXecute-bits"><span class="toc-text">The NX bits (the No-eXecute bits)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Canary"><span class="toc-text">Canary</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PIE"><span class="toc-text">PIE</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E8%8A%82%EF%BC%9A%E8%BF%94%E5%9B%9E%E5%AF%BC%E5%90%91%E7%BC%96%E7%A8%8B"><span class="toc-text">第八节：返回导向编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text">系统调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="toc-text">动态链接库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ROP"><span class="toc-text">ROP</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-text">一个重要的系统调用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ROPgadget"><span class="toc-text">ROPgadget</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">执行流程</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5-vs-%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5"><span class="toc-text">动态链接 vs 静态链接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E7%9A%84%E7%9B%B8%E5%85%B3%E7%BB%93%E6%9E%84"><span class="toc-text">动态链接的相关结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="toc-text">动态链接过程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/%E7%88%86%E7%A0%B4/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" title="CTF-SHOW 刷题记录Web2">CTF-SHOW 刷题记录Web2</a><time datetime="2025-03-18T08:23:08.000Z" title="发表于 2025-03-18 16:23:08">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/%E6%A0%88%E6%BA%A2%E5%87%BA/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" title="CTF-SHOW 刷题记录">CTF-SHOW 刷题记录</a><time datetime="2025-03-18T08:23:07.000Z" title="发表于 2025-03-18 16:23:07">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/SSRF/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/" title="任意文件读取漏洞">任意文件读取漏洞</a><time datetime="2025-03-18T08:23:07.000Z" title="发表于 2025-03-18 16:23:07">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/SSRF/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" title="CTF-SHOW刷题记录Web5">CTF-SHOW刷题记录Web5</a><time datetime="2025-03-18T08:23:07.000Z" title="发表于 2025-03-18 16:23:07">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/SSRF/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/" title="网络协议">网络协议</a><time datetime="2025-03-18T08:23:07.000Z" title="发表于 2025-03-18 16:23:07">2025-03-18</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/1.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Pocon</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="9067825440" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true" data-lrcType="-1"> </div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318090244979.png" alt="image-20250318090244979"></p>
+<h3 id="pwnttool中elf模块"><a href="#pwnttool中elf模块" class="headerlink" title="pwnttool中elf模块"></a>pwnttool中elf模块</h3><p>elf &#x3D; ELF(“.&#x2F;文件名”)</p>
+<p>hex(elf.got[“puts”])：得到puts函数在got表中的表项的地址</p>
+<p>6y</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pwn/" rel="tag"># Pwn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/" rel="prev" title="BUUCTF中SQL注入writeup">
+      <i class="fa fa-chevron-left"></i> BUUCTF中SQL注入writeup
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/" rel="next" title="Pwn题解">
+      Pwn题解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PPT%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">PPT链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E3%80%81ELF%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">第一节：可执行文件、ELF文件结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%8A%82%EF%BC%9A%E7%A8%8B%E5%BA%8F%E8%A3%85%E8%BD%BD%E5%92%8C%E8%BF%90%E8%A1%8C%E5%86%85%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">第二节：程序装载和运行内存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%EF%BC%88%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%EF%BC%89%E5%92%8C%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="nav-number">3.0.0.0.1.</span> <span class="nav-text">虚拟地址空间（虚拟内存）和物理内存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AE%B5%E4%B8%8E%E8%8A%82"><span class="nav-number">3.0.0.0.2.</span> <span class="nav-text">段与节</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">3.0.0.0.3.</span> <span class="nav-text">举个例子</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E8%8A%82%EF%BC%9ACPU%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">第三节：CPU与进程的执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E8%8A%82%EF%BC%9A%E8%A3%85%E8%BD%BD%E4%B8%8E%E6%B1%87%E7%BC%96"><span class="nav-number">5.</span> <span class="nav-text">第四节：装载与汇编</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E8%8A%82%EF%BC%9A%E6%A0%88%E6%BA%A2%E5%87%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">6.</span> <span class="nav-text">第五节：栈溢出基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88"><span class="nav-number">6.0.1.</span> <span class="nav-text">函数调用栈</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">6.0.1.0.1.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA%E6%94%BB%E5%87%BB"><span class="nav-number">6.0.2.</span> <span class="nav-text">栈溢出攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="nav-number">6.0.2.0.1.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E8%8A%82%EF%BC%9A%E7%86%9F%E7%BB%83%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">7.</span> <span class="nav-text">第六节：熟练使用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#IDA"><span class="nav-number">7.0.0.0.1.</span> <span class="nav-text">IDA</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pwndbg"><span class="nav-number">7.0.0.0.2.</span> <span class="nav-text">pwndbg</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E7%A0%81"><span class="nav-number">7.0.0.0.3.</span> <span class="nav-text">机器码</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E8%8A%82%EF%BC%9A%E7%A8%8B%E5%BA%8F%E4%BF%9D%E6%8A%A4%E6%8E%AA%E6%96%BD"><span class="nav-number">8.</span> <span class="nav-text">第七节：程序保护措施</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASLR%EF%BC%88Address-Space-Layout-Randomization%EF%BC%89"><span class="nav-number">8.0.0.1.</span> <span class="nav-text">ASLR（Address Space Layout Randomization）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%89%8B%E6%AE%B5"><span class="nav-number">8.0.0.1.1.</span> <span class="nav-text">攻击手段</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-NX-bits-the-No-eXecute-bits"><span class="nav-number">8.0.0.2.</span> <span class="nav-text">The NX bits (the No-eXecute bits)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Canary"><span class="nav-number">8.0.0.3.</span> <span class="nav-text">Canary</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PIE"><span class="nav-number">8.0.0.4.</span> <span class="nav-text">PIE</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%85%AB%E8%8A%82%EF%BC%9A%E8%BF%94%E5%9B%9E%E5%AF%BC%E5%90%91%E7%BC%96%E7%A8%8B"><span class="nav-number">9.</span> <span class="nav-text">第八节：返回导向编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="nav-number">9.0.1.</span> <span class="nav-text">系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="nav-number">9.0.2.</span> <span class="nav-text">动态链接库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROP"><span class="nav-number">9.0.3.</span> <span class="nav-text">ROP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="nav-number">9.0.3.0.1.</span> <span class="nav-text">一个重要的系统调用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ROPgadget"><span class="nav-number">9.0.3.0.2.</span> <span class="nav-text">ROPgadget</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">9.0.3.0.3.</span> <span class="nav-text">执行流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5-vs-%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5"><span class="nav-number">9.0.3.1.</span> <span class="nav-text">动态链接 vs 静态链接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E7%9A%84%E7%9B%B8%E5%85%B3%E7%BB%93%E6%9E%84"><span class="nav-number">9.0.4.</span> <span class="nav-text">动态链接的相关结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="nav-number">9.0.5.</span> <span class="nav-text">动态链接过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwnttool%E4%B8%ADelf%E6%A8%A1%E5%9D%97"><span class="nav-number">9.0.6.</span> <span class="nav-text">pwnttool中elf模块</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
