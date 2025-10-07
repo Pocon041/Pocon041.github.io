@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="支持向量机[toc] 数学基础补充二元函数的无条件极值问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="指令系统">
+<meta property="og:url" content="http://example.com/2025/10/07/SVM/index.html">
+<meta property="og:site_name" content="Pocon&#39;s Blog">
+<meta property="og:description" content="支持向量机[toc] 数学基础补充二元函数的无条件极值问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png">
+<meta property="og:image" content="https://picx.zhimg.com/v2-0f1ccaf844905148b7e75cab0d0ee2e3_1440w.jpg">
+<meta property="article:published_time" content="2025-10-07T08:56:13.000Z">
+<meta property="article:modified_time" content="2025-10-07T07:23:33.029Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png">
+
+<link rel="canonical" href="http://example.com/2025/10/07/SVM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>指令系统 | Pocon's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/07/SVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          指令系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-10-07 16:56:13 / 修改时间：15:23:33" itemprop="dateCreated datePublished" datetime="2025-10-07T16:56:13+08:00">2025-10-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><p>[toc]</p>
+<h3 id="数学基础补充"><a href="#数学基础补充" class="headerlink" title="数学基础补充"></a>数学基础补充</h3><h4 id="二元函数的无条件极值问题"><a href="#二元函数的无条件极值问题" class="headerlink" title="二元函数的无条件极值问题"></a>二元函数的无条件极值问题</h4><ol>
+<li>求偏导等于0，找到所有驻点（必要条件）</li>
+<li>求二阶偏导，依次确定各驻点处A、B、C的值，根据$$AC-B^2$$的符号判断是否为极值点（充分条件）<ol>
+<li>大于0，有极值。A&gt;0极小值，反之极大值</li>
+<li>小于0，没有极值</li>
+<li>等于0，可能有也可能没有</li>
+</ol>
+</li>
+</ol>
+<p>这通常对应一个<strong>最简单的无约束优化问题</strong></p>
+<h4 id="条件极值和拉格朗日乘数法"><a href="#条件极值和拉格朗日乘数法" class="headerlink" title="条件极值和拉格朗日乘数法"></a>条件极值和拉格朗日乘数法</h4><p>条件极值：对自变量有附加条件的极值</p>
+<p>设二元函数$$f(x,y)$$和$$\phi(x,y)$$在区域D内有一阶连续偏导数，则求$$z &#x3D; f(x,y)$$在D内满足条件$$\phi(x,y)$$的极值问题，可以转化为求拉格朗日函数<br>$$<br>L(x,y,\lambda) &#x3D; f(x,y) + \lambda\phi(x,y)~~~~~	(其中\lambda是某一常数)<br>$$<br>的无条件极值问题</p>
+<p>其中我们称一维向量$$\lambda_i$$是一个拉格朗日乘子</p>
+<p>这通常用于<strong>求解带有等式约束的优化问题</strong></p>
+<h4 id="数学符号说明"><a href="#数学符号说明" class="headerlink" title="数学符号说明"></a>数学符号说明</h4><h5 id="最大最小"><a href="#最大最小" class="headerlink" title="最大最小"></a>最大最小</h5><p>$$<br>g(\lambda) &#x3D; max_{x \in D}f(x,\lambda)<br>$$</p>
+<ul>
+<li>这是一个关于$$\lambda$$的函数</li>
+<li>当 $$\lambda &#x3D; y$$ 时，$$g(\lambda)$$ 的取值为： 固定 $$f(x,\lambda)$$ 中的 $$\lambda &#x3D; y $$ ，变动 x 时 f 能娶到的最大值</li>
+</ul>
+<p>$$<br>g(\lambda) &#x3D; max_\lambda ~min_x ~f(x,\lambda)<br>$$</p>
+<ul>
+<li>从右往左看，首先把min这一项看作关于$$\lambda$$ 的函数$$g(\lambda)$$ ，然后求这个函数的最大值</li>
+</ul>
+<h5 id="inf和sup符号"><a href="#inf和sup符号" class="headerlink" title="inf和sup符号"></a>inf和sup符号</h5><p>inf 是下确界，sup 上确界。和最大最小值相似但不同，max f 不存在的情况下 sup f 可能存在</p>
+<h5 id="凸函数凹函数"><a href="#凸函数凹函数" class="headerlink" title="凸函数凹函数"></a>凸函数凹函数</h5><p>使用国内定义还是国际定义仁者见仁智者见智了（<strong>以下使用国际定义</strong>）</p>
+<p>但是要记得詹森不等式<br>$$<br>凸函数：和的函数值 \le 函数值的和 \<br>凹函数：和的函数值 \ge 函数值的和<br>$$<br><a target="_blank" rel="noopener" href="https://wetts.github.io/2019/09/11/%E6%95%B0%E5%AD%A6/%E5%85%B6%E4%BB%96/%E4%BB%BF%E5%B0%84%E5%87%BD%E6%95%B0%E5%92%8C%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/">仿射函数</a>是又凹又凸的</p>
+<p>max是凹函数、min是凸函数（利用詹森不等式证明）</p>
+<h4 id="拉格朗日对偶问题"><a href="#拉格朗日对偶问题" class="headerlink" title="拉格朗日对偶问题"></a>拉格朗日对偶问题</h4><h5 id="原问题"><a href="#原问题" class="headerlink" title="原问题"></a>原问题</h5><p>$$<br>\begin{aligned}<br>	\min_{\mathbf{x}\in \mathbb{R} ^{\mathtt{n}}} \mathbf{f}\left( \mathbf{x} \right)\<br>	\mathbf{s}.\mathbf{t}\quad \mathbf{c}<em>{\mathtt{i}}\left( \mathbf{x} \right) &amp;\leqslant \mathbf{0},\mathbf{i}\in \left[ \mathtt{1},\mathtt{k} \right]\<br>	\quad \quad \mathtt{h}</em>{\mathtt{j}}\left( \mathbf{x} \right) &amp;&#x3D;\mathbf{0},\mathbf{j}\in \left[ \mathtt{1},\mathbf{l} \right]\<br>\end{aligned}<br>$$</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96">凸优化</a> 要求$$f(x)$$ 是凸函数， $$c_i(x)$$ 是凸函数， $$h_j(x)$$ 是仿射函数</p>
+<p>但这里我们做两个约定</p>
+<ul>
+<li>我们不假定原函数 f 的凹凸性， f 既可以是凹函数也可以是凸函数</li>
+<li>问题的定义域 $$\mathrm{D}&#x3D;(\mathrm{dom} \mathrm{f)}\cap (\bigcap\nolimits_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\mathrm{c}<em>{\mathrm{i}})}\cap (\bigcap\nolimits</em>{\mathrm{i}&#x3D;1}^{\mathrm{l}}{\mathrm{h}_{\mathrm{i}})}$$</li>
+<li>D 不是 空集</li>
+<li>我们约定最终求出来的最优结果用$$p^*$$表示</li>
+</ul>
+<h5 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h5><p>定义：实质相同但从不同角度提出不同提法的一对问题。</p>
+<p>在原问题中, 约束条件太多，并且凹凸性不明确。 于是我们将他转化为拉格朗日对偶问题。这样的有点是：只有一个约束，并且拉格朗日对偶问题一定是凹的。</p>
+<p>证明如下：</p>
+<ol>
+<li>类比于等式约束的最值问题，我们为原问题构建一个广义拉格朗日函数</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathcal{L} :\mathbb{R} ^{\mathtt{n}}\times \mathbb{R} ^{\Bbbk}\times \mathbb{R} ^{\mathrm{l}}\rightarrow \mathrm{R}\<br>	\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathtt{f}(\mathtt{x})+\sum_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\lambda <em>{\mathrm{i}}\mathrm{c}</em>{\mathrm{i}}(\mathtt{x})}+\sum_{\mathrm{j}&#x3D;1}^{\mathrm{l}}{\mathrm{\mu}<em>{\mathrm{j}}\mathrm{h}</em>{\mathrm{j}}(\mathtt{x})}\<br>	\vec{\mathtt{x}}\in \mathbb{R} ^{\mathtt{n}},\vec{\lambda}\in \mathbb{R} ^{\Bbbk},\vec{\mathrm{\mu}}\in \mathbb{R} ^{\mathrm{l}}\<br>\end{aligned}<br>$$</p>
+<ol start="2">
+<li>根据 L 我们定义一个拉格朗日对偶函数 g(lambda, mu)</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathtt{g}(\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}\<br>	&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\bigl( \mathtt{f}(\mathtt{x})+\sum_{\mathtt{i}&#x3D;\mathtt{l}}^{\mathtt{k}}{\lambda <em>{\mathtt{i}}\mathrm{c}</em>{\mathtt{i}}(\mathtt{x})}+\sum_{\mathtt{j}&#x3D;\mathtt{l}}^{\mathtt{l}}{\mathrm{\mu}<em>{\mathtt{j}}\mathrm{h}</em>{\mathtt{j}}(\mathtt{x})} \bigr)\<br>	\lambda &amp;\geqslant 0\<br>\end{aligned}<br>$$</p>
+<p>​	可以证明这个函数一定是凹函数。</p>
+<p>我们总结得到：<strong>不管原函数 f 的凹凸性， 它的对偶函数 g 一定是凹函数</strong></p>
+<p>我们之所以需要这么一个对偶函数是因为<strong>只要 λ 不小于 0 ， g的值永远不会超过 $$p^*$$</strong>。证明略</p>
+<p>也就是说， $$p^*$$永远都不会小于 $$max~g(\lambda,\mu)$$</p>
+<h5 id="从原问题到拉格朗日对偶问题"><a href="#从原问题到拉格朗日对偶问题" class="headerlink" title="从原问题到拉格朗日对偶问题"></a>从原问题到拉格朗日对偶问题</h5><p>我们通过拉格朗日对偶函数给出了最优解 $$p^<em>$$的下界，也就是说我们通过求$$max~g(\lambda,\mu)$$来逼近$$p^</em>$$的值</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png" alt="在这里插入图片描述" style="zoom: 50%;">
+
+<p>回顾原问题，我们现在给出对偶问题的形式<br>$$<br>\begin{aligned}<br>	\max_{\lambda ,\mu} \mathtt{g}(\lambda ,\mu )&amp;&#x3D;\max_{\lambda ,\mu} \mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\lambda ,\mu )\<br>	\mathrm{s}.\mathrm{t}\quad \lambda _{\mathtt{i}}&amp;\geqslant \mathtt{0},\mathtt{i}&#x3D;\mathtt{1},\mathtt{2},…,\mathtt{k}\<br>\end{aligned}<br>$$<br>这是个凸优化问题，我们转而去求 d^* 了。</p>
+<h4 id="KKT条件"><a href="#KKT条件" class="headerlink" title="KKT条件"></a>KKT条件</h4><p>学习中……</p>
+<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><h4 id="超平面"><a href="#超平面" class="headerlink" title="超平面"></a>超平面</h4><p>二维空间上，两类点被一条直线完全分开叫做线性可分</p>
+<p>拓展到n维空间上，将n维欧氏空间上的两个点集$$D_1$$ 和$$D_2$$完全正确地划分开的 $$wx + b &#x3D; 0$$就成了一个超平面。</p>
+<h4 id="支持向量"><a href="#支持向量" class="headerlink" title="支持向量"></a>支持向量</h4><p>样本中距离超平面最近的一些点叫做支持向量</p>
+<p><img src="https://picx.zhimg.com/v2-0f1ccaf844905148b7e75cab0d0ee2e3_1440w.jpg" alt="img"></p>
+<h3 id="SVM最优化问题"><a href="#SVM最优化问题" class="headerlink" title="SVM最优化问题"></a>SVM最优化问题</h3><p>SVM想要找到的就是 最大间隔超平面，即支持向量离超平面最远</p>
+<p>任意超平面可以用以下线性方程来描述：<br>$$<br>w^T x + b &#x3D; 0<br>$$<br>由点到直线的距离公式推导可得，n维向量到超平面的距离为：<br>$$<br>\frac{|w^T x + b &#x3D; 0|}{||w||}<br>$$<br>其中 $$||w||$$ &#x3D; $$\sqrt{w_1^2+…+w_n^2}$$</p>
+<p>我们假设支持向量到超平面的距离为 d，可知其他向量到超平面的距离 &gt; d，于是我们可以这样描述超平面两端的向量：<br>$$<br>\left{ \begin{aligned}<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\ge \boldsymbol{d}\quad \boldsymbol{y}&#x3D;\boldsymbol{1}\<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\le -\boldsymbol{d}\quad \boldsymbol{y}&#x3D;-\boldsymbol{1}\<br>\end{aligned} \right.<br>$$<br>由于 $$||w||d$$ 严格大于0，我们假设它为 1 </p>
+<h2 id="sklearn实现SVM"><a href="#sklearn实现SVM" class="headerlink" title="sklearn实现SVM"></a>sklearn实现SVM</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E7%88%86%E7%A0%B4/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" rel="prev" title="CTF-SHOW 刷题记录Web2">
+      <i class="fa fa-chevron-left"></i> CTF-SHOW 刷题记录Web2
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">支持向量机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80%E8%A1%A5%E5%85%85"><span class="nav-number">1.0.1.</span> <span class="nav-text">数学基础补充</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%85%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%97%A0%E6%9D%A1%E4%BB%B6%E6%9E%81%E5%80%BC%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">二元函数的无条件极值问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E6%9E%81%E5%80%BC%E5%92%8C%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E4%B9%98%E6%95%B0%E6%B3%95"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">条件极值和拉格朗日乘数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7%E8%AF%B4%E6%98%8E"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">数学符号说明</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E6%9C%80%E5%B0%8F"><span class="nav-number">1.0.1.3.1.</span> <span class="nav-text">最大最小</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#inf%E5%92%8Csup%E7%AC%A6%E5%8F%B7"><span class="nav-number">1.0.1.3.2.</span> <span class="nav-text">inf和sup符号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%B8%E5%87%BD%E6%95%B0%E5%87%B9%E5%87%BD%E6%95%B0"><span class="nav-number">1.0.1.3.3.</span> <span class="nav-text">凸函数凹函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">拉格朗日对偶问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%9F%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.1.4.1.</span> <span class="nav-text">原问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.1.4.2.</span> <span class="nav-text">对偶问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8E%E5%8E%9F%E9%97%AE%E9%A2%98%E5%88%B0%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.1.4.3.</span> <span class="nav-text">从原问题到拉格朗日对偶问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#KKT%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.0.1.5.</span> <span class="nav-text">KKT条件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-number">1.0.2.</span> <span class="nav-text">基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E5%B9%B3%E9%9D%A2"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">超平面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">支持向量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SVM%E6%9C%80%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.0.3.</span> <span class="nav-text">SVM最优化问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn%E5%AE%9E%E7%8E%B0SVM"><span class="nav-number">1.1.</span> <span class="nav-text">sklearn实现SVM</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

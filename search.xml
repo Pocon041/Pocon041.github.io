@@ -2917,4 +2917,79 @@
 </blockquote>
 ]]></content>
   </entry>
+  <entry>
+    <title>指令系统</title>
+    <url>/2025/10/07/SVM/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><p>[toc]</p>
+<h3 id="数学基础补充"><a href="#数学基础补充" class="headerlink" title="数学基础补充"></a>数学基础补充</h3><h4 id="二元函数的无条件极值问题"><a href="#二元函数的无条件极值问题" class="headerlink" title="二元函数的无条件极值问题"></a>二元函数的无条件极值问题</h4><ol>
+<li>求偏导等于0，找到所有驻点（必要条件）</li>
+<li>求二阶偏导，依次确定各驻点处A、B、C的值，根据$$AC-B^2$$的符号判断是否为极值点（充分条件）<ol>
+<li>大于0，有极值。A&gt;0极小值，反之极大值</li>
+<li>小于0，没有极值</li>
+<li>等于0，可能有也可能没有</li>
+</ol>
+</li>
+</ol>
+<p>这通常对应一个<strong>最简单的无约束优化问题</strong></p>
+<h4 id="条件极值和拉格朗日乘数法"><a href="#条件极值和拉格朗日乘数法" class="headerlink" title="条件极值和拉格朗日乘数法"></a>条件极值和拉格朗日乘数法</h4><p>条件极值：对自变量有附加条件的极值</p>
+<p>设二元函数$$f(x,y)$$和$$\phi(x,y)$$在区域D内有一阶连续偏导数，则求$$z &#x3D; f(x,y)$$在D内满足条件$$\phi(x,y)$$的极值问题，可以转化为求拉格朗日函数<br>$$<br>L(x,y,\lambda) &#x3D; f(x,y) + \lambda\phi(x,y)~~~~~	(其中\lambda是某一常数)<br>$$<br>的无条件极值问题</p>
+<p>其中我们称一维向量$$\lambda_i$$是一个拉格朗日乘子</p>
+<p>这通常用于<strong>求解带有等式约束的优化问题</strong></p>
+<h4 id="数学符号说明"><a href="#数学符号说明" class="headerlink" title="数学符号说明"></a>数学符号说明</h4><h5 id="最大最小"><a href="#最大最小" class="headerlink" title="最大最小"></a>最大最小</h5><p>$$<br>g(\lambda) &#x3D; max_{x \in D}f(x,\lambda)<br>$$</p>
+<ul>
+<li>这是一个关于$$\lambda$$的函数</li>
+<li>当 $$\lambda &#x3D; y$$ 时，$$g(\lambda)$$ 的取值为： 固定 $$f(x,\lambda)$$ 中的 $$\lambda &#x3D; y $$ ，变动 x 时 f 能娶到的最大值</li>
+</ul>
+<p>$$<br>g(\lambda) &#x3D; max_\lambda ~min_x ~f(x,\lambda)<br>$$</p>
+<ul>
+<li>从右往左看，首先把min这一项看作关于$$\lambda$$ 的函数$$g(\lambda)$$ ，然后求这个函数的最大值</li>
+</ul>
+<h5 id="inf和sup符号"><a href="#inf和sup符号" class="headerlink" title="inf和sup符号"></a>inf和sup符号</h5><p>inf 是下确界，sup 上确界。和最大最小值相似但不同，max f 不存在的情况下 sup f 可能存在</p>
+<h5 id="凸函数凹函数"><a href="#凸函数凹函数" class="headerlink" title="凸函数凹函数"></a>凸函数凹函数</h5><p>使用国内定义还是国际定义仁者见仁智者见智了（<strong>以下使用国际定义</strong>）</p>
+<p>但是要记得詹森不等式<br>$$<br>凸函数：和的函数值 \le 函数值的和 \<br>凹函数：和的函数值 \ge 函数值的和<br>$$<br><a href="https://wetts.github.io/2019/09/11/%E6%95%B0%E5%AD%A6/%E5%85%B6%E4%BB%96/%E4%BB%BF%E5%B0%84%E5%87%BD%E6%95%B0%E5%92%8C%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/">仿射函数</a>是又凹又凸的</p>
+<p>max是凹函数、min是凸函数（利用詹森不等式证明）</p>
+<h4 id="拉格朗日对偶问题"><a href="#拉格朗日对偶问题" class="headerlink" title="拉格朗日对偶问题"></a>拉格朗日对偶问题</h4><h5 id="原问题"><a href="#原问题" class="headerlink" title="原问题"></a>原问题</h5><p>$$<br>\begin{aligned}<br>	\min_{\mathbf{x}\in \mathbb{R} ^{\mathtt{n}}} \mathbf{f}\left( \mathbf{x} \right)\<br>	\mathbf{s}.\mathbf{t}\quad \mathbf{c}<em>{\mathtt{i}}\left( \mathbf{x} \right) &amp;\leqslant \mathbf{0},\mathbf{i}\in \left[ \mathtt{1},\mathtt{k} \right]\<br>	\quad \quad \mathtt{h}</em>{\mathtt{j}}\left( \mathbf{x} \right) &amp;&#x3D;\mathbf{0},\mathbf{j}\in \left[ \mathtt{1},\mathbf{l} \right]\<br>\end{aligned}<br>$$</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96">凸优化</a> 要求$$f(x)$$ 是凸函数， $$c_i(x)$$ 是凸函数， $$h_j(x)$$ 是仿射函数</p>
+<p>但这里我们做两个约定</p>
+<ul>
+<li>我们不假定原函数 f 的凹凸性， f 既可以是凹函数也可以是凸函数</li>
+<li>问题的定义域 $$\mathrm{D}&#x3D;(\mathrm{dom} \mathrm{f)}\cap (\bigcap\nolimits_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\mathrm{c}<em>{\mathrm{i}})}\cap (\bigcap\nolimits</em>{\mathrm{i}&#x3D;1}^{\mathrm{l}}{\mathrm{h}_{\mathrm{i}})}$$</li>
+<li>D 不是 空集</li>
+<li>我们约定最终求出来的最优结果用$$p^*$$表示</li>
+</ul>
+<h5 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h5><p>定义：实质相同但从不同角度提出不同提法的一对问题。</p>
+<p>在原问题中, 约束条件太多，并且凹凸性不明确。 于是我们将他转化为拉格朗日对偶问题。这样的有点是：只有一个约束，并且拉格朗日对偶问题一定是凹的。</p>
+<p>证明如下：</p>
+<ol>
+<li>类比于等式约束的最值问题，我们为原问题构建一个广义拉格朗日函数</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathcal{L} :\mathbb{R} ^{\mathtt{n}}\times \mathbb{R} ^{\Bbbk}\times \mathbb{R} ^{\mathrm{l}}\rightarrow \mathrm{R}\<br>	\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathtt{f}(\mathtt{x})+\sum_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\lambda <em>{\mathrm{i}}\mathrm{c}</em>{\mathrm{i}}(\mathtt{x})}+\sum_{\mathrm{j}&#x3D;1}^{\mathrm{l}}{\mathrm{\mu}<em>{\mathrm{j}}\mathrm{h}</em>{\mathrm{j}}(\mathtt{x})}\<br>	\vec{\mathtt{x}}\in \mathbb{R} ^{\mathtt{n}},\vec{\lambda}\in \mathbb{R} ^{\Bbbk},\vec{\mathrm{\mu}}\in \mathbb{R} ^{\mathrm{l}}\<br>\end{aligned}<br>$$</p>
+<ol start="2">
+<li>根据 L 我们定义一个拉格朗日对偶函数 g(lambda, mu)</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathtt{g}(\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}\<br>	&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\bigl( \mathtt{f}(\mathtt{x})+\sum_{\mathtt{i}&#x3D;\mathtt{l}}^{\mathtt{k}}{\lambda <em>{\mathtt{i}}\mathrm{c}</em>{\mathtt{i}}(\mathtt{x})}+\sum_{\mathtt{j}&#x3D;\mathtt{l}}^{\mathtt{l}}{\mathrm{\mu}<em>{\mathtt{j}}\mathrm{h}</em>{\mathtt{j}}(\mathtt{x})} \bigr)\<br>	\lambda &amp;\geqslant 0\<br>\end{aligned}<br>$$</p>
+<p>​	可以证明这个函数一定是凹函数。</p>
+<p>我们总结得到：<strong>不管原函数 f 的凹凸性， 它的对偶函数 g 一定是凹函数</strong></p>
+<p>我们之所以需要这么一个对偶函数是因为<strong>只要 λ 不小于 0 ， g的值永远不会超过 $$p^*$$</strong>。证明略</p>
+<p>也就是说， $$p^*$$永远都不会小于 $$max~g(\lambda,\mu)$$</p>
+<h5 id="从原问题到拉格朗日对偶问题"><a href="#从原问题到拉格朗日对偶问题" class="headerlink" title="从原问题到拉格朗日对偶问题"></a>从原问题到拉格朗日对偶问题</h5><p>我们通过拉格朗日对偶函数给出了最优解 $$p^<em>$$的下界，也就是说我们通过求$$max~g(\lambda,\mu)$$来逼近$$p^</em>$$的值</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png" alt="在这里插入图片描述" style="zoom: 50%;">
+
+<p>回顾原问题，我们现在给出对偶问题的形式<br>$$<br>\begin{aligned}<br>	\max_{\lambda ,\mu} \mathtt{g}(\lambda ,\mu )&amp;&#x3D;\max_{\lambda ,\mu} \mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\lambda ,\mu )\<br>	\mathrm{s}.\mathrm{t}\quad \lambda _{\mathtt{i}}&amp;\geqslant \mathtt{0},\mathtt{i}&#x3D;\mathtt{1},\mathtt{2},…,\mathtt{k}\<br>\end{aligned}<br>$$<br>这是个凸优化问题，我们转而去求 d^* 了。</p>
+<h4 id="KKT条件"><a href="#KKT条件" class="headerlink" title="KKT条件"></a>KKT条件</h4><p>学习中……</p>
+<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><h4 id="超平面"><a href="#超平面" class="headerlink" title="超平面"></a>超平面</h4><p>二维空间上，两类点被一条直线完全分开叫做线性可分</p>
+<p>拓展到n维空间上，将n维欧氏空间上的两个点集$$D_1$$ 和$$D_2$$完全正确地划分开的 $$wx + b &#x3D; 0$$就成了一个超平面。</p>
+<h4 id="支持向量"><a href="#支持向量" class="headerlink" title="支持向量"></a>支持向量</h4><p>样本中距离超平面最近的一些点叫做支持向量</p>
+<p><img src="https://picx.zhimg.com/v2-0f1ccaf844905148b7e75cab0d0ee2e3_1440w.jpg" alt="img"></p>
+<h3 id="SVM最优化问题"><a href="#SVM最优化问题" class="headerlink" title="SVM最优化问题"></a>SVM最优化问题</h3><p>SVM想要找到的就是 最大间隔超平面，即支持向量离超平面最远</p>
+<p>任意超平面可以用以下线性方程来描述：<br>$$<br>w^T x + b &#x3D; 0<br>$$<br>由点到直线的距离公式推导可得，n维向量到超平面的距离为：<br>$$<br>\frac{|w^T x + b &#x3D; 0|}{||w||}<br>$$<br>其中 $$||w||$$ &#x3D; $$\sqrt{w_1^2+…+w_n^2}$$</p>
+<p>我们假设支持向量到超平面的距离为 d，可知其他向量到超平面的距离 &gt; d，于是我们可以这样描述超平面两端的向量：<br>$$<br>\left{ \begin{aligned}<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\ge \boldsymbol{d}\quad \boldsymbol{y}&#x3D;\boldsymbol{1}\<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\le -\boldsymbol{d}\quad \boldsymbol{y}&#x3D;-\boldsymbol{1}\<br>\end{aligned} \right.<br>$$<br>由于 $$||w||d$$ 严格大于0，我们假设它为 1 </p>
+<h2 id="sklearn实现SVM"><a href="#sklearn实现SVM" class="headerlink" title="sklearn实现SVM"></a>sklearn实现SVM</h2>]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
 </search>
