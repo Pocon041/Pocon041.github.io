@@ -2918,7 +2918,7 @@
 ]]></content>
   </entry>
   <entry>
-    <title>指令系统</title>
+    <title>支持向量机（SVM）</title>
     <url>/2025/10/07/SVM/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><p>[toc]</p>
 <h3 id="数学基础补充"><a href="#数学基础补充" class="headerlink" title="数学基础补充"></a>数学基础补充</h3><h4 id="二元函数的无条件极值问题"><a href="#二元函数的无条件极值问题" class="headerlink" title="二元函数的无条件极值问题"></a>二元函数的无条件极值问题</h4><ol>
