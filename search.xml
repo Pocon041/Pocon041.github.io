@@ -2872,127 +2872,6 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/12/08/node_modules/hexo-asset-img/README/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><p align="center">
-<!-- <img src="docs/.vuepress/public/images/logo.png" alt="hexo-asset-img"> -->
-</p>
-<h1 align="center">hexo-asset-img</h1>
-
-<p>English | <a href="README_zh.md">中文</a></p>
-<blockquote>
-<p>:cake: Hexo local image plugin: Convert the relative path of the image to asset_img</p>
-</blockquote>
-<p><a href><img src="https://img.shields.io/github/repo-size/yiyungent/hexo-asset-img.svg?style=flat" alt="repo size"></a><br><a href="https://github.com/yiyungent/hexo-asset-img/blob/master/LICENSE"><img src="https://img.shields.io/github/license/yiyungent/hexo-asset-img.svg?style=flat" alt="LICENSE"></a><br><a href="https://www.npmjs.com/package/hexo-asset-img"><img src="https://img.shields.io/npm/v/hexo-asset-img.svg" alt="NPM version"></a><br><a href="https://www.npmjs.com/package/hexo-asset-img"><img src="https://img.shields.io/npm/dt/hexo-asset-img" alt="NPM downloads"></a><br><a href="https://jq.qq.com/?_wv=1027&k=q5R82fYN"><img src="https://img.shields.io/badge/QQ%20Group-894031109-deepgreen" alt="QQ Group"></a></p>
-<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>Use this plug-in to realize the preview of Markdown editors such as Typora and Hexo release preview, both of which can display pictures normally</p>
-<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-asset-img --save</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>Latest Dev</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install git://github.com/yiyungent/hexo-asset-img.git#main</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo-typora</span><br><span class="line">├── apppicker.jpg</span><br><span class="line">├── logo.png</span><br><span class="line">└── rules.jpg</span><br><span class="line">hexo-typora.md</span><br></pre></td></tr></table></figure>
-
-<p>Make sure <code>post_asset_folder: true</code> in your <code>_config.yml</code>.</p>
-<p><code>hexo-typora.md</code>: Just use <code>![logo](hexo-typora/logo.png)</code> to insert <code>logo.png</code>.</p>
-<h3 id="Use-with-Typora"><a href="#Use-with-Typora" class="headerlink" title="Use with Typora"></a>Use with Typora</h3><ul>
-<li><a href="https://moeci.com/posts/hexo-typora">Hexo + Typora + Hexo plug-in development to solve the inconsistency of image paths | yiyun’s Blog</a></li>
-</ul>
-<h2 id="Origin"><a href="#Origin" class="headerlink" title="Origin"></a>Origin</h2><p><a href="https://github.com/xcodebuild/hexo-asset-image">hexo-asset-image</a> No longer valid, probably starting from <code>Hexo 5</code>, and this repository has been archived </p>
-<blockquote>
-<p>Q: 为什么使用本地图片 而不是网络图片 (图床) ?<br>A:</p>
-<ol>
-<li>第三方图床不稳定, 容易丢失图片    </li>
-<li>自行搭建图床, 随着上传错误图片, 删除文章而没有删除关联图片 次数的增多, 未引用图片越来越多, 图床中也越来越多的无用冗余图片, 还不方便删除, 也容易误删除     </li>
-<li>本地图片 与 文章在一个文件夹, 易打包, 在无网络或网络较差时也能预览   </li>
-<li>本地图片 放在与 文章文件名同名文件夹内 方便管理</li>
-</ol>
-<p><code>补充:</code><br>很多 <code>markdown编辑器</code> 提供粘贴图片到本地图片文件夹, 这些图片文件名通常不易读, 较长, 如果每次删除文章中的图片引用, 都手动去删除相应图片, 以及删除文章, 手动删除关联图片文件夹, 比较麻烦, 但不删除, 未引用图片又会越来越多, 因此 <code>删除未引用图片工具</code> 应运而生!      </p>
-<ul>
-<li><a href="https://github.com/yiyungent/clear-image-action">yiyungent&#x2F;clear-image-action: 🔧 Image detection. | 图片检测 | 清理未引用图片 | 删除未引用图片 | 检查引用的图片是否有效 | GitHub Actions</a></li>
-<li><a href="https://github.com/yiyungent/coo">yiyungent&#x2F;coo: 🧰 .NET 自用CLI, 工具集</a></li>
-</ul>
-</blockquote>
-<h2 id="Related-Projects"><a href="#Related-Projects" class="headerlink" title="Related Projects"></a>Related Projects</h2><ul>
-<li><a href="https://github.com/yiyungent/clear-image-action">yiyungent&#x2F;clear-image-action: 🔧 Image detection. | 图片检测 | 清理未引用图片 | 删除未引用图片 | 检查引用的图片是否有效 | GitHub Actions</a></li>
-<li><a href="https://github.com/xcodebuild/hexo-asset-image">xcodebuild&#x2F;hexo-asset-image</a></li>
-<li><a href="https://github.com/cocowool/hexo-image-link">cocowool&#x2F;hexo-image-link</a></li>
-<li><a href="https://github.com/cnzsb/hexo-asset">cnzsb&#x2F;hexo-asset</a></li>
-</ul>
-<h2 id="Donate"><a href="#Donate" class="headerlink" title="Donate"></a>Donate</h2><p>hexo-asset-img is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing.</p>
-<p>We accept donations through these channels:</p>
-<ul>
-<li><a href="https://afdian.net/@yiyun" target="_blank">爱发电</a></li>
-</ul>
-<h2 id="Author"><a href="#Author" class="headerlink" title="Author"></a>Author</h2><p><strong>hexo-asset-img</strong> © <a href="https://github.com/yiyungent">yiyun</a>, Released under the <a href="./LICENSE">MIT</a> License.<br><br>Authored and maintained by yiyun with help from contributors (<a href="https://github.com/yiyungent/hexo-asset-img/contributors">list</a>).</p>
-<blockquote>
-<p>GitHub <a href="https://github.com/yiyungent">@yiyungent</a> Gitee <a href="https://gitee.com/yiyungent">@yiyungent</a></p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2024/12/08/node_modules/hexo-asset-img/README_zh/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><p align="center">
-<!-- <img src="docs/.vuepress/public/images/logo.png" alt="hexo-asset-img"> -->
-</p>
-<h1 align="center">hexo-asset-img</h1>
-
-<p><a href="README.md">English</a> | 中文</p>
-<blockquote>
-<p>:cake: Hexo 本地图片插件: 转换 图片相对路径 为 asset_img</p>
-</blockquote>
-<p><a href><img src="https://img.shields.io/github/repo-size/yiyungent/hexo-asset-img.svg?style=flat" alt="repo size"></a><br><a href="https://github.com/yiyungent/hexo-asset-img/blob/master/LICENSE"><img src="https://img.shields.io/github/license/yiyungent/hexo-asset-img.svg?style=flat" alt="LICENSE"></a><br><a href="https://www.npmjs.com/package/hexo-asset-img"><img src="https://img.shields.io/npm/v/hexo-asset-img.svg" alt="NPM version"></a><br><a href="https://www.npmjs.com/package/hexo-asset-img"><img src="https://img.shields.io/npm/dt/hexo-asset-img" alt="NPM downloads"></a><br><a href="https://jq.qq.com/?_wv=1027&k=q5R82fYN"><img src="https://img.shields.io/badge/QQ%20Group-894031109-deepgreen" alt="QQ Group"></a></p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>使用本插件 即可实现 Typora 等 Markdown 编辑器预览 与 Hexo 发布预览 均能正常显示图片</p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-asset-img --save</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>最新开发版</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install git://github.com/yiyungent/hexo-asset-img.git#main</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo-typora</span><br><span class="line">├── apppicker.jpg</span><br><span class="line">├── logo.png</span><br><span class="line">└── rules.jpg</span><br><span class="line">hexo-typora.md</span><br></pre></td></tr></table></figure>
-
-<p>Make sure <code>post_asset_folder: true</code> in your <code>_config.yml</code>.</p>
-<p><code>hexo-typora.md</code>: Just use <code>![logo](hexo-typora/logo.png)</code> to insert <code>logo.png</code>.</p>
-<h3 id="与-Typora-配合使用"><a href="#与-Typora-配合使用" class="headerlink" title="与 Typora 配合使用"></a>与 Typora 配合使用</h3><ul>
-<li><a href="https://moeci.com/posts/hexo-typora">Hexo + Typora + 开发Hexo插件 解决图片路径不一致 | yiyun’s Blog</a></li>
-</ul>
-<h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p><a href="https://github.com/xcodebuild/hexo-asset-image">hexo-asset-image</a> 已无效, 大概是从 <code>Hexo 5</code> 开始，并且此仓库已 archived </p>
-<blockquote>
-<p>Q: 为什么使用本地图片 而不是网络图片 (图床) ?<br>A:</p>
-<ol>
-<li>第三方图床不稳定, 容易丢失图片    </li>
-<li>自行搭建图床, 随着上传错误图片, 删除文章而没有删除关联图片 次数的增多, 未引用图片越来越多, 图床中也越来越多的无用冗余图片, 还不方便删除, 也容易误删除     </li>
-<li>本地图片 与 文章在一个文件夹, 易打包, 在无网络或网络较差时也能预览   </li>
-<li>本地图片 放在与 文章文件名同名文件夹内 方便管理</li>
-</ol>
-<p><code>补充:</code><br>很多 <code>markdown编辑器</code> 提供粘贴图片到本地图片文件夹, 这些图片文件名通常不易读, 较长, 如果每次删除文章中的图片引用, 都手动去删除相应图片, 以及删除文章, 手动删除关联图片文件夹, 比较麻烦, 但不删除, 未引用图片又会越来越多, 因此 <code>删除未引用图片工具</code> 应运而生!      </p>
-<ul>
-<li><a href="https://github.com/yiyungent/clear-image-action">yiyungent&#x2F;clear-image-action: 🔧 Image detection. | 图片检测 | 清理未引用图片 | 删除未引用图片 | 检查引用的图片是否有效 | GitHub Actions</a></li>
-<li><a href="https://github.com/yiyungent/coo">yiyungent&#x2F;coo: 🧰 .NET 自用CLI, 工具集</a></li>
-</ul>
-</blockquote>
-<h2 id="相关项目"><a href="#相关项目" class="headerlink" title="相关项目"></a>相关项目</h2><ul>
-<li><a href="https://github.com/yiyungent/clear-image-action">yiyungent&#x2F;clear-image-action: 🔧 Image detection. | 图片检测 | 清理未引用图片 | 删除未引用图片 | 检查引用的图片是否有效 | GitHub Actions</a></li>
-<li><a href="https://github.com/xcodebuild/hexo-asset-image">xcodebuild&#x2F;hexo-asset-image</a></li>
-<li><a href="https://github.com/cocowool/hexo-image-link">cocowool&#x2F;hexo-image-link</a></li>
-<li><a href="https://github.com/cnzsb/hexo-asset">cnzsb&#x2F;hexo-asset</a></li>
-</ul>
-<h2 id="Donate"><a href="#Donate" class="headerlink" title="Donate"></a>Donate</h2><p>hexo-asset-img is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing.</p>
-<p>We accept donations through these channels:</p>
-<ul>
-<li><a href="https://afdian.net/@yiyun" target="_blank">爱发电</a></li>
-</ul>
-<h2 id="Author"><a href="#Author" class="headerlink" title="Author"></a>Author</h2><p><strong>hexo-asset-img</strong> © <a href="https://github.com/yiyungent">yiyun</a>, Released under the <a href="./LICENSE">MIT</a> License.<br><br>Authored and maintained by yiyun with help from contributors (<a href="https://github.com/yiyungent/hexo-asset-img/contributors">list</a>).</p>
-<blockquote>
-<p>GitHub <a href="https://github.com/yiyungent">@yiyungent</a> Gitee <a href="https://gitee.com/yiyungent">@yiyungent</a></p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
     <title>格式化字符串</title>
     <url>/2024/11/06/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><p>格式化字符串是个按部就班的人，直接打印的时候，不管给没给参数，他会按照参数的规则，打印出字符串中给的格式化字符，不管这个参数危不危险</p>
@@ -3053,6 +2932,2230 @@
       </categories>
       <tags>
         <tag>Pwn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网期末复习</title>
+    <url>/2026/01/17/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="第一章-绪论"><a href="#第一章-绪论" class="headerlink" title="第一章    绪论"></a>第一章    绪论</h1><h3 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h3><h4 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h4><p>数据是数据库中存储的基本对象。数据是描述事物的符号记录</p>
+<p>数据和语义是不可分的</p>
+<h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4><p>数据库是<strong><font color="red">长期储存</font></strong>在计算机内、<strong><font color="red">有组织</font></strong>、<strong><font color="red">可共享</font></strong>的<strong><font color="red">大量</font></strong>数据集合</p>
+<h3 id="数据模型三要素"><a href="#数据模型三要素" class="headerlink" title="数据模型三要素"></a>数据模型三要素</h3><p><strong><font color="red">数据结构，数据操作，完整性约束</font></strong></p>
+<h3 id="数据库领域常用逻辑模型"><a href="#数据库领域常用逻辑模型" class="headerlink" title="数据库领域常用逻辑模型"></a>数据库领域常用逻辑模型</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116122909654.png" alt="image-20260116122909654" style="zoom:50%;"></p>
+<h3 id="概念模型（E-R图）"><a href="#概念模型（E-R图）" class="headerlink" title="概念模型（E-R图）"></a>概念模型（E-R图）</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116123737950.png" alt="image-20260116123737950" style="zoom:50%;"></p>
+<h3 id="什么是数据库系统三级模式结构？优点？"><a href="#什么是数据库系统三级模式结构？优点？" class="headerlink" title="什么是数据库系统三级模式结构？优点？"></a>什么是数据库系统三级模式结构？优点？</h3><h4 id="三级模式结构（大概率考）"><a href="#三级模式结构（大概率考）" class="headerlink" title="三级模式结构（大概率考）"></a><font color="red">三级模式结构（大概率考）</font></h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251216103240728.png" alt="image-20251216103240728" style="zoom: 67%;"></p>
+<p>模式：全体数据的逻辑结构和特征的描述。是一个中间层</p>
+<p>内模式：是数据物理结构和存储方式的描述，是数据在数据库内部的表示方式。我们在第九章详细讲了这个。</p>
+<p>外模式：两个一对多。外模式是数据库用户使用的<strong>局部</strong>数据的逻辑结构和特征的描述；同一外模式也可以为某一用户的多个应用系统所使用</p>
+<h4 id="二级映像"><a href="#二级映像" class="headerlink" title="二级映像"></a>二级映像</h4><p>三个抽象级别的联系和转换</p>
+<h5 id="外模式-模式映像"><a href="#外模式-模式映像" class="headerlink" title="外模式/模式映像"></a>外模式/模式映像</h5><ul>
+<li>保证数据的逻辑独立性</li>
+</ul>
+<p>一个数据库可以有多个外模式。反映了不同用户的应用需求，看待数据的方式，对数据保密的要求</p>
+<h5 id="逻辑独立性"><a href="#逻辑独立性" class="headerlink" title="逻辑独立性"></a><font color="red">逻辑独立性</font></h5><p>当<strong><font color="blue">模式改变时</font></strong>，数据库管理员<strong><font color="blue">修改有关的外模式/模式映像</font></strong>，使<strong><font color="blue">外模式保持不变</font></strong></p>
+<p>应用程序是依据数据的外模式编写的，从而<strong><font color="blue">应用程序不必修改</font></strong>，保证了数据与程序的逻辑独立性，简称数据的逻辑独立性。</p>
+<h5 id="模式-内模式映像"><a href="#模式-内模式映像" class="headerlink" title="模式/内模式映像"></a>模式/内模式映像</h5><ul>
+<li>保证数据的物理独立性</li>
+</ul>
+<p>数据库中该映像是唯一的。</p>
+<h5 id="物理独立性"><a href="#物理独立性" class="headerlink" title="物理独立性"></a><font color="red">物理独立性</font></h5><p>当<strong><font color="blue">数据库的存储结构改变</font></strong>了（例如选用了另一种存储结构），数据库管理员<strong><font color="blue">修改模式/内模式映像</font></strong>，使<strong><font color="blue">模式保持不变</font></strong></p>
+<p><strong><font color="blue">应用程序不受影响</font></strong>，保证了数据与程序的物理独立性</p>
+<h1 id="第二章-关系数据库"><a href="#第二章-关系数据库" class="headerlink" title="第二章    关系数据库"></a>第二章    关系数据库</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>域：具有相同数据类型的值的集合</p>
+<p>笛卡尔积：所有域的所有取值的组合</p>
+<p>元组：笛卡尔积中的每一个元素</p>
+<p>分量；笛卡尔积元素中的每个值</p>
+<h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h3><p>关系是<strong>笛卡尔积的子集</strong>。关系中的每个元素是关系中的元组。</p>
+<h4 id="关系的表示"><a href="#关系的表示" class="headerlink" title="关系的表示"></a>关系的表示</h4><p>关系是一个<strong>二维表</strong>，表的每行对应一个<strong>元组</strong>，每列对应一个<strong>域</strong>。为了区分不同的域，我们取一个名字为<strong>属性</strong></p>
+<h4 id="不同的码"><a href="#不同的码" class="headerlink" title="不同的码"></a><font color="red"><strong>不同的码</strong></font></h4><h5 id="候选码"><a href="#候选码" class="headerlink" title="候选码"></a>候选码</h5><p>关系中的某一属性组（一类属性）能够决定其他元组，就称该属性组为候选码</p>
+<h5 id="全码"><a href="#全码" class="headerlink" title="全码"></a>全码</h5><p>关系中所有属性组是这个关系模式的候选码，称为全码</p>
+<h5 id="主码"><a href="#主码" class="headerlink" title="主码"></a>主码</h5><p>从多个候选码选一个出来，称为主码</p>
+<h5 id="外部码"><a href="#外部码" class="headerlink" title="外部码"></a>外部码</h5><p>F是基本关系R的一个或一组属性，但不是关系R的码。如果F与基本关系S的主码Ks相对应，则称F是基本关系R的外码。其中基本关系R称为<strong>参照关系</strong>，基本关系S称为<strong>被参照关系</strong>或<strong>目标关系</strong></p>
+<h5 id="主属性"><a href="#主属性" class="headerlink" title="主属性"></a>主属性</h5><p>候选码的所有属性都称为主属性。</p>
+<h2 id="关系代数（必考）"><a href="#关系代数（必考）" class="headerlink" title="关系代数（必考）"></a>关系代数（必考）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260114095744784.png" alt="image-20260114095744784" style="zoom: 33%;"></p>
+<h3 id="笛卡尔积"><a href="#笛卡尔积" class="headerlink" title="笛卡尔积"></a>笛卡尔积</h3><p>R 和 S，R作为外层循环，有n条记录；S作为内层循环，有m条记录。二重循环后，最后得到一个n * m的结果。</p>
+<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>略</p>
+<h3 id="投影"><a href="#投影" class="headerlink" title="投影"></a>投影</h3><p>略</p>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><h4 id="等值连接"><a href="#等值连接" class="headerlink" title="等值连接"></a>等值连接</h4><h4 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h4><p>把等值连接中的重复列去掉</p>
+<h3 id="除"><a href="#除" class="headerlink" title="除"></a>除</h3><p>给定关系<strong>R (X，Y)</strong> 和<strong>S (Y，Z)</strong>，其中<strong>X</strong>，<strong>Y</strong>，<strong>Z</strong>为属性组。</p>
+<p><strong>R</strong>中的<strong>Y</strong>与<strong>S</strong>中的<strong>Y</strong>可以有不同的属性名，但必须出自相同的域集。</p>
+<p><strong><em>R</em>与<em>S</em>的除运算</strong>得到一个新的关系<strong>P(X)</strong></p>
+<p><strong>P</strong>是<strong>R</strong>中满足下列条件的元组在 <strong>X</strong> 属性列上的投影：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116121259857.png" alt="image-20260116121259857" style="zoom:67%;"></p>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260114100632672.png" alt="image-20260114100632672" style="zoom:67%;"></p>
+<h3 id="做题步骤"><a href="#做题步骤" class="headerlink" title="做题步骤"></a>做题步骤</h3><ol>
+<li>求的是什么属性：投影</li>
+<li>满足什么限制条件：选择</li>
+<li>从哪张表或哪几张表中查找：自然连接</li>
+</ol>
+<h1 id="第三章-关系数据库标准语言SQL"><a href="#第三章-关系数据库标准语言SQL" class="headerlink" title="第三章    关系数据库标准语言SQL"></a>第三章    关系数据库标准语言SQL</h1><h2 id="表层次的SQL语句"><a href="#表层次的SQL语句" class="headerlink" title="表层次的SQL语句"></a>表层次的SQL语句</h2><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span></span><br><span class="line">	[<span class="keyword">ADD</span> <span class="operator">&lt;</span>新列名<span class="operator">&gt;</span> <span class="operator">&lt;</span>数据类型<span class="operator">&gt;</span> [完整性约束]]</span><br><span class="line">	[<span class="keyword">DROP</span> <span class="operator">&lt;</span>完整性约束名<span class="operator">&gt;</span>]</span><br><span class="line">	[<span class="keyword">ALTER</span> <span class="keyword">COLUMN</span> <span class="operator">&lt;</span>列名<span class="operator">&gt;</span> <span class="operator">&lt;</span>数据类型<span class="operator">&gt;</span>]</span><br></pre></td></tr></table></figure>
+<h5 id="例"><a href="#例" class="headerlink" title="例"></a>例</h5><p>向Student表增加“入学时间”列，其数据类型为日期型。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> Student <span class="keyword">ADD</span> S_entrance <span class="type">DATE</span>；</span><br></pre></td></tr></table></figure>
+<p>增加课程名称必须取唯一值的约束条件。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> Course <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span>(Cname); </span><br></pre></td></tr></table></figure>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span> [RESTRICT <span class="operator">|</span> CASCADE]</span><br></pre></td></tr></table></figure>
+<h2 id="记录层次的SQL语句"><a href="#记录层次的SQL语句" class="headerlink" title="记录层次的SQL语句"></a>记录层次的SQL语句</h2><h3 id="增"><a href="#增" class="headerlink" title="增"></a>增</h3><h4 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h4><p>不能破坏实体完整性、参照完整性以及用户定义的完整性。考虑下2NF（存在传递依赖）、3NF（存在）的插入异常</p>
+<h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p>INTO子句后面属性列的顺序可与表定义的顺序不一样。如果不写默认为表中定义的顺序。</p>
+<p>但是VALUES子句中的提供的值必须和INTO子句匹配</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">INSERT</span><br><span class="line">INTO &lt;表名&gt; [ (&lt;属性列1&gt; [, &lt;属性列2&gt;, ...)] ]</span><br><span class="line">VALUES (&lt;常量1&gt; [, &lt;常量2&gt;] ... )</span><br></pre></td></tr></table></figure>
+<h4 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h4><p>将一个新学生元组（学号：200215128；姓名：陈冬；性别：男；所在系：IS；年龄：18岁）插入到Student表中。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span></span><br><span class="line"><span class="keyword">INTO</span>  Student (Sno，Sname，Ssex，Sdept，Sage)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="string">&#x27;200215128&#x27;</span>，<span class="string">&#x27;陈冬&#x27;</span>，<span class="string">&#x27;男&#x27;</span>，<span class="string">&#x27;IS&#x27;</span>，<span class="number">18</span>)；</span><br></pre></td></tr></table></figure>
+<p>对每一个系，求学生的平均年龄，并把结果存入数据库。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span></span><br><span class="line"><span class="keyword">INTO</span>  Dept_age(Sdept，Avg_age)</span><br><span class="line">    <span class="keyword">SELECT</span>  Sdept，<span class="built_in">AVG</span>(Sage)</span><br><span class="line">    <span class="keyword">FROM</span>  Student</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> Sdept；</span><br></pre></td></tr></table></figure>
+<h3 id="删"><a href="#删" class="headerlink" title="删"></a>删</h3><h4 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h4><p>where子句缺省表示要删除表中的全部元组，表的定义仍在字典中</p>
+<p>如果删除操作破坏了数据库的完整性，将进行违约处理</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span></span><br><span class="line">[<span class="keyword">WHERE</span> <span class="operator">&lt;</span>条件<span class="operator">&gt;</span>];</span><br></pre></td></tr></table></figure>
+<h4 id="例-1"><a href="#例-1" class="headerlink" title="例"></a>例</h4><p>删除计算机可学习所有学生的选课记录</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span></span><br><span class="line"><span class="keyword">FROM</span> SC</span><br><span class="line"><span class="keyword">WHERE</span> ’CS<span class="string">&#x27; = (</span></span><br><span class="line"><span class="string">				SELECT Sdept</span></span><br><span class="line"><span class="string">				FROM Student</span></span><br><span class="line"><span class="string">				WHERE Student.sno = SC.sno</span></span><br><span class="line"><span class="string">				);</span></span><br></pre></td></tr></table></figure>
+<h3 id="改"><a href="#改" class="headerlink" title="改"></a>改</h3><p>RDBMS在执行修改语句时会检查修改操作。如果破坏了数据库的完整性，将进行违约处理</p>
+<h4 id="规则-1"><a href="#规则-1" class="headerlink" title="规则"></a>规则</h4><h4 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h4><p>SET子句指定修改方式、要修改的列和修改后的取值</p>
+<p>WHERE子句指定要修改的元组，缺省表示要修改表中所有元组</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">SET</span> <span class="operator">&lt;</span>列名<span class="operator">&gt;</span> <span class="operator">=</span> <span class="operator">&lt;</span>表达式<span class="operator">&gt;</span> [, <span class="operator">&lt;</span>列名<span class="operator">&gt;=</span><span class="operator">&lt;</span>表达式<span class="operator">&gt;</span> ]...</span><br><span class="line">[<span class="keyword">WHERE</span> <span class="operator">&lt;</span>条件<span class="operator">&gt;</span>];</span><br></pre></td></tr></table></figure>
+<h4 id="例-2"><a href="#例-2" class="headerlink" title="例"></a>例</h4><p>将学生200215121的年龄改为22岁</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span>  Student</span><br><span class="line"><span class="keyword">SET</span> Sage<span class="operator">=</span><span class="number">22</span></span><br><span class="line"><span class="keyword">WHERE</span>  Sno<span class="operator">=</span><span class="string">&#x27; 200215121 &#x27;</span>； </span><br></pre></td></tr></table></figure>
+<p>将所有学生的年龄增加1岁</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> Student</span><br><span class="line"><span class="keyword">SET</span> Sage<span class="operator">=</span> Sage<span class="operator">+</span><span class="number">1</span>；</span><br></pre></td></tr></table></figure>
+<p><strong><font color="red">将计算机科学系全体学生的成绩置零</font></strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> SC</span><br><span class="line">    <span class="keyword">SET</span>  Grade<span class="operator">=</span><span class="number">0</span></span><br><span class="line">    <span class="keyword">WHERE</span>  <span class="string">&#x27;CS&#x27;</span><span class="operator">=</span></span><br><span class="line">           (<span class="keyword">SELECT</span> Sdept</span><br><span class="line">            <span class="keyword">FROM</span>  Student</span><br><span class="line">            <span class="keyword">WHERE</span>  Student.Sno <span class="operator">=</span> SC.Sno)；</span><br></pre></td></tr></table></figure>
+<h3 id="查"><a href="#查" class="headerlink" title="查"></a>查</h3><p>这个单独写一篇</p>
+<h2 id="索引相关的SQL语句"><a href="#索引相关的SQL语句" class="headerlink" title="索引相关的SQL语句"></a>索引相关的SQL语句</h2><h3 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">UNIQUE</span>] [CLUSTER] INDEX <span class="operator">&lt;</span>索引名<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ON</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span> (<span class="operator">&lt;</span>列名<span class="operator">&gt;</span>[次序] ...);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>UNIQUE：唯一索引</p>
+</li>
+<li><p>CLUSTER：聚簇索引</p>
+</li>
+<li><p>次序</p>
+<ul>
+<li>ASC：升序</li>
+<li>DESC：降序</li>
+</ul>
+</li>
+</ul>
+<h5 id="例-3"><a href="#例-3" class="headerlink" title="例"></a>例</h5><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> CLUSTER INDEX Stusname  <span class="keyword">ON</span>  Student(Sname)；</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">UNIQUE</span> INDEX  SCno <span class="keyword">ON</span> SC(Sno <span class="keyword">ASC</span>，Cno <span class="keyword">DESC</span>)； </span><br></pre></td></tr></table></figure>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> INDEX <span class="operator">&lt;</span>索引名<span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="视图相关的SQL语句"><a href="#视图相关的SQL语句" class="headerlink" title="视图相关的SQL语句"></a>视图相关的SQL语句</h2><h3 id="视图的定义"><a href="#视图的定义" class="headerlink" title="视图的定义"></a><font color="red">视图的定义</font></h3><ul>
+<li>是从一个或几个基本表导出的虚表</li>
+<li>只存放视图的定义，不存放视图对应的数据</li>
+<li>基表中的数据发生变化，从视图中查询出的数据也随之改变</li>
+</ul>
+<h3 id="建立视图"><a href="#建立视图" class="headerlink" title="建立视图"></a>建立视图</h3><p>RDBMS执行CREATE VIEW语句时只是把视图定义存入数据字典，并不执行其中的SELECT语句。</p>
+<blockquote>
+<p>数据字典是DBMS内部的一组系统表，记录了数据库中所有的定义信息。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> <span class="operator">&lt;</span>视图名<span class="operator">&gt;</span> [ (<span class="operator">&lt;</span>列名<span class="operator">&gt;</span> [,<span class="operator">&lt;</span>列名<span class="operator">&gt;</span>]...) ]</span><br><span class="line"><span class="keyword">AS</span> <span class="operator">&lt;</span>子查询<span class="operator">&gt;</span></span><br><span class="line">[<span class="keyword">WITH</span> <span class="keyword">CHECK</span> OPTION];</span><br></pre></td></tr></table></figure>
+<p>WITH CHECK OPTION表示对视图进行 增删改 操作时要保证 增删改的行 满足 视图定义中的谓词条件。</p>
+<h4 id="例-4"><a href="#例-4" class="headerlink" title="例"></a>例</h4><p>建立信息系学生的视图，并要求进行修改和插入操作时仍需保证该视图只有信息系的学生 。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> CS</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> Sno, Sname, Sage</span><br><span class="line"><span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> Sdept <span class="operator">=</span> <span class="string">&#x27;CS&#x27;</span></span><br><span class="line"><span class="keyword">WITH</span> <span class="keyword">CHECK</span> OPTION;</span><br></pre></td></tr></table></figure>
+<p>这样在对视图 CS 进行增删改的时候会自动加上 Sdept=’IS‘ 的条件</p>
+<p>将Student表中所有女生记录定义为一个视图</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">VIEW</span> F_Student(F_Sno，name，sex，age，dept)</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span>  Student</span><br><span class="line"><span class="keyword">WHERE</span> Ssex<span class="operator">=</span>‘女’；</span><br></pre></td></tr></table></figure>
+<p>但这样Student表变了，视图也不能用了</p>
+<h3 id="更新视图"><a href="#更新视图" class="headerlink" title="更新视图"></a>更新视图</h3><p>将信息系学生视图IS_Student中学号200215122的学生姓名改为“刘辰”</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span>  IS_Student</span><br><span class="line"><span class="keyword">SET</span>  Sname<span class="operator">=</span> <span class="string">&#x27;刘辰&#x27;</span></span><br><span class="line"><span class="keyword">WHERE</span>  Sno<span class="operator">=</span> <span class="string">&#x27; 200215122 &#x27;</span>；</span><br></pre></td></tr></table></figure>
+<p>会写sql查询语句，以及视图部分定义要牢记</p>
+<p>基本表的定义 删除 修改 创建</p>
+<p>重点：数据的查询</p>
+<p>数据查询 数据定义 数据操作</p>
+<p>d单表（排序 分组） 连接（等值） 嵌套（带in的子查询）</p>
+<p>数据更新 插入 删除</p>
+<p>索引的创建 要会创建索引 知道数据字典的概念</p>
+<p><a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=视图&amp;zhida_source=entity">视图</a> 什么是视图 如何创建视图</p>
+<p>查询（给定条件） 新建 删除 修改 满足某种条件的 排序 统计 分组 视图创建 视图创建时的完整性</p>
+<h1 id="第四章-数据库安全性"><a href="#第四章-数据库安全性" class="headerlink" title="第四章    数据库安全性"></a>第四章    数据库安全性</h1><blockquote>
+<p>能改概述如何维护数据库安全</p>
+<p>数据库的安全控制常用的方法技术 <a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=自主存取控制&amp;zhida_source=entity">自主存取控制</a>（什么语句实现的 授权 撤销授权） <a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=强制存取控制&amp;zhida_source=entity">强制存取控制</a></p>
+<p><a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=审计&amp;zhida_source=entity">审计</a> 审计的概念 审计的分类（由谁来审计）</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116125148943.png" alt="image-20260116125148943" style="zoom:50%;"></p>
+<p>最低要求是C2</p>
+<h3 id="用户标识和鉴定"><a href="#用户标识和鉴定" class="headerlink" title="用户标识和鉴定"></a>用户标识和鉴定</h3><p>用户提供口令，系统核对口令以鉴别用户身份</p>
+<h3 id="存取控制"><a href="#存取控制" class="headerlink" title="存取控制"></a><font color="red">存取控制</font></h3><h4 id="主体、客体定义"><a href="#主体、客体定义" class="headerlink" title="主体、客体定义"></a>主体、客体定义</h4><ul>
+<li>主体是系统中的<font color="green">活动实体</font><ul>
+<li>DBMS所管理的实际用户</li>
+<li>代表用户的各进程</li>
+</ul>
+</li>
+<li>客体是系统中的<font color="green">被动实体</font>，是<font color="green">受主体操纵的</font><ul>
+<li>文件</li>
+<li>基表</li>
+<li>索引</li>
+<li>视图</li>
+</ul>
+</li>
+</ul>
+<h4 id="自主存取控制（C2）"><a href="#自主存取控制（C2）" class="headerlink" title="自主存取控制（C2）"></a>自主存取控制（C2）</h4><p>存取控制包括：定义用户权限、合法权限检查</p>
+<p>定义存取权限称为 <strong><font color="blue">授权</font></strong></p>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><p>这是一种灵活的授权机制，DBA拥有所有对象的所有权限。</p>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>可能造成数据的无意泄露。因为这种机制仅仅通过数据的存取权限来进行安全控制，而数据本身并无安全性标记。也就是说只涉及主体，未涉及客体。</p>
+<h5 id="授予"><a href="#授予" class="headerlink" title="授予"></a>授予</h5><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="operator">&lt;</span>权限<span class="operator">&gt;</span> [,<span class="operator">&lt;</span>权限<span class="operator">&gt;</span>]...</span><br><span class="line">[<span class="keyword">ON</span> <span class="operator">&lt;</span>对象类型<span class="operator">&gt;</span> <span class="operator">&lt;</span>对象名<span class="operator">&gt;</span>]</span><br><span class="line"><span class="keyword">TO</span> <span class="operator">&lt;</span>用户<span class="operator">&gt;</span> [,<span class="operator">&lt;</span>用户<span class="operator">&gt;</span>]...</span><br><span class="line">[<span class="keyword">WITH</span> <span class="keyword">GRANT</span> OPTION]</span><br></pre></td></tr></table></figure>
+<p>WITH GRANT OPTION具有这样的特性：不允许循环授权</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116125657985.png" alt="image-20260116125657985" style="zoom:50%;"></p>
+<p>ALL PRIVILEGES， PUBLIC了解一下</p>
+<p>同时可以使用ROLE批量管理。 ROLE就好比是授权的视图</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> ROLE R1；</span><br><span class="line"></span><br><span class="line"><span class="keyword">GRANT</span> ...</span><br><span class="line">ON...</span><br><span class="line"><span class="keyword">TO</span> R1；</span><br><span class="line"></span><br><span class="line"><span class="keyword">GRANT</span> R1</span><br><span class="line"><span class="keyword">To</span> ...</span><br><span class="line"></span><br><span class="line"><span class="keyword">REVOKE</span> R1</span><br><span class="line"><span class="keyword">FROM</span> ...</span><br></pre></td></tr></table></figure>
+<h5 id="收回"><a href="#收回" class="headerlink" title="收回"></a>收回</h5><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">REVOKE</span> <span class="operator">&lt;</span>权限<span class="operator">&gt;</span> [,<span class="operator">&lt;</span>权限<span class="operator">&gt;</span>]...</span><br><span class="line">[<span class="keyword">ON</span> <span class="operator">&lt;</span>对象类型<span class="operator">&gt;</span> <span class="operator">&lt;</span>对象名<span class="operator">&gt;</span>]</span><br><span class="line"><span class="keyword">FROM</span> <span class="operator">&lt;</span>用户<span class="operator">&gt;</span> [,<span class="operator">&lt;</span>用户<span class="operator">&gt;</span>]... [RESTRICT <span class="operator">|</span> CASCADE];</span><br></pre></td></tr></table></figure>
+<p>默认是RESTRICT</p>
+<h4 id="强制存取控制（B1）"><a href="#强制存取控制（B1）" class="headerlink" title="强制存取控制（B1）"></a>强制存取控制（B1）</h4><p>主体的<strong>敏感度标记</strong>称为<strong>许可证级别</strong>，课题的<strong>敏感度标记</strong>为<strong>密级</strong></p>
+<ul>
+<li>主体许可证级别 &gt;= 客体密级：主体可以读客体</li>
+<li>主体许可证级别 = 客体密级：主体可以写客体</li>
+</ul>
+<p>修正规则：主体 &lt;= 客体：主体能写客体</p>
+<h3 id="视图机制"><a href="#视图机制" class="headerlink" title="视图机制"></a>视图机制</h3><p>把要保密的数据对无权存取这些数据的用户隐藏起来，对数据提供一定程度的安全保护</p>
+<p>主要功能是提供数据独立性，间接实现了支持存取谓词的用户权限定义</p>
+<h3 id="审计数据（C2以上必须有）"><a href="#审计数据（C2以上必须有）" class="headerlink" title="审计数据（C2以上必须有）"></a>审计数据（C2以上必须有）</h3><p>设置审计功能</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">AUDIT <span class="operator">&lt;</span>权限<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ON</span> <span class="operator">&lt;</span>对象名<span class="operator">&gt;</span>;</span><br></pre></td></tr></table></figure>
+<p>取消审计功能</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">NOAUDIT <span class="operator">&lt;</span>权限<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ON</span> <span class="operator">&lt;</span>对象名<span class="operator">&gt;</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><h3 id="推理控制、隐蔽信道、数据隐私保护"><a href="#推理控制、隐蔽信道、数据隐私保护" class="headerlink" title="推理控制、隐蔽信道、数据隐私保护"></a>推理控制、隐蔽信道、数据隐私保护</h3><h1 id="第五章-数据库完整性"><a href="#第五章-数据库完整性" class="headerlink" title="第五章    数据库完整性"></a>第五章    数据库完整性</h1><blockquote>
+<p>数据库的完整性 实体完整性 参照完整性 定义理解 使用 重点</p>
+<p>触发器 触发的事件 什么情况下会触发触发器</p>
+<p>能区分数据库的完整性和数据库的安全性 以及他们分别保障了什么</p>
+<p>用户定义的完整性</p>
+</blockquote>
+<h3 id="什么是数据库安全性？什么是完整性？"><a href="#什么是数据库安全性？什么是完整性？" class="headerlink" title="什么是数据库安全性？什么是完整性？"></a>什么是数据库安全性？什么是完整性？</h3><h4 id="完整性"><a href="#完整性" class="headerlink" title="完整性"></a>完整性</h4><p>数据库的完整性指的是<strong><font color="blue">数据</font></strong>的<strong><font color="red">正确性</font></strong>和<strong><font color="red">相容性</font></strong>，防止<strong>不合语义</strong>的数据进入数据库。即：完整性代表是否能真实地反映现实世界。</p>
+<h4 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h4><p>而数据库的安全性指的是保护数据库防止<strong>恶意的破坏</strong>和<strong>非法的存取</strong>。防范对象是<strong>非法用户</strong>和<strong>非法操作</strong>。</p>
+<h3 id="DBMS提供的服务"><a href="#DBMS提供的服务" class="headerlink" title="DBMS提供的服务"></a>DBMS提供的服务</h3><ol>
+<li>提供<strong>定义</strong>完整性约束条件的机制</li>
+<li>提供完整性<strong>检查</strong>的方法</li>
+<li><strong>违约处理</strong></li>
+</ol>
+<h2 id="三类完整性约束定义"><a href="#三类完整性约束定义" class="headerlink" title="三类完整性约束定义"></a>三类完整性约束定义</h2><h3 id="实体完整性"><a href="#实体完整性" class="headerlink" title="实体完整性"></a>实体完整性</h3><p>也就是说主码。单属性的码可以是列级或者表级别，但是多属性的码只能是表级别。</p>
+<h4 id="实体完整性检查和违约处理"><a href="#实体完整性检查和违约处理" class="headerlink" title="实体完整性检查和违约处理"></a>实体完整性检查和违约处理</h4><p>插入或对主码更新时，RDBMS会检查</p>
+<ol>
+<li>主码是否唯一。不唯一拒绝插入或修改</li>
+<li>主码各个属性是否为空。只要有一个为空就拒绝插入或修改</li>
+</ol>
+<h3 id="参照完整性"><a href="#参照完整性" class="headerlink" title="参照完整性"></a>参照完整性</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">FOREIGN KEY</span>(Sno) <span class="keyword">REFERENCES</span> Student(Sno) <span class="keyword">ON</span> [<span class="keyword">DELETE</span> <span class="operator">|</span> <span class="keyword">UPDATE</span> ] CASCADE</span><br></pre></td></tr></table></figure>
+<h4 id="参照完整性检查和违约处理"><a href="#参照完整性检查和违约处理" class="headerlink" title="参照完整性检查和违约处理"></a><font color="red">参照完整性检查和违约处理</font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>被参照表（例如Student）</th>
+<th>参照表（例如SC）</th>
+<th>违约处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可能破坏参照完整性</td>
+<td>插入元组</td>
+<td>拒绝</td>
+</tr>
+<tr>
+<td>可能破坏参照完整性</td>
+<td>修改外码值</td>
+<td>拒绝</td>
+</tr>
+<tr>
+<td>删除元组</td>
+<td>可能破坏参照完整性</td>
+<td>拒绝/级连删除/设置为空值</td>
+</tr>
+<tr>
+<td>修改主码值</td>
+<td>可能破坏参照完整性</td>
+<td>拒绝/级连修改/设置为空值</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h5 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h5><p>受限插入：不允许插入一个不存在的外键</p>
+<p>递归插入：先在被参照表中插入这个元组，再在参照表中插入元组</p>
+<h5 id="修改-1"><a href="#修改-1" class="headerlink" title="修改"></a>修改</h5><p>受限修改：自己想去吧我操了怎么这么多</p>
+<h5 id="删除-1"><a href="#删除-1" class="headerlink" title="删除"></a>删除</h5><p>级联删除：也就是递归删除嘛</p>
+<p>受限删除：系统拒绝</p>
+<p>置空删除：前提是不是被参照表的主码</p>
+<h3 id="用户定义完整性"><a href="#用户定义完整性" class="headerlink" title="用户定义完整性"></a>用户定义完整性</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">Ssex <span class="type">varchar</span>(<span class="number">8</span>) CEHCK (Ssex <span class="keyword">IN</span>(<span class="string">&#x27;male&#x27;</span>, <span class="string">&#x27;female&#x27;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">CONSTRAINT</span> check_sex <span class="keyword">CHECK</span> (Ssex <span class="keyword">IN</span>(<span class="string">&#x27;male&#x27;</span>, <span class="string">&#x27;female&#x27;</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">ALTER TABLE</span> Student</span><br><span class="line"><span class="keyword">ADD CONSTRAINT</span> check_sex <span class="keyword">CHECK</span>(...);</span><br><span class="line"></span><br><span class="line"><span class="keyword">ALTER TABLE</span> Student</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">CONSTRAINT</span> check_sex;</span><br></pre></td></tr></table></figure>
+<h3 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h3><h4 id="定义触发器"><a href="#定义触发器" class="headerlink" title="定义触发器"></a>定义触发器</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TRIGGER</span> <span class="operator">&lt;</span>触发器名<span class="operator">&gt;</span></span><br><span class="line">&#123;BEFORE <span class="operator">|</span> AFTER&#125; <span class="operator">&lt;</span>触发事件<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ON</span> <span class="operator">&lt;</span>表名<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">FOR</span> <span class="keyword">EACH</span> &#123;<span class="type">ROW</span> <span class="operator">|</span> STATEMENT&#125;</span><br><span class="line">[<span class="keyword">WHEN</span> <span class="operator">&lt;</span>触发条件<span class="operator">&gt;</span>]</span><br><span class="line"><span class="operator">&lt;</span>触发动作体<span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="第六章-关系数据理论"><a href="#第六章-关系数据理论" class="headerlink" title="第六章    关系数据理论"></a>第六章    关系数据理论</h1><p>常常会出分析题：</p>
+<h3 id="会分析函数依赖（给定一些关系，分析函数依赖，给出关系候选码，最高满足第几范式，并给出判断依据，"><a href="#会分析函数依赖（给定一些关系，分析函数依赖，给出关系候选码，最高满足第几范式，并给出判断依据，" class="headerlink" title="会分析函数依赖（给定一些关系，分析函数依赖，给出关系候选码，最高满足第几范式，并给出判断依据，"></a>会分析<a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=函数依赖&amp;zhida_source=entity">函数依赖</a>（给定一些关系，分析函数依赖，给出关系候选码，最高满足第几范式，并给出判断依据，</h3><p>函数依赖</p>
+<p>平凡函数依赖和非平凡函数依赖</p>
+<p>完全函数依赖和部分函数依赖</p>
+<p>传递函数依赖</p>
+<h3 id="2NF"><a href="#2NF" class="headerlink" title="2NF"></a>2NF</h3><p>消除了部分依赖</p>
+<h4 id="例子（1NF-gt-2NF）"><a href="#例子（1NF-gt-2NF）" class="headerlink" title="例子（1NF -&gt; 2NF）"></a>例子（1NF -&gt; 2NF）</h4><p>S-L-C(Sno, Sdept, Sloc, Cno, Grade)</p>
+<h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h4><ul>
+<li>插入异常：一个学生还没选课，那么选不上</li>
+<li>删除异常：学生退课后，学生不存在了</li>
+<li>数据冗余：选修四门课程，就要重复四个相同的sloc</li>
+<li>修改复杂：修改某个学生的sdept还要修改多个sloc</li>
+</ul>
+<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>投影分解法</p>
+<p>S-L-C分解为两个关系模式，以消除这些部分函数依赖</p>
+<p>SC（Sno， Cno， Grade）</p>
+<p>S-L（Sno， Sdept， Sloc）</p>
+<h3 id="3NF"><a href="#3NF" class="headerlink" title="3NF"></a>3NF</h3><p>消除了传递依赖</p>
+<h4 id="例子（2NF-gt-3NF）"><a href="#例子（2NF-gt-3NF）" class="headerlink" title="例子（2NF -&gt; 3NF）"></a>例子（2NF -&gt; 3NF）</h4><p>S-L(Sno, Sdept, Sloc)</p>
+<h4 id="异常-1"><a href="#异常-1" class="headerlink" title="异常"></a>异常</h4><ul>
+<li>插入异常：新建的系还没有学生，不能插入</li>
+<li>删除异常：学生没有</li>
+<li>数据冗余度大：</li>
+<li>修改复杂：</li>
+</ul>
+<h4 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h4><p>投影分解法，分解成两个关系模式</p>
+<h3 id="BCNF"><a href="#BCNF" class="headerlink" title="BCNF"></a>BCNF</h3><h3 id="找出设计存在的问题，存在哪些异常，数据冗余，更新异常，插入异常，删除异常，为什么会出现这些异常（与函数依赖，规范化程度有关），并进行修改）"><a href="#找出设计存在的问题，存在哪些异常，数据冗余，更新异常，插入异常，删除异常，为什么会出现这些异常（与函数依赖，规范化程度有关），并进行修改）" class="headerlink" title="找出设计存在的问题，存在哪些异常，数据冗余，更新异常，插入异常，删除异常，为什么会出现这些异常（与函数依赖，规范化程度有关），并进行修改）"></a>找出设计存在的问题，存在哪些异常，数据冗余，更新异常，插入异常，删除异常，为什么会出现这些异常（与函数依赖，规范化程度有关），并进行修改）</h3><h4 id="数据冗余"><a href="#数据冗余" class="headerlink" title="数据冗余"></a>数据冗余</h4><p>浪费大量的存储空间</p>
+<h4 id="更新异常"><a href="#更新异常" class="headerlink" title="更新异常"></a>更新异常</h4><p>数据冗余，更新数据时，维护数据完整性代价大（一个数据变了，多条记录要修改）</p>
+<h4 id="插入异常"><a href="#插入异常" class="headerlink" title="插入异常"></a>插入异常</h4><p>该插的数据插不进去（主键还不存在值）</p>
+<h4 id="删除异常"><a href="#删除异常" class="headerlink" title="删除异常"></a>删除异常</h4><p>不该删除的数据不得不删（本该存档的记录全删了，其他关系里没这个数据）</p>
+<h3 id="通过一些分解，能够达到更高一级的范式。"><a href="#通过一些分解，能够达到更高一级的范式。" class="headerlink" title="通过一些分解，能够达到更高一级的范式。"></a>通过一些分解，能够达到更高一级的范式。</h3><h3 id="给一个关系，会画ER图，语法树的优化，简单的优化（俩规则，选择先做，把选择和笛卡尔积搞成一个连接）"><a href="#给一个关系，会画ER图，语法树的优化，简单的优化（俩规则，选择先做，把选择和笛卡尔积搞成一个连接）" class="headerlink" title="给一个关系，会画ER图，语法树的优化，简单的优化（俩规则，选择先做，把选择和笛卡尔积搞成一个连接）"></a>给一个关系，会画ER图，语法树的优化，简单的优化（俩规则，选择先做，把选择和笛卡尔积搞成一个连接）</h3><h3 id="函数依赖-多值依赖-能判断什么是函数依赖什么是多值依赖"><a href="#函数依赖-多值依赖-能判断什么是函数依赖什么是多值依赖" class="headerlink" title="函数依赖 多值依赖 能判断什么是函数依赖什么是多值依赖"></a>函数依赖 <a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=多值依赖&amp;zhida_source=entity">多值依赖</a> 能判断什么是函数依赖什么是多值依赖</h3><h3 id="传递函数依赖，部分函数依赖"><a href="#传递函数依赖，部分函数依赖" class="headerlink" title="传递函数依赖，部分函数依赖"></a>传递函数依赖，部分函数依赖</h3><h3 id="1，2，3范式，BCNF范式-重点-他们之间的规范化递进关系，消除了什么依赖到达下一级范式"><a href="#1，2，3范式，BCNF范式-重点-他们之间的规范化递进关系，消除了什么依赖到达下一级范式" class="headerlink" title="1，2，3范式，BCNF范式 重点 他们之间的规范化递进关系，消除了什么依赖到达下一级范式"></a>1，2，3范式，<a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=BCNF范式&amp;zhida_source=entity">BCNF范式</a> 重点 他们之间的规范化递进关系，消除了什么依赖到达下一级范式</h3><h3 id="对关系的分解-什么是无损连接性的分解-什么是函数依赖性的分解"><a href="#对关系的分解-什么是无损连接性的分解-什么是函数依赖性的分解" class="headerlink" title="对关系的分解 什么是无损连接性的分解 什么是函数依赖性的分解"></a>对关系的分解 什么是<a href="https://zhida.zhihu.com/search?content_id=258632368&amp;content_type=Article&amp;match_order=1&amp;q=无损连接性&amp;zhida_source=entity">无损连接性</a>的分解 什么是函数依赖性的分解</h3><h1 id="第七章-数据库设计"><a href="#第七章-数据库设计" class="headerlink" title="第七章    数据库设计"></a>第七章    数据库设计</h1><h2 id="数据库设计的基本步骤"><a href="#数据库设计的基本步骤" class="headerlink" title="数据库设计的基本步骤"></a>数据库设计的基本步骤</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260117135810997.png" alt="image-20260117135810997"></p>
+<h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><p>重点是数据和处理</p>
+<h4 id="数据字典"><a href="#数据字典" class="headerlink" title="数据字典"></a><font color="red">数据字典</font></h4><p>进行详细的数据收集和数据分析所获得的主要结果</p>
+<p>包含了数据项、数据结构、数据流、数据存储、处理过程</p>
+<h3 id="概念结构设计"><a href="#概念结构设计" class="headerlink" title="概念结构设计"></a>概念结构设计</h3><p>将需求分析得到的用户需求抽象为信息结构即概念模型的过程就是概念结构设计</p>
+<p>描述概念模型的工具：ER图</p>
+<h4 id="设计概念结构的四类方法"><a href="#设计概念结构的四类方法" class="headerlink" title="设计概念结构的四类方法"></a>设计概念结构的四类方法</h4><p><strong>自顶向下</strong>：先定义全局，再逐步细化</p>
+<p><strong>自底向上</strong>：先定义局部，然后集成起来，最后得到全局概念结构</p>
+<p><strong>逐步扩张</strong>：先定义核心概念结构，然后向外扩充，滚雪球的方式生成其他概念结构</p>
+<p><strong>混合策略</strong>：自顶向下和自底向上的结合。用自顶向下策略设计一个全局概念结构的框架，以它为骨架集成由自底向上策略中设计的各局部概念结构。</p>
+<p>我们一般使用自顶向下进行需求分析，然后通过自底向上设计概念结构</p>
+<h4 id="视图的集成——合并，修改与重构"><a href="#视图的集成——合并，修改与重构" class="headerlink" title="视图的集成——合并，修改与重构"></a><font color="red">视图的集成</font>——合并，修改与重构</h4><p>合并分E-R图存在冲突，有以下几类冲突</p>
+<h5 id="属性冲突"><a href="#属性冲突" class="headerlink" title="属性冲突"></a>属性冲突</h5><p>属性值的类型、取值范围、取值集合不同；属性取值单位冲突</p>
+<blockquote>
+<p>比如有人把学号设计成varchar，有人是long int</p>
+</blockquote>
+<h5 id="命名冲突"><a href="#命名冲突" class="headerlink" title="命名冲突"></a>命名冲突</h5><p>同名异意、异意同名</p>
+<h5 id="结构冲突"><a href="#结构冲突" class="headerlink" title="结构冲突"></a>结构冲突</h5><p>同一对象再不同应用具有不同的抽象</p>
+<blockquote>
+<p>“课程”在某一局部应用中被当作实体, 在另一局部应用中则被当作属性</p>
+</blockquote>
+<p>解决方法：通常是把属性变换为实体或把实体变换为属性，使同一对象具有相同的抽象。变换时要遵循两个准则。</p>
+<blockquote>
+<p>(1)作为属性，不能再具有需要描述的性质，即属性必须是不可分的数据项，不能包含其他属性。</p>
+<p>(2)属性不能与其他实体具有联系，即E-R图中所表示的联系是实体之间的联系。</p>
+<p>凡满足上述两条准则的事物，一般均可作为属性对待。</p>
+</blockquote>
+<p>数据库设计的六个阶段 每个阶段的功能 做的事情 目标</p>
+<p>哪些是和数据库管理系统有关 哪些是无关的</p>
+<p>数据字典</p>
+<p>ER图 会画 会设计 集成时的冲突有哪些</p>
+<p>把ER图转化为关系</p>
+<h1 id="第八章-数据库编程"><a href="#第八章-数据库编程" class="headerlink" title="第八章    数据库编程"></a>第八章    数据库编程</h1><h2 id="嵌入式SQL与主语言的通信"><a href="#嵌入式SQL与主语言的通信" class="headerlink" title="嵌入式SQL与主语言的通信"></a>嵌入式SQL与主语言的通信</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260117143755954.png" alt="image-20260117143755954"></p>
+<h3 id="SQL通信区"><a href="#SQL通信区" class="headerlink" title="SQL通信区"></a>SQL通信区</h3><p>向主语言传递SQL语句的执行状态信息</p>
+<p>使主语言能够据此控制程序流程</p>
+<h3 id="主变量"><a href="#主变量" class="headerlink" title="主变量"></a>主变量</h3><p>主语言向SQL语句提供参数（输入主变量）</p>
+<p>将SQL语句查询数据库结果交主语言进一步处理（输出主变量）</p>
+<p>为了与数据库对象名（表名、视图名、列名等）区别，SQL语句中的主变量名前要加冒号（:）作为标志</p>
+<h3 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h3><p>解决集合性操作语言与过程性操作语言的不匹配</p>
+<p><strong><font color="blue">SQL语言是面向集合的</font></strong>，一条SQL语句原则上可以产生或处理多条记录<br>主语言是面向记录的，<strong><font color="blue">一组主变量一次只能存放一条记录</font></strong><br>仅使用主变量并不能完全满足SQL语句向应用程序输出数据的要求<br>嵌入式SQL引入了游标的概念，用来协调这两种不同的处理方式</p>
+<p>游标是系统为用户开设的一个数据缓冲区，存放SQL语句的执行结果。用户可以用SQL语句逐一从游标中获取记录，并赋给主变量，交由主语言进一步处理</p>
+<h5 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">EXEC SQL DECLARE&lt;cursor_name&gt; CURSOR</span><br><span class="line">	FOR &lt;SELECT phase&gt;;</span><br><span class="line">	</span><br><span class="line">EXEC SQL OPEN &lt;cursor_name&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="不使用游标的SQL语句"><a href="#不使用游标的SQL语句" class="headerlink" title="不使用游标的SQL语句"></a>不使用游标的SQL语句</h2><h2 id="使用游标的SQL语句"><a href="#使用游标的SQL语句" class="headerlink" title="使用游标的SQL语句"></a>使用游标的SQL语句</h2><h2 id="动态SQL"><a href="#动态SQL" class="headerlink" title="动态SQL"></a>动态SQL</h2><h1 id="第九章-关系数据库存储管理"><a href="#第九章-关系数据库存储管理" class="headerlink" title="第九章    关系数据库存储管理"></a>第九章    关系数据库存储管理</h1><h2 id="顺序表索引"><a href="#顺序表索引" class="headerlink" title="顺序表索引"></a>顺序表索引</h2><h4 id="稠密索引"><a href="#稠密索引" class="headerlink" title="稠密索引"></a>稠密索引</h4><ul>
+<li>索引块中存放每条记录的索引属性值以及指向相应记录的指针 </li>
+</ul>
+<h4 id="稀疏索引"><a href="#稀疏索引" class="headerlink" title="稀疏索引"></a>稀疏索引</h4><ul>
+<li>基本表的每个物理存储块只对应一个索引项</li>
+</ul>
+<h4 id="多级索引"><a href="#多级索引" class="headerlink" title="多级索引"></a>多级索引</h4><ul>
+<li>第一级索引是稠密或稀疏索引</li>
+<li>第二级及以上为建立在上一级索引上的稀疏索引</li>
+<li>重复直到尺寸合适</li>
+</ul>
+<h1 id="第十章-关系查询处理和查询优化"><a href="#第十章-关系查询处理和查询优化" class="headerlink" title="第十章    关系查询处理和查询优化"></a>第十章    关系查询处理和查询优化</h1><h2 id="查询处理步骤"><a href="#查询处理步骤" class="headerlink" title="查询处理步骤"></a>查询处理步骤</h2><h3 id="查询分析"><a href="#查询分析" class="headerlink" title="查询分析"></a>查询分析</h3><p>对查询语句进行扫描、词法分析和语法分析</p>
+<h3 id="查询检查"><a href="#查询检查" class="headerlink" title="查询检查"></a>查询检查</h3><p>根据数据字典对合法的查询语句进行语义检查</p>
+<p>检查通过后把SQL查询语句转换称等价的关系表达式，RDBMS一般都用<strong><font color="blue">查询树</font></strong>来标识扩展的关系代数表达式</p>
+<h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><p>选择一个高效执行的查询处理策略</p>
+<p>关系查询优化是影响RDBMS性能的关键因素 </p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><font color="orange">**查询优化的优点不仅在于用户不必考虑如何最好地表达查询以获得较好的效率，而且在于系统可以比用户程序的“优化”做得更好** </font>
+
+<ul>
+<li><strong><font color="green">优化器可以从数据字典中获取许多统计信息</font></strong>，而用户程序则难以获得这些信息</li>
+<li>如果<strong><font color="green">数据库的物理统计信息改变</font></strong>了，<strong><font color="green">系统可以自动对查询重新优化以选择相适应的执行计划</font></strong>。在非关系系统中必须重写程序，而重写程序在实际应用中往往是不太可能的</li>
+<li>优化器可以考虑数百种不同的执行计划，程序员一般只能考虑有限的几种可能性。</li>
+<li>优化器中包括了很多复杂的优化技术，这些优化技术往往只有最好的程序员才能掌握。系统的自动优化相当于使得所有人都拥有这些优化技术</li>
+</ul>
+<h4 id="代数优化"><a href="#代数优化" class="headerlink" title="代数优化"></a>代数优化</h4><h5 id="查询树的启发式规则"><a href="#查询树的启发式规则" class="headerlink" title="查询树的启发式规则"></a>查询树的启发式规则</h5><ol>
+<li><strong><font color="red">选择运算应尽可能先做</font></strong>。这是最重要、最基本的一条</li>
+<li>把<strong><font color="red">投影运算和选择运算同时进行</font></strong>。若有若干投影和选择运算，并且它们都对<strong>同一个关系</strong>操作，则可以在扫描此关系的同时完成所有的这些运算以避免重复扫描关系</li>
+<li>把<strong><font color="red">投影同其前或其后的双目运算结合</font></strong>起来</li>
+<li>把某些<strong><font color="red">选择同</font></strong>在它前面要执行的<strong><font color="red">笛卡尔积</font></strong>结合起来成为一个<strong><font color="red">连接运算</font></strong></li>
+<li><font color="red">**找出公共子表达式**</font>
+
+</li>
+</ol>
+<h5 id="例-5"><a href="#例-5" class="headerlink" title="例"></a>例</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260117130206001.png" alt="image-20260117130206001" style="zoom: 50%;"></p>
+<p>首先选择优先做，所以select放SC前面，然后笛卡尔+选择=自然连接，最后投影即可</p>
+<h4 id="物理优化"><a href="#物理优化" class="headerlink" title="物理优化"></a>物理优化</h4><p>物理优化就是要选择高效合理的操作算法或存取路径，求得优化的查询计划 </p>
+<h5 id="选择操作的启发式规则"><a href="#选择操作的启发式规则" class="headerlink" title="选择操作的启发式规则"></a>选择操作的启发式规则</h5><p>总结一下：<strong>占比大的用全表顺序扫描，占比小的（或主码=值）用索引</strong></p>
+<ol>
+<li>小关系全表扫描，即使选择列上有索引</li>
+<li>对于大关系<ul>
+<li>选择条件是 主码 = 值<ul>
+<li>查询结果最多一个元组，可以选择主码索引</li>
+<li>一般RDBMS自动建立主码索引</li>
+</ul>
+</li>
+<li>选择条件是 非主属性 = 值，非主属性查询 或 范围查询，并且选择列上有索引<ul>
+<li>估算查询结果的元组数目<ul>
+<li>比例小用索引扫描方法</li>
+<li>比例大用全表顺序扫描</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于用AND连接的合取选择条件<ul>
+<li>如果有涉及这些属性的组合索引<ul>
+<li>优先采用组合索引扫描方法</li>
+</ul>
+</li>
+<li>如果某些属性上有一般的索引<ul>
+<li>索引扫描方法</li>
+<li>否则使用全表顺序扫描。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于用OR连接的析取选择条件，一般使用全表顺序扫描</li>
+</ul>
+</li>
+</ol>
+<h5 id="连接操作的启发式规则"><a href="#连接操作的启发式规则" class="headerlink" title="连接操作的启发式规则"></a>连接操作的启发式规则</h5><h3 id="查询执行"><a href="#查询执行" class="headerlink" title="查询执行"></a>查询执行</h3><h2 id="连接操作实现"><a href="#连接操作实现" class="headerlink" title="连接操作实现"></a>连接操作实现</h2><h3 id="嵌套循环方法"><a href="#嵌套循环方法" class="headerlink" title="嵌套循环方法"></a>嵌套循环方法</h3><ol>
+<li>对外层循环中的每一个元组，检索内存循环中的每一个元组</li>
+<li>检查这俩元组在连接属性上是否相同</li>
+<li>如果满足连接条件，则串接后作为结果输出，直到外层循环表中的元组处理完为止</li>
+</ol>
+<h3 id="排序-合并方法"><a href="#排序-合并方法" class="headerlink" title="排序-合并方法"></a>排序-合并方法</h3><ol>
+<li>如果连接的表没有排好序，先对Student表和SC表按连接属性Sno排序</li>
+<li>取Student表中第一个Sno，依次扫描SC表中具有相同的Sno的元组</li>
+<li>当扫描到Sno不相同的第一个SC元组时，返回Student表扫描它的下一个元组，再扫描SC表中具有相同Sno的元组，把它们连接起来</li>
+<li>重复上述步骤直到Student表扫描完</li>
+</ol>
+<h3 id="索引连接方法"><a href="#索引连接方法" class="headerlink" title="索引连接方法"></a>索引连接方法</h3><ol>
+<li>在SC表上建立属性Sno的索引，如果原来没有该索引</li>
+<li>对Student中每一个元组，由Sno值通过SC的索引查找相应的SC元组</li>
+<li>把这些SC元组和Student元组连接起来</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260117124713912.png" alt="image-20260117124713912" style="zoom:67%;"></p>
+<h3 id="Hash-Join方法"><a href="#Hash-Join方法" class="headerlink" title="Hash Join方法"></a>Hash Join方法</h3><ol>
+<li>将Sno作为hash码，将Student表按hash函数分散到hash桶中<br><font color="blue"><strong>划分阶段</strong></font>：对包含较少元组的表进行一遍处理，把它的元组按hash函数分散到hash表的桶中</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Hash码</th>
+<th>200215121</th>
+<th>200215236</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>元组</td>
+<td>200215121刘永25</td>
+<td>200215236  王丽丽23</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li>Sno 作为hash码，将SC表的各个元组按hash函数分散到适当的hash桶中<br><font color="blue"><strong>试探阶段/连接阶段</strong></font>：对另一个表进行一遍操作，把元组散列到适当的hash桶中，把元组与桶中所有来自前一个元组并与之相配的元组连接起来</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Hash码</th>
+<th>200215121</th>
+<th>200215236</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>元组</td>
+<td>200215121,刘永,25  200215121,95001,90  200215121,95002,85</td>
+<td>200215236,  王丽丽,23  200215236,95003,93</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择、连接操作物理优化的启发式规则</p>
+<h1 id="第十一章-数据库恢复技术"><a href="#第十一章-数据库恢复技术" class="headerlink" title="第十一章    数据库恢复技术"></a>第十一章    数据库恢复技术</h1><h2 id="事务的基本概念"><a href="#事务的基本概念" class="headerlink" title="事务的基本概念"></a>事务的基本概念</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>事务是用户定义的一个数据库操作序列，这些操作要么全做要么都不做，是一个不可分割的工作单位</p>
+<h3 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h3><p><strong><font color="red">恢复技术能保证事务的原子性、持续性</font></strong></p>
+<p><strong><font color="red">并发控制能保证事务的一致性、隔离性</font></strong></p>
+<h4 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h4><p>事务中包括的诸操作要么都做，要么都不做</p>
+<h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><p>事务执行的结果必须是使数据库从一个一致性状态变到另一个一致性状态。其中一致性代表数据库中只包含成功事务提交的结果（COM、ROL）。</p>
+<h4 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h4><p>对并发执行而言,一个事务的执行不能被其他事务干扰</p>
+<h4 id="持续性"><a href="#持续性" class="headerlink" title="持续性"></a>持续性</h4><p>一个事务一旦提交，它对数据库中数据的改变就应该是永久性的。</p>
+<h2 id="恢复实现技术"><a href="#恢复实现技术" class="headerlink" title="恢复实现技术"></a>恢复实现技术</h2><h3 id="数据转储"><a href="#数据转储" class="headerlink" title="数据转储"></a>数据转储</h3><p>海量、增量、静态、动态</p>
+<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>日志文件(log)是用来记录事务对数据库的更新操作的文件</p>
+<h4 id="为什么要先写日志文件，再写数据库"><a href="#为什么要先写日志文件，再写数据库" class="headerlink" title="为什么要先写日志文件，再写数据库"></a>为什么要先写日志文件，再写数据库</h4><p>写数据库和写日志文件是两个不同的操作，在这两个操作之间可能发生故障。如果先写了数据库修改，而在日志文件中没有登记下这个修改，则以后就无法恢复这个修改了。如果先写日志，但没有修改数据库，按日志文件恢复时只不过是多执行一次不必要的UNDO操作，并不会影响数据库的正确性。</p>
+<h2 id="恢复策略"><a href="#恢复策略" class="headerlink" title="恢复策略"></a>恢复策略</h2><h3 id="事务内部故障"><a href="#事务内部故障" class="headerlink" title="事务内部故障"></a>事务内部故障</h3><p>是<strong>非预期的</strong>，不能由应用程序处理的。包含运算溢出、死锁撤销、违反完整性约束等</p>
+<h4 id="不一致原因"><a href="#不一致原因" class="headerlink" title="不一致原因"></a>不一致原因</h4><p>事务在运行至正常终止点前被终止</p>
+<h4 id="恢复方法"><a href="#恢复方法" class="headerlink" title="恢复方法"></a>恢复方法</h4><p>利用日志文件<strong><font color="blue">UNDO</font></strong>此事务<strong><font color="blue">已对数据库的修改</font></strong></p>
+<ol>
+<li><strong><font color="red">反向扫描日志</font></strong>，查找该事务的更新操作</li>
+<li>对该事务的更新操作<strong><font color="red">执行逆操作</font></strong></li>
+<li>继续扫描，同样处理，<strong><font color="red">直到读到此事务的开始标记</font></strong></li>
+</ol>
+<h3 id="系统故障"><a href="#系统故障" class="headerlink" title="系统故障"></a>系统故障</h3><p>称为软故障，是指造成系统停止运转的任何事务，使得系统需要重新启动</p>
+<h4 id="不一致原因-1"><a href="#不一致原因-1" class="headerlink" title="不一致原因"></a>不一致原因</h4><p>未完成事务对数据库的更新已写入数据库，已提交事务对数据库的更新还留在缓冲区没来得及写入数据库</p>
+<h4 id="恢复方法-1"><a href="#恢复方法-1" class="headerlink" title="恢复方法"></a>恢复方法</h4><p>UNDO故障发生时未完成的事务，REDO已完成的事务。</p>
+<ol>
+<li><font color="red"><strong>正向扫描日志</strong></font>，将故障发生前已经提交的事务放入重做队列；将故障发生时未完成的事件放入撤销队列</li>
+<li>对撤销队列事务进行撤销处理：<strong><font color="red">反向扫描日志文件</font></strong>，对每个<strong><font color="red">UNDO</font></strong>事件的更新操作执行逆操作</li>
+<li>对重做队列事务进行重做处理：<strong><font color="red">正向扫描日志文件</font></strong>，对每个<strong><font color="red">REDO</font></strong>事件重新执行登记的操作</li>
+</ol>
+<h3 id="介质故障"><a href="#介质故障" class="headerlink" title="介质故障"></a>介质故障</h3><p>称为硬故障，指外存故障</p>
+<h4 id="恢复方法-2"><a href="#恢复方法-2" class="headerlink" title="恢复方法"></a>恢复方法</h4><p>需要重装数据库，并重做已完成的事务</p>
+<ol>
+<li>装入最新的后备数据库副本，使数据库恢复到最近一次转储时的一致性状态</li>
+<li>装入有关的日志文件副本，重做已完成的事务。</li>
+</ol>
+<h2 id="具有检查点的恢复技术"><a href="#具有检查点的恢复技术" class="headerlink" title="具有检查点的恢复技术"></a>具有检查点的恢复技术</h2><h4 id="问题提出"><a href="#问题提出" class="headerlink" title="问题提出"></a><font color="red">问题提出</font></h4><ul>
+<li><font color="blue">搜索整个日志将耗费大量的时间</font></li>
+<li><font color="blue">REDO处理：重新执行，浪费了大量时间</font>
+
+</li>
+</ul>
+<h4 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法"></a>解决方法</h4><ul>
+<li>在日志文件中增加检查点记录（checkpoint）</li>
+<li>增加重新开始文件</li>
+<li>恢复子系统在登录日志文件期间动态地维护日志</li>
+</ul>
+<h4 id="恢复步骤"><a href="#恢复步骤" class="headerlink" title="恢复步骤"></a>恢复步骤</h4><ol>
+<li>从重新开始文件中找到最后一个检查点记录在日志文件中的地址，由该地址在日志文件中<strong><font color="red">找到最后一个检查点记录</font></strong></li>
+<li>由该检查点记录得到<strong><font color="red">检查点建立时刻所有正在执行的事务清单ACTIVE-LIST</font></strong>，建立两个事务队列：UNDO-LIST，REDO-LIST。把ACTIVE-LIST暂时放入<strong><font color="red">UNDO-LIST队列</font></strong>，REDO队列暂为空</li>
+<li><font color="blue">从检查点开始</font><strong><font color="red">正向扫描</font></strong>日志文件，直到日志文件结束。<strong>新开始的事务暂时放到UNDO-LIST，如果提交了就直接放到REDO-LIST</strong></li>
+<li>对UNDO-LIST中的每个事务执行UNDO操作，对REDO-LIST中的每个事务执行REDO操作</li>
+</ol>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a><strong>优势</strong></h4><ul>
+<li>使用检查点方法<strong><font color="green">可以改善恢复效率</font></strong><ul>
+<li>在检查点之前提交的事件不用REDO了</li>
+</ul>
+</li>
+</ul>
+<h1 id="第十二章-并发控制"><a href="#第十二章-并发控制" class="headerlink" title="第十二章    并发控制"></a>第十二章    并发控制</h1><h2 id="并发控制概述"><a href="#并发控制概述" class="headerlink" title="并发控制概述"></a>并发控制概述</h2><p>由于并发操作破坏了事务的隔离性，导致了数据不一致。所以我们通过并发控制，就是要用正确的方式调度并发操作，使一个用户事务的执行不受其他事务的干扰，从而避免造成数据的不一致性</p>
+<h3 id="并发控制机制的任务"><a href="#并发控制机制的任务" class="headerlink" title="并发控制机制的任务"></a>并发控制机制的任务</h3><ul>
+<li>对并发操作进行正确调度</li>
+<li>保证事务的隔离性</li>
+<li>保证数据库的一致性<ul>
+<li>丢失修改</li>
+<li>不可重复度</li>
+<li>读脏数据</li>
+</ul>
+</li>
+</ul>
+<h2 id="不一致性问题"><a href="#不一致性问题" class="headerlink" title="不一致性问题"></a>不一致性问题</h2><h4 id="丢失修改"><a href="#丢失修改" class="headerlink" title="丢失修改"></a>丢失修改</h4><p>两个事务T1和T2读入同一数据并修改，T2的提交结果破坏了T1提交的结果，导致T1的修改被丢失</p>
+<blockquote>
+<p>比如说一张机票有16张，A和B同时知道了这件事，然后同时购买，结果两个人买了后机票还有15张</p>
+</blockquote>
+<h4 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h4><p>不可重复读是指事务T1读取数据后，事务T2执行更新操作，使T1无法再现前一次读取结果</p>
+<ul>
+<li>事务T1读取A，<font color="blue">T2对A进行了修改</font>，T1再次读A的时候得到了与前一次不同的值</li>
+<li>事务T1按一定条件从数据库读取了某些数据记录后，<font color="blue">事务T2删除了其中部分记录</font>，党T1再次按相同条件读取数据时，发现某些记录消失了</li>
+<li>事务T1按一定条件从数据库中读取某些数据记录后，<font color="blue">事务T2插入了一些记录</font>，当T1再次按相同条件读取数据时，发现多了一些记录</li>
+</ul>
+<h4 id="读脏数据"><a href="#读脏数据" class="headerlink" title="读脏数据"></a>读脏数据</h4><ol>
+<li>事务T1修改某一数据，并将其<strong>写回磁盘</strong></li>
+<li>事务T2读取同一数据后，<strong>T1</strong>由于某种原因<strong>被撤销</strong></li>
+<li>这时T1已修改过的数据恢复原值，T2读到的的数据就与数据库中的数据不一致</li>
+<li>T2读到的数据就为脏数据，即不正确的数据</li>
+</ol>
+<h3 id="基本封锁类型"><a href="#基本封锁类型" class="headerlink" title="基本封锁类型"></a>基本封锁类型</h3><p>这不就是经典的读者-写者问题。作者在写的时候，必须保证没有人在读，并且只能一个人写。作者写好了，读者才能读，而且很多人一起读都可以。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116191209138.png" alt="image-20260116191209138" style="zoom: 33%;"></p>
+<h4 id="排他锁"><a href="#排他锁" class="headerlink" title="排他锁"></a>排他锁</h4><p>又称为写锁。若事务T对数据对象A上X锁，则只允许T读取和修改A，其他的任何事务都不能再对A加任何类型的锁，直到T释放A上的锁</p>
+<h4 id="共享锁"><a href="#共享锁" class="headerlink" title="共享锁"></a>共享锁</h4><p>又称为读锁，若事务T对数据对象A加上S锁，则其他事务只能再对A加S锁，而不能加X锁，直到T释放A上的S锁。</p>
+<h3 id="封锁机制"><a href="#封锁机制" class="headerlink" title="封锁机制"></a>封锁机制</h3><p>用于解决并行操作带来的数据不一致性问题</p>
+<h4 id="一级封锁机制——解决丢失修改问题"><a href="#一级封锁机制——解决丢失修改问题" class="headerlink" title="一级封锁机制——解决丢失修改问题"></a>一级封锁机制——解决丢失修改问题</h4><font color="red">修改之前加X锁</font>。本质上就是说写者写的时候读者不准读。但是我们读的时候没有加锁。
+
+事务T在修改R之前必须对其加X锁，直到事务结束（COM和ROL）才释放
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116192157871.png" alt="image-20260116192157871" style="zoom: 67%;">
+
+#### 二级封锁机制——解决读脏数据问题
+
+<font color="red">读取之前加S锁，读完后即可释放S锁</font>。可以防止丢失修改和读脏数据，但由于读完数据即可释放S锁，所以不能保证可重复读。
+
+加上事务T在读取R之前必须先对其加S锁，读完后方可释放S锁。
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116192901313.png" alt="image-20260116192901313" style="zoom:50%;">
+
+#### 三级封锁机制——解决不可重复读问题
+
+<font color="red">读取之前加S锁，事务结束后即可释放S锁</font>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116193426599.png" alt="image-20260116193426599" style="zoom:50%;"></p>
+<h2 id="活锁和死锁"><a href="#活锁和死锁" class="headerlink" title="活锁和死锁"></a>活锁和死锁</h2><p>解决合理调度问题</p>
+<h3 id="活锁——饥饿"><a href="#活锁——饥饿" class="headerlink" title="活锁——饥饿"></a>活锁——饥饿</h3><p>因为X锁拥有绝对的优先级，可能导致S锁无限等待</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116193700235.png" alt="image-20260116193700235" style="zoom:33%;"></p>
+<h4 id="解决方法-3"><a href="#解决方法-3" class="headerlink" title="解决方法"></a>解决方法</h4><p>先来先服务</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116193700235.png" style="zoom:50%;"></p>
+<h4 id="预防死锁"><a href="#预防死锁" class="headerlink" title="预防死锁"></a>预防死锁</h4><p>破坏死锁的必要条件</p>
+<h5 id="一次封锁法（破坏请求保持条件）"><a href="#一次封锁法（破坏请求保持条件）" class="headerlink" title="一次封锁法（破坏请求保持条件）"></a>一次封锁法（破坏请求保持条件）</h5><p>要求每个事务必须一次将所有要使用的数据全部加锁，否则不能继续执行</p>
+<h5 id="顺序封锁法（破坏循环等待条件）"><a href="#顺序封锁法（破坏循环等待条件）" class="headerlink" title="顺序封锁法（破坏循环等待条件）"></a>顺序封锁法（破坏循环等待条件）</h5><p>预先对数据对象规定一个封锁顺序，所有事务都按照这个顺序实行封锁</p>
+<h4 id="诊断死锁"><a href="#诊断死锁" class="headerlink" title="诊断死锁"></a>诊断死锁</h4><h5 id="超时法"><a href="#超时法" class="headerlink" title="超时法"></a>超时法</h5><p>如果一个事务的等待时间超过了规定的时限，就认为发生了死锁</p>
+<h5 id="等待图法"><a href="#等待图法" class="headerlink" title="等待图法"></a><font color="red">等待图法</font></h5><p>用事务等待图动态反映所有事务的等待情况</p>
+<p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20260116194206139.png" alt="image-20260116194206139" style="zoom:50%;"></p>
+<p>比如图a中，T1等待T2，同时T2等待T1</p>
+<h4 id="解除死锁"><a href="#解除死锁" class="headerlink" title="解除死锁"></a>解除死锁</h4><p>选择一个处理死锁代价最小的事务，将其撤消</p>
+<h2 id="两段锁协议（2PL）"><a href="#两段锁协议（2PL）" class="headerlink" title="两段锁协议（2PL）"></a>两段锁协议（2PL）</h2><p>最常用的一种封锁协议，并且产生的是可串行化调度</p>
+<ul>
+<li>在对任何数据进行读、写操作之前，事务首先要获得对该数据的封锁</li>
+<li>在释放一个封锁之后，事务不再申请和获得任何其他封锁</li>
+</ul>
+<h3 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h3><h4 id="一阶段——获得封锁（扩展阶段）"><a href="#一阶段——获得封锁（扩展阶段）" class="headerlink" title="一阶段——获得封锁（扩展阶段）"></a>一阶段——获得封锁（扩展阶段）</h4><p>事务可以申请获得任何数据项上的任何类型的锁，但不能释放任何锁</p>
+<h4 id="二阶段——释放封锁（收缩阶段）"><a href="#二阶段——释放封锁（收缩阶段）" class="headerlink" title="二阶段——释放封锁（收缩阶段）"></a>二阶段——释放封锁（收缩阶段）</h4><p>事务可以释放任何数据项上的任何类型的锁，但是不能再申请任何锁</p>
+<h4 id="例子-2"><a href="#例子-2" class="headerlink" title="例子"></a>例子</h4><p>这个是对的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116200831228.png" alt="image-20260116200831228"></p>
+<p>这个是错的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116200842653.png" alt="image-20260116200842653"></p>
+<p>但不是说由于不符合两端锁所以是错的，因为两段锁协议是可串行化调度的<strong><font color="blue">充分条件</font></strong></p>
+<h2 id="并发调度的可串行性"><a href="#并发调度的可串行性" class="headerlink" title="并发调度的可串行性"></a>并发调度的可串行性</h2><h4 id="可串行化调度"><a href="#可串行化调度" class="headerlink" title="可串行化调度"></a>可串行化调度</h4><p><strong><font color="red">多个事务的并发执行是正确的，当且仅当其结果与按某一次序串行地执行这些事务时的结果相同。</font></strong></p>
+<h4 id="可串行性"><a href="#可串行性" class="headerlink" title="可串行性"></a>可串行性</h4><p>一个给定的并发调度，当且仅当它是可串行化的，才认为是正确调度。</p>
+<h4 id="冲突操作"><a href="#冲突操作" class="headerlink" title="冲突操作"></a>冲突操作</h4><p>冲突操作是指不同的事务对同一个数据的读写操作和写写操作。不同事务的冲突操作和同一事务的两个操作不能交换</p>
+<h4 id="可串行化调度的充分条件"><a href="#可串行化调度的充分条件" class="headerlink" title="可串行化调度的充分条件"></a><font color="red">可串行化调度的充分条件</font></h4><p>一个调度Sc在保证<strong><font color="green">冲突操作的次序不变</font></strong>的情况下，通过交换两个事务不冲突操作的次序得到另一个调度Sc’，如果Sc‘ 是串行的，则称Sc为冲突可串行化的调度</p>
+<blockquote>
+<p>也就是说满足冲突可串行化，也就是说冲突操作顺序不变，则一定是可串行化调度；如果不满足冲突可串行化，那是不是可串行化调度说不准，要自己分析</p>
+</blockquote>
+<h2 id="封锁粒度"><a href="#封锁粒度" class="headerlink" title="封锁粒度"></a>封锁粒度</h2><p>封锁对象的大小称为封锁粒度</p>
+<ul>
+<li><p>显式封锁：直接加到数据对象上的封锁</p>
+</li>
+<li><p>隐式封锁：该数据对象上没哟独立加锁，但是其上级节点加锁而使得该数据对象加上了锁</p>
+<p>二者效果一样</p>
+</li>
+</ul>
+<h3 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h3><p>提高对某个数据对象加锁时系统的检查效率</p>
+<ul>
+<li>如果对一个节点加意向锁，则说明该结点的下层节点正在被加锁</li>
+<li>对任一节点加基本锁，必须先对它的上层节点加意向锁</li>
+</ul>
+<p>常用意向锁：</p>
+<ul>
+<li>意向共享锁</li>
+<li>意向排它锁</li>
+<li>共享意向排它锁</li>
+</ul>
+<p>意向锁：</p>
+<ul>
+<li>提高了系统的并发度</li>
+<li>减少了加锁和解锁的开销</li>
+<li>在实际的数据库管理系统产品中得到广泛使用。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>期末复习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统期末复习</title>
+    <url>/2026/01/17/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="第一章-操作系统引论"><a href="#第一章-操作系统引论" class="headerlink" title="第一章    操作系统引论"></a>第一章    操作系统引论</h1><h2 id="操作系统定义"><a href="#操作系统定义" class="headerlink" title="操作系统定义"></a>操作系统定义</h2><font color="red">**一组能有效地组织和管理计算机硬件和软件资源，合理地对各类作业进行调度，以及方便用户使用地程序的集合.**</font>
+
+<blockquote>
+<p>操作系统是对（软件+硬件）计算机资源 进行管理的软件</p>
+</blockquote>
+<h2 id="发展流程"><a href="#发展流程" class="headerlink" title="发展流程"></a>发展流程</h2><h3 id="脱机处理"><a href="#脱机处理" class="headerlink" title="脱机处理"></a>脱机处理</h3><h3 id="批处理系统"><a href="#批处理系统" class="headerlink" title="批处理系统"></a>批处理系统</h3><p>用户脱机使用计算机，作业是成批处理的，系统内多道程序并发执行，交互能力差</p>
+<p>简单来说，就是用户将若干作业提交给计算机系统集中处理的操作系统</p>
+<h4 id="单道批处理"><a href="#单道批处理" class="headerlink" title="单道批处理"></a>单道批处理</h4><p>监督程序将磁盘上的第一个作业装入内存，并把运行控制权交给该作业；当该作业处理完成时，又把控制权还给监督程序将第二个作业调入内存</p>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>系统中的资源得不到充分的利用，IO过程中CPU空闲（CPU和IO设备使用忙闲不均）</p>
+<h4 id="多道批处理"><a href="#多道批处理" class="headerlink" title="多道批处理"></a>多道批处理</h4><p>经过两次调度</p>
+<ul>
+<li><p>作业先放在外存上，形成一个后备队列</p>
+</li>
+<li><p>作业调度程序按照<strong>作业调度算法</strong>从后备队列选择若干作业调入内存</p>
+</li>
+<li>内存中按照<strong>进程调度算法</strong>共享CPU和系统中的各种资源</li>
+<li>通过中断技术（外中断）使得CPU和IO并行</li>
+</ul>
+<h5 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h5><p>资源利用率高、系统吞吐量大</p>
+<h5 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h5><p>没有交互能力（作业执行时用户无法干涉）、平均周转时间长</p>
+<h4 id="分时系统"><a href="#分时系统" class="headerlink" title="分时系统"></a>分时系统</h4><p>多个用户同时使用计算机，<strong>人机交互性较强</strong>，具有每个用户独立使用计算机的独占性。关键问题是：<strong>及时接收、及时处理</strong></p>
+<p>简单来说，就是允许多个用户以交互的方式使用计算机的操作系统</p>
+<h4 id="实时系统"><a href="#实时系统" class="headerlink" title="实时系统"></a>实时系统</h4><p>能对控制对象做出及时反应，可靠性高，相应及时，但资源利用率低</p>
+<h5 id="例"><a href="#例" class="headerlink" title="例"></a>例</h5><p>信息查询系统（飞机、火车订票系统），工业（武器）控制系统，多媒体系统，嵌入式系统</p>
+<h2 id="基本特性"><a href="#基本特性" class="headerlink" title="基本特性"></a>基本特性</h2><p>并发和共享式操作系统两个最基本的特征，两者之间互为存在的条件。</p>
+<h3 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h3><p>宏观上同时执行，微观上分时交替执行。</p>
+<h5 id="程序并发执行的特征"><a href="#程序并发执行的特征" class="headerlink" title="程序并发执行的特征"></a>程序并发执行的特征</h5><ul>
+<li>间断性</li>
+<li>失去封闭性：多个程序共享资源，且速度不同</li>
+<li>不可再现性</li>
+</ul>
+<h3 id="共享"><a href="#共享" class="headerlink" title="共享"></a>共享</h3><h5 id="互斥共享"><a href="#互斥共享" class="headerlink" title="互斥共享"></a>互斥共享</h5><p>比如打印机、磁带机</p>
+<h5 id="同时访问"><a href="#同时访问" class="headerlink" title="同时访问"></a>同时访问</h5><p>这里的同时也是，宏观上的，微观上交替地对该资源进行访问（分时共享）</p>
+<h3 id="虚拟"><a href="#虚拟" class="headerlink" title="虚拟"></a>虚拟</h3><p>把一个物理上的实体变成若干逻辑上的对应物。比如说虚拟处理器、虚拟设备技术</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><h1 id="第二章-进程的描述与控制"><a href="#第二章-进程的描述与控制" class="headerlink" title="第二章    进程的描述与控制"></a>第二章    进程的描述与控制</h1><h2 id="程序"><a href="#程序" class="headerlink" title="程序"></a>程序</h2><p>静态的。而进程是动态的</p>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><h4 id="顺序性"><a href="#顺序性" class="headerlink" title="顺序性"></a>顺序性</h4><p>每一个操作必须在下一个操作开始之前结束。进程是程序的一次顺序执行。</p>
+<h4 id="封闭性"><a href="#封闭性" class="headerlink" title="封闭性"></a>封闭性</h4><p>程序运行时独占全机资源，资源的状态只有本程序能够改变；程序与程序之间相互独立，执行时独占全机资源</p>
+<p><strong>并发性破坏了封闭性</strong>。</p>
+<h4 id="可再现性"><a href="#可再现性" class="headerlink" title="可再现性"></a>可再现性</h4><p>只要初始条件和运行环境相同，当程序重复执行时，都将获得相同的结果。</p>
+<h3 id="程序并发执行的特征-1"><a href="#程序并发执行的特征-1" class="headerlink" title="程序并发执行的特征"></a>程序并发执行的特征</h3><ul>
+<li>间断性</li>
+<li>失去封闭性</li>
+<li>不可再现性</li>
+</ul>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><h3 id="进程的定义"><a href="#进程的定义" class="headerlink" title="进程的定义"></a>进程的定义</h3><p><strong><font color="red">进程是进程实体的运行过程，是系统进行资源分配和调度的一个独立单位</font></strong></p>
+<blockquote>
+<p>如何体现<strong>独立性</strong>？每个进程拥有一个独立的私有的地址空间，不同进程的地址空间不能相互访问。</p>
+<p>对比起线程，线程本身不具有资源，其地址和进程共享，所以同一进程中的各个线程的地址空间相同。</p>
+</blockquote>
+<p>进程是接受计算机资源的基本单位（未引入线程）</p>
+<blockquote>
+<p>不管是否支持线程，进程都是资源分配的基本单位；引入线程后，线程是处理及调度的基本单位。</p>
+<p>内核级线程是处理及调度和分派的单位</p>
+</blockquote>
+<p>一个进程映像是<strong>程序+相关数据段+PCB</strong></p>
+<ul>
+<li>是一个程序及其数据在处理机上顺序执行时所发生的活动。进程是动态的，而程序是静态的。</li>
+<li>程序在一个数据集合上运行的过程，是<strong><font color="red">系统进行资源分配和调度的一个独立单位</font></strong>。</li>
+</ul>
+<h3 id="进程的特性"><a href="#进程的特性" class="headerlink" title="进程的特性"></a>进程的特性</h3><ul>
+<li><strong>动态性</strong>：由创建而生，由调度而执行，由撤销而亡</li>
+<li><strong>并发性</strong>：多个进程实体同存与内存中，并发执行</li>
+<li><strong>独立性</strong>：资源分配和调度的独立单位</li>
+<li><strong>异步性</strong>：不同进程按各自独立的，不可预知速度执行</li>
+</ul>
+<blockquote>
+<p><strong>进程和操作系统都具有：并发性和异步性</strong></p>
+</blockquote>
+<h3 id="进程控制块PCB"><a href="#进程控制块PCB" class="headerlink" title="进程控制块PCB"></a>进程控制块PCB</h3><p>是<strong>进程存在的唯一标志</strong>。记录了操作系统所需的，用于描述进程当前情况以及控制进程运行的全部信息。</p>
+<h4 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h4><p>进程标识符、处理机状态、进程调度信息、进程控制信息</p>
+<h4 id="进程控制块的组织方式"><a href="#进程控制块的组织方式" class="headerlink" title="进程控制块的组织方式"></a>进程控制块的组织方式</h4><h5 id="链接方式"><a href="#链接方式" class="headerlink" title="链接方式"></a>链接方式</h5><ul>
+<li><p>把具有同一状态的PCB链接成一个<strong>队列</strong></p>
+</li>
+<li><p>包含就绪队列、若干阻塞队列、空队列</p>
+</li>
+</ul>
+<h5 id="索引方式"><a href="#索引方式" class="headerlink" title="索引方式"></a>索引方式</h5><ul>
+<li>系统根据所有进程的状态建立相应的<strong>索引表</strong></li>
+<li>就绪索引表、阻塞索引表等，索引表在内存的首地址记录在内存的一些专用单元中</li>
+</ul>
+<h3 id="进程的基本状态及转换"><a href="#进程的基本状态及转换" class="headerlink" title="进程的基本状态及转换"></a>进程的基本状态及转换</h3><p>我们通过<strong>原语</strong>来控制进程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251215220223347.png" alt="image-20251215220223347" style="zoom:67%;"></p>
+<p>复杂一点的话参考</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260115164830074.png" alt="image-20260115164830074" style="zoom:33%;"></p>
+<h3 id="原语"><a href="#原语" class="headerlink" title="原语"></a>原语</h3><h2 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>使并发执行的诸进程之间有效地共享资源和相互合作，从而使程序的执行具有<strong>可再现性</strong>。</p>
+<h3 id="两种制约关系"><a href="#两种制约关系" class="headerlink" title="两种制约关系"></a>两种制约关系</h3><h5 id="直接相互制约"><a href="#直接相互制约" class="headerlink" title="直接相互制约"></a>直接相互制约</h5><p>源于进程间的合作</p>
+<h5 id="间接相互制约"><a href="#间接相互制约" class="headerlink" title="间接相互制约"></a>间接相互制约</h5><p>源于进程对资源的共享</p>
+<h3 id="临界资源"><a href="#临界资源" class="headerlink" title="临界资源"></a>临界资源</h3><h5 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h5><p>一段时间内只允许一个进程访问的资源。必须采用“互斥方法访问”。</p>
+<blockquote>
+<p>一个进程正在访问临界资源，另一个要访问该资源的进程必须等待</p>
+</blockquote>
+<font color="blue">**临界区：访问临界资源的代码段**</font>
+
+<h3 id="进程同步应该遵循的规则"><a href="#进程同步应该遵循的规则" class="headerlink" title="进程同步应该遵循的规则"></a>进程同步应该遵循的规则</h3><h4 id="空闲让进"><a href="#空闲让进" class="headerlink" title="空闲让进"></a>空闲让进</h4><p>无进程处于临界区时，表明临界资源处于空闲状态，应允许一个请求进入临界区的进程立即进入自己的临界区</p>
+<h4 id="忙则等待"><a href="#忙则等待" class="headerlink" title="忙则等待"></a>忙则等待</h4><p>当有进程进入临界区时，表明临界资源正被访问，因而其他试图进入临界区的进程必须等待，以保证对临界资源的互斥访问</p>
+<h4 id="有限等待"><a href="#有限等待" class="headerlink" title="有限等待"></a>有限等待</h4><p>对要求访问临界资源的进程，应保证有限的时间内能进入自己的临界区，以免陷入 <strong>死等</strong> 状态</p>
+<h4 id="让权等待"><a href="#让权等待" class="headerlink" title="让权等待"></a>让权等待</h4><p>当进程不能进入自己的临界区时，应立即释放处理机，以免进程陷入  <strong>忙等</strong> 状态</p>
+<h2 id="信号量机制"><a href="#信号量机制" class="headerlink" title="信号量机制"></a>信号量机制</h2><h3 id="整形信号量——不符合让权等待"><a href="#整形信号量——不符合让权等待" class="headerlink" title="整形信号量——不符合让权等待"></a>整形信号量——不符合让权等待</h3><ul>
+<li>以<strong><font color="red">整形变量S</font></strong>作为信号量</li>
+<li>使用wait(S) 和 Signal(S) 来访问。这是两个原子操作（P、V）</li>
+</ul>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wait(S): while S&lt;=0 do no-op</span><br><span class="line">		S := S-1;</span><br><span class="line">		</span><br><span class="line">signal(S): S := S + 1;</span><br></pre></td></tr></table></figure>
+<p>由于是原子操作，所以自加自减不会交替执行</p>
+<h4 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h4><p>当 S&lt;0的时候会不停检查，<strong>不符合让权等待原则</strong></p>
+<h3 id="记录型信号量——会造成死锁"><a href="#记录型信号量——会造成死锁" class="headerlink" title="记录型信号量——会造成死锁"></a>记录型信号量——会造成死锁</h3><ul>
+<li>用一个<strong><font color="red">整形变量value</font></strong>表示资源的数目</li>
+<li>用一个<strong><font color="red">链表L将</font></strong>等待访问该资源的进程组成<strong><font color="red">阻塞队列</font></strong></li>
+</ul>
+<h4 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h4><h5 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type semaphore = record</span><br><span class="line">	value : integer;</span><br><span class="line">	L : list of process;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<h5 id="P、V-操作"><a href="#P、V-操作" class="headerlink" title="P、V 操作"></a>P、V 操作</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108221504633.png" alt="image-20260108221504633" style="zoom:67%;"></p>
+<h4 id="缺陷-1"><a href="#缺陷-1" class="headerlink" title="缺陷"></a>缺陷</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108222634090.png" alt="image-20260108222634090" style="zoom: 50%;"></p>
+<p>这里就是一个经典的循环等待，狗咬狗死不放手的现象了。死锁了。所以在<strong><font color="blue">多种共享资源条件下，容易造成死锁</font></strong></p>
+<h3 id="AND型信号量——一次性全分配"><a href="#AND型信号量——一次性全分配" class="headerlink" title="AND型信号量——一次性全分配"></a>AND型信号量——一次性全分配</h3><ul>
+<li>一次性分配进程执行过程中所需要的全部资源，使用完过后再一并释放</li>
+<li>即使只有一个资源无法分配，其他的资源也都不分配</li>
+<li><strong><font color="red">要么全分配，要么一个都不分配</font></strong></li>
+</ul>
+<p>直观上来说，记录型信号量不是只有涉及到多种资源分配的时候才死锁吗，那我们把多种资源绑定在一起，成一族资源就好了，</p>
+<h4 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108223050972.png" alt="image-20260108223050972" style="zoom:67%;"></p>
+<h4 id="缺陷-2"><a href="#缺陷-2" class="headerlink" title="缺陷"></a>缺陷</h4><ul>
+<li><p>如果一次要申请<strong><font color="blue">N个同类资源</font></strong>，就要使用N次<strong><font color="blue">重复</font></strong>的命令，效率低。</p>
+</li>
+<li><p>无法满足 当资源低于某个<strong><font color="blue">下限值</font></strong>的时候，便不分配</p>
+</li>
+<li><p>循环调用多个P、V操作<strong><font color="blue">可能造成死锁</font></strong>。比如甲乙各占10个A资源，但是20个A才能运行</p>
+</li>
+</ul>
+<h3 id="信号量集"><a href="#信号量集" class="headerlink" title="信号量集"></a>信号量集</h3><ul>
+<li>每次分配之前，必须测试该资源的数量，看其是否大于其下限值（最大可分配值）</li>
+<li>除<strong><font color="red">信号量S</font></strong>外，还设置资源的<strong><font color="red">需求量d</font></strong>，和资源的<strong><font color="red">下限值t</font></strong></li>
+</ul>
+<h4 id="实现-3"><a href="#实现-3" class="headerlink" title="实现"></a>实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Swait(S1, t1, d1</span><br><span class="line">	  S2, t2, d2...</span><br><span class="line">	  )</span><br><span class="line">	if Si &gt;= ti and ... and Sn &gt;= tn then</span><br><span class="line">		for i:=1 to n do</span><br><span class="line">			Si := Si - di;</span><br><span class="line">        end for;</span><br><span class="line">    else</span><br><span class="line">    	//将进程阻塞，放入第一个发现si &lt; ti的等待队列中</span><br><span class="line">    end if;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">Ssignal(S1, d1,</span><br><span class="line">		S1, d2...</span><br><span class="line">		)</span><br><span class="line">	for i:=1 to n do</span><br><span class="line">		Si := Si + di;</span><br><span class="line">		//将Si等待队列中的进程转入就绪队列</span><br><span class="line">    end for;</span><br></pre></td></tr></table></figure>
+<h4 id="其中特殊使用"><a href="#其中特殊使用" class="headerlink" title="其中特殊使用"></a>其中特殊使用</h4><h5 id="Swait-S-d-d"><a href="#Swait-S-d-d" class="headerlink" title="Swait(S, d, d)"></a><font color="blue">Swait(S, d, d)</font></h5><p>只有一个信号量，每次分d份资源。当资源数少于d的时候，不给分配</p>
+<h5 id="Swait-S-1-1"><a href="#Swait-S-1-1" class="headerlink" title="Swait(S, 1, 1)"></a><font color="blue">Swait(S, 1, 1)</font></h5><p>退化成一般<strong><font color="red">记录型信号量</font></strong>（S&gt;1） 或 <strong><font color="red">互斥型信号量</font></strong>（S=1）</p>
+<h5 id="Swait-S-1-0"><a href="#Swait-S-1-0" class="headerlink" title="Swait(S, 1, 0)"></a><font color="blue">Swait(S, 1, 0)</font></h5><p>作为<strong><font color="red">开关</font></strong>。 S &gt;= 1便可执行后续代码，S = 0 后阻止任何程序执行该段代码。</p>
+<h3 id="信号量的两种应用"><a href="#信号量的两种应用" class="headerlink" title="信号量的两种应用"></a>信号量的两种应用</h3><h4 id="利用信号量实现进程互斥"><a href="#利用信号量实现进程互斥" class="headerlink" title="利用信号量实现进程互斥"></a>利用信号量实现进程互斥</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108224837180.png" alt="image-20260108224837180" style="zoom:67%;"></p>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><ul>
+<li>P、V在同一个程序中成对出现</li>
+<li>首先定义信号量。如果单纯互斥，设置信号量=1即可。如果实现访问<strong><font color="red">有限数量的共享资源</font></strong>，那么<strong><font color="red">信号量=资源数量</font></strong> </li>
+</ul>
+<h4 id="利用信号量实现前趋关系"><a href="#利用信号量实现前趋关系" class="headerlink" title="利用信号量实现前趋关系"></a>利用信号量实现前趋关系</h4><p><strong><font color="red">var mutex: semaphore := 0</font></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108225126015.png" alt="image-20260108225126015" style="zoom:67%;"></p>
+<h5 id="注意-1"><a href="#注意-1" class="headerlink" title="注意"></a>注意</h5><ul>
+<li><p>信号量初始值一定是0</p>
+</li>
+<li><p>signal在前趋步骤集合的末尾，wait在后继部分的开头</p>
+</li>
+</ul>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108230124026.png" alt="image-20260108230124026" style="zoom: 67%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108230134126.png" alt="image-20260108230134126" style="zoom:67%;"></p>
+<h2 id="三大问题"><a href="#三大问题" class="headerlink" title="三大问题"></a>三大问题</h2><h3 id="生产者-消费者问题"><a href="#生产者-消费者问题" class="headerlink" title="生产者-消费者问题"></a>生产者-消费者问题</h3><h4 id="经典版"><a href="#经典版" class="headerlink" title="经典版"></a>经典版</h4><p>一组生产者进程和消费者进程共享一个初值为空，大小为n的缓冲区，只有缓冲区没满时，生产者才能把消息放入缓冲区，否则必须等待；只有缓冲区不空时，消费者才能从中取出消息，否则必须等待。由于缓冲区时临界资源，它只允许一个生产者放入消息，或一个消费者从中取出消息。</p>
+<h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>临界资源：仓库</p>
+<p>约束条件：仓库满的时候生产者阻塞，仓库空的时候消费者阻塞</p>
+<h5 id="环形缓冲区"><a href="#环形缓冲区" class="headerlink" title="环形缓冲区"></a>环形缓冲区</h5><p>这里我们类似于循环队列，使用了in 和 out两个指针</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">samephore mutex = 1;</span><br><span class="line">Item buffer[n];	</span><br><span class="line">int int,out,count = 0;</span><br><span class="line"></span><br><span class="line">//生产者</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(mutex);</span><br><span class="line">	if(count &lt; n)&#123;</span><br><span class="line">		count++;</span><br><span class="line">		buffer[in] = item_put;</span><br><span class="line">		in = (in+1) % n</span><br><span class="line">	&#125;</span><br><span class="line">	signal(mutex)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//消费者</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(mutex)</span><br><span class="line">    if(count&gt;0)&#123;</span><br><span class="line">        count--;</span><br><span class="line">        item_get = buffer[out];</span><br><span class="line">        out = (out+1) % n;</span><br><span class="line">    &#125;</span><br><span class="line">	signal(mutex)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="一般做法"><a href="#一般做法" class="headerlink" title="一般做法"></a>一般做法</h5><p>一般我们还是使用full empty两个信号量。其中full代表有多少位置以及有货物了，empty表示多少个位置是空的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">semaphore full = 0;</span><br><span class="line">semaphore empty = n;</span><br><span class="line">semaphore mutex = 1;</span><br><span class="line"></span><br><span class="line">//生产者</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(empty)</span><br><span class="line">	wait(mutex)</span><br><span class="line">	//放货物</span><br><span class="line">	signal(mutex)</span><br><span class="line">	signal(full)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//消费者</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(full)</span><br><span class="line">	wait(mutex)</span><br><span class="line">	//取货物</span><br><span class="line">	signal(full)</span><br><span class="line">	signal(empty)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><font color="red">注意顺序</font></strong>，如果我们先wait mutex的话，会发生死锁。</p>
+<p>这里我们用的记录型信号量，同样我们可以使用AND型信号量，Swait(…)，里面的顺序要对~~!</p>
+<h4 id="进阶版"><a href="#进阶版" class="headerlink" title="进阶版"></a>进阶版</h4><p>桌上有一个盘子，每次只能向其中放入<strong>一个水果</strong>。爸爸专向盘子中放苹果，妈妈专向盘子中放橘子，儿子专等吃盘子中的橘子，女儿专等吃盘子中的苹果。只有盘子为空时，爸爸或妈妈才可向盘子中放一个水果；仅当盘子中有自己需要的水果时，儿子或女儿可以从盘子中取出</p>
+<h5 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h5><p>相对于传统派，维新派可以这样解构。盘子就是buffer，且容量为1，有两类商品-消费者。并且由于容量只有1，所以一定只存在 放水果-吃水果-放水果-吃水果…..这样的过程。</p>
+<h5 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">semaphore mutex = 1;</span><br><span class="line">semaphore orange, apple = 0;</span><br><span class="line"></span><br><span class="line">//爸爸</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(plate)</span><br><span class="line">	//放苹果</span><br><span class="line">	signal(apple)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//女儿</span><br><span class="line">while(1)&#123;</span><br><span class="line">	wait(apple)</span><br><span class="line">	//eat apple</span><br><span class="line">	signal(plate)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//妈妈</span><br><span class="line">//儿子 略</span><br></pre></td></tr></table></figure>
+<h3 id="哲学家进餐问题"><a href="#哲学家进餐问题" class="headerlink" title="哲学家进餐问题"></a>哲学家进餐问题</h3><p>一张圆桌边上坐着5名哲学家，每两名哲学家之间的桌上摆一根筷子，两根筷子中间是一碗米饭。哲学家们<strong><font color="red">倾注毕生精力</font></strong>用于思考和进餐，哲学家在思考时，并不影响他们。只有在哲学家饥饿的时候，才试图拿起左、右两根筷子（一根、一根拿起）。若筷子已在他人手上，则需要等待。饥饿的哲学家只有同时拿到了两根筷子才可以开始进餐，进餐完毕后，放下筷子继续思考</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260115224607862.png" alt="image-20260115224607862" style="zoom:50%;"></p>
+<p>注意一下这个安排的顺序</p>
+<h4 id="实现-4"><a href="#实现-4" class="headerlink" title="实现"></a>实现</h4><p>很简单啊。有的时候还会多一个临界资源：碗</p>
+<p>然后这里的话我们强制加一个条件：先拿左筷子，再拿右筷子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">semaphore chopstick[5] = &#123;1,1,1,1,1&#125;;</span><br><span class="line">Pi()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(chopstick[i]);</span><br><span class="line">		wait(chopstick[(i+1)%5]);</span><br><span class="line">		//eat</span><br><span class="line">		signal(chopstick[i]);</span><br><span class="line">		signal(chopstick[(i+1)%5]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但这样有个严重的问题，就是如果所有人同时先拿起左边的筷子怎么办？会发生死锁。</p>
+<p>我们可以加上以下限制条件</p>
+<ul>
+<li>最多允许4名哲学家同时进餐</li>
+<li>当且仅当一名哲学家左右两边的筷子都可用的时候才允许抓起筷子<ul>
+<li>加互斥锁</li>
+<li>用AND信号量</li>
+</ul>
+</li>
+<li>对哲学家顺序标号，要求奇数号哲学家先左后右；偶数号哲学家先右后左</li>
+</ul>
+<h3 id="读者-写者问题"><a href="#读者-写者问题" class="headerlink" title="读者-写者问题"></a>读者-写者问题</h3><p>有读者和写者两组并发进程，共享一个文件，当两个或以上的读进程同时访问共享数据时不会产生副作用，但若某个写进程和其他进程（读进程或写进程）同时访问共享数据时则可能导致数据不一致的错误。因此要求：①允许多个读者可以同时对文件执行读操作；②只允许一个写者往文件中写信息；③任意一个写者在完成写操作之前不允许其他读者或写者工作；④写者执行写操作前，应让已有的读者和写者全部退出</p>
+<h4 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h4><p>参考下数据库。读锁和读锁相容，其他组合（读写，写写）都是互斥的。</p>
+<p>而仅仅在文件上加一个互斥锁实现读写、写写互斥是不太行的，因为有一个功能是所有读者都消失了我们才能开始写，所以我们需要一个计数器。并且这个计数器也是临界资源需要一个额外的互斥锁。</p>
+<p>总之，读者-写者的关键就是有一个<strong><font color="red">互斥访问的count计数器</font></strong></p>
+<h4 id="实现-5"><a href="#实现-5" class="headerlink" title="实现"></a>实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int count = 0;	//当前读者数量</span><br><span class="line">semaphore mutex = 1;	//给count加锁</span><br><span class="line">semaphore rw = 1;		//读写互斥锁</span><br><span class="line"></span><br><span class="line">writer()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(rw);</span><br><span class="line">		//writing</span><br><span class="line">		signal(rw);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reader()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(mutex);</span><br><span class="line">		if(count == 0)</span><br><span class="line">			wait(rw); //等着写完或者不让写</span><br><span class="line">		count++;</span><br><span class="line">		signal(mutex)</span><br><span class="line">		//reading</span><br><span class="line">		wait(mutex)</span><br><span class="line">		count--;</span><br><span class="line">		if(count == 0)</span><br><span class="line">			signal(rw);</span><br><span class="line">		signal(mutex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里读进程是优先的，这样可能导致写进程饥饿。如果我们想要能够有写进程请求访问，这是应禁止后续读进程的请求，这个时候就再加一个互斥锁就好了。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">writer()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(r);	//我要写了，不准读了</span><br><span class="line">		wait(rw);	//没人读我就开写了</span><br><span class="line">		//writing</span><br><span class="line">		signal(rw);	//我写完了</span><br><span class="line">		signal(r);	//你们有读的权限了</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reader()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(r);	//我有权限读吗</span><br><span class="line">		wait(mutex);</span><br><span class="line">		if(count == 0)</span><br><span class="line">			wait(rw);	//说明还有人在你关闭权限之前就在读了，你要等他们读完才能开始写</span><br><span class="line">        count++;</span><br><span class="line">        signal(mutex);</span><br><span class="line">        //reading</span><br><span class="line">        wait(mutex);</span><br><span class="line">        count --;</span><br><span class="line">        if(count == 0)</span><br><span class="line">        	signal(rw);	//钉子户走了，可以开始写了</span><br><span class="line">        signal(mutex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="王源问题"><a href="#王源问题" class="headerlink" title="王源问题"></a>王源问题</h3><p>假设一个系统有三个吸烟者进程和一个供应者进程。每个抽烟者不停地卷烟并抽掉它，但要卷起并抽掉一支烟，抽烟者需要有三种材料：烟草、纸和胶水。三个抽烟者中，第一个拥有烟草，第二个拥有纸，第三个拥有胶水。供应者进程无线地提供三种材料，供应者每次将两种材料放到桌子上，拥有剩下那种材料地抽烟者卷一根烟并抽掉它，并给供应者告诉已完成，此时供应者就会将另外两种材料放到桌上，如此重复。</p>
+<h4 id="实现-6"><a href="#实现-6" class="headerlink" title="实现"></a>实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int num=0;	//存储随机数</span><br><span class="line">semaphore offer1, offer2, offer3 = 0;</span><br><span class="line">semaphore finish = 0;</span><br><span class="line"></span><br><span class="line">Offer()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		num = (num+1)%3;</span><br><span class="line">		if(num == 0)</span><br><span class="line">			signal(offer1);	//烟草 + 纸</span><br><span class="line">        if(num == 1)</span><br><span class="line">    		signal(offer2);	//烟草 + 胶水</span><br><span class="line">        if(num == 2)</span><br><span class="line">    		signal(offer3);	//纸 + 胶水</span><br><span class="line">        wait(finish);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">P1()&#123;</span><br><span class="line">	while(1)&#123;</span><br><span class="line">		wait(offer1)</span><br><span class="line">		//卷烟，抽了</span><br><span class="line">		signal(finish)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">P2、P3 略</span><br></pre></td></tr></table></figure>
+<h3 id="独木桥问题"><a href="#独木桥问题" class="headerlink" title="独木桥问题"></a>独木桥问题</h3><p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20260115225340786.png" alt="image-20260115225340786"></p>
+<p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20260115225358512.png" alt="image-20260115225358512"></p>
+<h4 id="分析-3"><a href="#分析-3" class="headerlink" title="分析"></a>分析</h4><p>有点像读者-写者的变种。我们通过一个互斥信号量实现桥上只有一种方向的人，只有一种方向的人都走完了，下一类人才能开走，所以需要一个计数器count，并且这个count也是一个临界资源需要加锁。并且一共有两种方向，也就需要两个count和两个count锁了。</p>
+<h4 id="实现-7"><a href="#实现-7" class="headerlink" title="实现"></a>实现</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">semaphore eastMutex, westMutex = 1</span><br><span class="line">semaphore bridge = 1</span><br><span class="line">int eastCount, westCount = 0</span><br><span class="line"></span><br><span class="line">东方：</span><br><span class="line">while（1）&#123;</span><br><span class="line">	wait(eastMutex);</span><br><span class="line">	if(eastCount == 0) </span><br><span class="line">		wait(brigde);</span><br><span class="line">    eastCount++;</span><br><span class="line">	signal(eastMutex);</span><br><span class="line">	//上桥</span><br><span class="line">	//下桥</span><br><span class="line">	wait(eastMutex);</span><br><span class="line">    eastCount--;</span><br><span class="line">	if(eastCount == 0) </span><br><span class="line">		signal(brigde);</span><br><span class="line">	signal(eastMutex);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">西方：</span><br><span class="line">while（1）&#123;</span><br><span class="line">	wait(westMutex);</span><br><span class="line">	if(westCount == 1)  </span><br><span class="line">		wait(brigde);</span><br><span class="line">    westCount++;</span><br><span class="line">	signal(westMutex);</span><br><span class="line">	//上桥</span><br><span class="line">	//下桥</span><br><span class="line">	wait(westMutex);</span><br><span class="line">    westCount--;</span><br><span class="line">	if(westCount == 0)</span><br><span class="line">		signal(bridge);</span><br><span class="line">	signal(westMutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="第三章-处理及调度与死锁"><a href="#第三章-处理及调度与死锁" class="headerlink" title="第三章    处理及调度与死锁"></a>第三章    处理及调度与死锁</h1><h2 id="处理机调度的层次"><a href="#处理机调度的层次" class="headerlink" title="处理机调度的层次"></a>处理机调度的层次</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108231001553.png" alt="image-20260108231001553" style="zoom:67%;"></p>
+<p>高级：作业</p>
+<p>中级</p>
+<p>低级：进程。抢占/非抢占</p>
+<h2 id="调度算法"><a href="#调度算法" class="headerlink" title="调度算法"></a>调度算法</h2><h3 id="相关指标计算"><a href="#相关指标计算" class="headerlink" title="相关指标计算"></a>相关指标计算</h3><h5 id="CPU利用率"><a href="#CPU利用率" class="headerlink" title="CPU利用率"></a>CPU利用率</h5><script type="math/tex; mode=display">
+ = \frac{CPU有效工作时间}{CPU有效工作时间+CPU空闲等待时间}</script><h5 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h5><p>单位时间内CPU完成作业的数量</p>
+<h5 id="周转时间"><a href="#周转时间" class="headerlink" title="周转时间"></a>周转时间</h5><script type="math/tex; mode=display">
+作业完成时间 - 作业提交时间</script><h5 id="平均周转时间"><a href="#平均周转时间" class="headerlink" title="平均周转时间"></a>平均周转时间</h5><script type="math/tex; mode=display">
+(作业完成时间 - 作业提交时间) / n</script><h5 id="平均带权周转时间"><a href="#平均带权周转时间" class="headerlink" title="平均带权周转时间"></a>平均带权周转时间</h5><script type="math/tex; mode=display">
+\frac{作业完成时间 - 作业提交时间}{作业实际运行时间} / n</script><h3 id="先来先服务（FCFS）"><a href="#先来先服务（FCFS）" class="headerlink" title="先来先服务（FCFS）"></a>先来先服务（FCFS）</h3><ul>
+<li><strong><font color="red">有利于长作业</font></strong>（进程），不利于短作业（进程）</li>
+<li>有利于CPU繁忙型作业（进程），不利于I/O繁忙型作业（进程）</li>
+<li>属于不可剥夺算法</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-08-23-16-54-573_com.orion.notein.png" alt="Screenshot_2026-01-08-23-16-54-573_com.orion.notein"></p>
+<h3 id="短作业优先（SJF）"><a href="#短作业优先（SJF）" class="headerlink" title="短作业优先（SJF）"></a>短作业优先（SJF）</h3><ul>
+<li>哪个<strong><font color="red">估计</font></strong>运行时间最短，先运行哪个。由于是估计，所以不一定能真正做到短作业优先调度</li>
+<li>对长作业不利</li>
+<li>不能保证紧迫性作业会被及时处理</li>
+<li>SPJ调度算法的平均等待时间、平均周转时间最少</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-08-23-21-18-861_com.orion.notein.png" alt="Screenshot_2026-01-08-23-21-18-861_com.orion.notein"></p>
+<h3 id="优先级调度算法（PSA）"><a href="#优先级调度算法（PSA）" class="headerlink" title="优先级调度算法（PSA）"></a>优先级调度算法（PSA）</h3><h5 id="非抢占式"><a href="#非抢占式" class="headerlink" title="非抢占式"></a>非抢占式</h5><p>一旦选择了优先权最高的进程执行，直到它结束或阻塞后，才选另一个执行</p>
+<h5 id="抢占式"><a href="#抢占式" class="headerlink" title="抢占式"></a>抢占式</h5><p>若出现优先权更高的，则让出CPU</p>
+<ul>
+<li>支持PSA的有：优先权原则，时间片原则，短作业有限原则</li>
+</ul>
+<h5 id="静态优先级"><a href="#静态优先级" class="headerlink" title="静态优先级"></a>静态优先级</h5><p>优先级在创建进程时决定，且在进程的整个运行期间保持不变。</p>
+<h5 id="动态优先级"><a href="#动态优先级" class="headerlink" title="动态优先级"></a>动态优先级</h5><p>进程运行过程中，根据进程情况的变化动态调整优先级</p>
+<h3 id="高相应比优先权调度算法（HRRN）"><a href="#高相应比优先权调度算法（HRRN）" class="headerlink" title="高相应比优先权调度算法（HRRN）"></a>高相应比优先权调度算法（HRRN）</h3><ul>
+<li>同时考虑到了短、长作业</li>
+</ul>
+<h4 id="动态优先权"><a href="#动态优先权" class="headerlink" title="动态优先权"></a>动态优先权</h4><script type="math/tex; mode=display">
+相应比 = \frac{等待时间+要求服务时间}{要求服务时间}</script><h3 id="时间片轮转调度算法"><a href="#时间片轮转调度算法" class="headerlink" title="时间片轮转调度算法"></a>时间片轮转调度算法</h3><p>分时系统的原则，主要目的是使得多个交互的用户能够得到及时相应，能够与计算机进行交互。</p>
+<p>注意时间片不能太长也不能太短。太长成了FCFS，太短调度和上下文切换频繁</p>
+<p>时间片轮转调度算法是绝对可抢占的</p>
+<h3 id="多队列调度算法"><a href="#多队列调度算法" class="headerlink" title="多队列调度算法"></a>多队列调度算法</h3><h3 id="多级反馈队列调度算法"><a href="#多级反馈队列调度算法" class="headerlink" title="多级反馈队列调度算法"></a>多级反馈队列调度算法</h3><h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260109210358112.png" alt="image-20260109210358112" style="zoom:67%;"></p>
+<h4 id="定义-2"><a href="#定义-2" class="headerlink" title="定义"></a>定义</h4><p>多个进程咋i运行过程中，因争夺资源而造成的一种僵局。当进程处于这种僵持状态时，若无外力作用，它们都将无法再向前推进</p>
+<h3 id="四个必要条件"><a href="#四个必要条件" class="headerlink" title="四个必要条件"></a>四个必要条件</h3><h4 id="互斥条件"><a href="#互斥条件" class="headerlink" title="互斥条件"></a>互斥条件</h4><p>一段时间内某资源仅为一个进程所占有</p>
+<h4 id="请求和保持条件"><a href="#请求和保持条件" class="headerlink" title="请求和保持条件"></a>请求和保持条件</h4><p>进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源已被其他进程占有。</p>
+<h4 id="不剥夺条件"><a href="#不剥夺条件" class="headerlink" title="不剥夺条件"></a>不剥夺条件</h4><p>进程所获得的资源在未使用之前，不能被其他进程强行夺走。只能主动释放</p>
+<h4 id="循环等待条件"><a href="#循环等待条件" class="headerlink" title="循环等待条件"></a>循环等待条件</h4><p>链中每个进程已获得的资源同时被链中下一个进程所请求。</p>
+<h3 id="预防死锁"><a href="#预防死锁" class="headerlink" title="预防死锁"></a>预防死锁</h3><h4 id="破坏不剥夺条件"><a href="#破坏不剥夺条件" class="headerlink" title="破坏不剥夺条件"></a>破坏不剥夺条件</h4><p>当一个已保持了某些不可剥夺资源的进程请求新的资源而得不到满足时，它必须释放已经保持的所有资源，待以后需要时再申请。</p>
+<h5 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h5><p>反复地申请和释放资源会增加系统开销，降低系统吞吐量</p>
+<h4 id="破坏请求并保持条件"><a href="#破坏请求并保持条件" class="headerlink" title="破坏请求并保持条件"></a>破坏请求并保持条件</h4><p>采用预先静态分配方法，即进程在运行前一次申请完它所需要地全部资源，在它资源未满足之前，不把它到投入运行。一旦投入运行，这些资源就一直归它所有，不再提出其他资源请求。</p>
+<h5 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h5><p>系统资源被严重良妃，而且还会导致”饥饿现象“</p>
+<h4 id="破坏循环等待条件"><a href="#破坏循环等待条件" class="headerlink" title="破坏循环等待条件"></a>破坏循环等待条件</h4><p>采用顺序资源分配法。首先给系统中地资源编号，规定每个进程必须按编号地递增的顺序请求资源。同类资源一次申请完。</p>
+<h5 id="缺点-4"><a href="#缺点-4" class="headerlink" title="缺点"></a>缺点</h5><p>限制了新类型设备加入，浪费，编程不友好</p>
+<h3 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h3><h4 id="安全状态"><a href="#安全状态" class="headerlink" title="安全状态"></a>安全状态</h4><h5 id="定义-3"><a href="#定义-3" class="headerlink" title="定义"></a>定义</h5><p>系统能按某种进程推进顺序（P1，P2，…，Pn）为每个进程 Pi 分配所需的资源，直至满足每个进程对资源的最大需求。</p>
+<p>如果系统没有找到一个安全序列，则称系统为不安全状态</p>
+<h5 id="注意-2"><a href="#注意-2" class="headerlink" title="注意"></a>注意</h5><p>并非所有的不安全状态都是死锁状态，但当系统进入不安全状态后，便<strong>可能</strong>进入死锁状态；反之，只要系统处于安全状态，系统便可避免进入死锁状态。</p>
+<h4 id="银行家算法（重点必考大题）"><a href="#银行家算法（重点必考大题）" class="headerlink" title="银行家算法（重点必考大题）"></a><font color="red">银行家算法（重点必考大题）</font></h4><p>我会，所以略</p>
+<h3 id="检测死锁"><a href="#检测死锁" class="headerlink" title="检测死锁"></a>检测死锁</h3><h4 id="资源分配图"><a href="#资源分配图" class="headerlink" title="资源分配图"></a>资源分配图</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-09-21-07-46-432_com.orion.notein.png" alt="Screenshot_2026-01-09-21-07-46-432_com.orion.notein"></p>
+<h4 id="死锁定理"><a href="#死锁定理" class="headerlink" title="死锁定理"></a>死锁定理</h4><p>S为死锁的条件是 当且仅当 资源分配图无法化简</p>
+<h3 id="解除死锁"><a href="#解除死锁" class="headerlink" title="解除死锁"></a>解除死锁</h3><h4 id="资源剥夺法"><a href="#资源剥夺法" class="headerlink" title="资源剥夺法"></a>资源剥夺法</h4><p><strong>挂起</strong>某些死锁进程，并抢占它们的资源，将这些资源分配给死锁进程</p>
+<h4 id="撤销进程法"><a href="#撤销进程法" class="headerlink" title="撤销进程法"></a>撤销进程法</h4><p>强制<strong>撤销</strong>部分甚至全部死锁进程并剥夺这些进程的资源</p>
+<h4 id="进程回退法"><a href="#进程回退法" class="headerlink" title="进程回退法"></a>进程回退法</h4><p>让一个或多个进程回退到足以回避死锁的地步，进程回退时资源释放资源而非被剥夺，要求系统保持进程的历史信息，设置还原点。</p>
+<h1 id="第四章-存储器管理"><a href="#第四章-存储器管理" class="headerlink" title="第四章    存储器管理"></a>第四章    存储器管理</h1><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/a096db60aa8e1d9de5e937936d08a4ff.jpg" style="zoom:50%;"></p>
+<h3 id="程序的链接"><a href="#程序的链接" class="headerlink" title="程序的链接"></a>程序的链接</h3><h4 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h4><p>在程序运行之前，先及那个各目标模块及它们所需的库函数链接成一个完整的装配模块，以后不再拆开。将几个目标模块装配成一个装入模块时，需要解决两个问题：①修改相对位置，编译后的所有目标模块都是从0开始的相对地址，当链接成一个装入模块时要修改相对地址。②变换外部调用符号，将每个模块中的所用的外部符号也都变换为相对地址</p>
+<h4 id="装入时动态链接"><a href="#装入时动态链接" class="headerlink" title="装入时动态链接"></a>装入时动态链接</h4><p>将用户源程序编译后所得到的一组目标模块，在装入内存时，采用边装入边链接的方式。优点是便于修改和更新，便于实现对目标模块的共享</p>
+<h4 id="运行时动态链接"><a href="#运行时动态链接" class="headerlink" title="运行时动态链接"></a>运行时动态链接</h4><p>对某些目标模块的链接，是在程序执行中需要改目标模块时才进行的。凡在执行过程中未用到的目标模块，都不会被调入内存和被链接到装入模块上。优点是能加快程序的装入过程，还可节省大量的内存空间。</p>
+<h3 id="程序的装入"><a href="#程序的装入" class="headerlink" title="程序的装入"></a>程序的装入</h3><h4 id="绝对装入"><a href="#绝对装入" class="headerlink" title="绝对装入"></a>绝对装入</h4><p>只适用于<strong><font color="red">单道程序环境</font></strong>。编译时将产生绝对地址的目标代码，程序逻辑地址和实际内存地址完全相同。</p>
+<h4 id="可重定位装入"><a href="#可重定位装入" class="headerlink" title="可重定位装入"></a>可重定位装入</h4><p>在<strong><font color="red">多道程序环境</font></strong>下，多个目标模块的起始地址通常都从0开始，程序中的其他地址都是相对于起始地址的，此时应采用可重定位装入方式。根据内存的当前情况，及那个装入模块转入内存的适当位置。在装入时对目标程序中指令和数据地址的修改过程称为重定位。</p>
+<p>当一个作业装入内存是，必须给它分分配要求的全部内存空间，若没有足够的内存，则无法装入。此外，作业一旦进入内存，整个运行期间就不能在内存中移动，也不能再申请内存空间。所以也称为<strong><font color="blue">静态重定位</font></strong></p>
+<h4 id="动态运行时装入"><a href="#动态运行时装入" class="headerlink" title="动态运行时装入"></a>动态运行时装入</h4><p>也成为<strong><font color="blue">动态重定位</font></strong></p>
+<h3 id="连续分配"><a href="#连续分配" class="headerlink" title="连续分配"></a>连续分配</h3><h4 id="单一连续分配"><a href="#单一连续分配" class="headerlink" title="单一连续分配"></a>单一连续分配</h4><p>内存分为<strong>系统区和用户区</strong>，系统区一般在低地址。用户内存中只有一道用户程序。</p>
+<h5 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h5><p>无外部碎片，无需进行内存保护</p>
+<h5 id="缺点-5"><a href="#缺点-5" class="headerlink" title="缺点"></a>缺点</h5><p>只能用于单用户、单任务的操作系统。有内部碎片，存储器的利用率极低</p>
+<h4 id="固定分区分配"><a href="#固定分区分配" class="headerlink" title="固定分区分配"></a>固定分区分配</h4><p>是一种<font color="red"><strong>多道程序存储管理方式</strong></font></p>
+<p>我们建立一个分区使用表，分区大小可以相同也可以不同。我们只需要修改分区表中的状态（已分配/未分配）即可。</p>
+<h5 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h5><p>无外部碎片</p>
+<h5 id="缺点-6"><a href="#缺点-6" class="headerlink" title="缺点"></a>缺点</h5><p>有内部碎片</p>
+<h4 id="动态分区分配（必考）"><a href="#动态分区分配（必考）" class="headerlink" title="动态分区分配（必考）"></a><font color="red">动态分区分配（必考）</font></h4><p>系统中的大小和数目是可变的</p>
+<p>随着时间的推移，<strong><font color="blue">内存中会产生越来越多的外部碎片</font></strong></p>
+<p>具体这里的算法很简单我就懒得写了，我只写特点。但是这里至少考一个填空或者简答题吧。要学会画图分析，而且记得画图画大一点哈哈</p>
+<h5 id="首次适应算法"><a href="#首次适应算法" class="headerlink" title="首次适应算法"></a>首次适应算法</h5><p>低地址部分出现很多小的空闲分区(外部碎片)</p>
+<h5 id="邻近适应算法"><a href="#邻近适应算法" class="headerlink" title="邻近适应算法"></a>邻近适应算法</h5><p>尾部出现很多外部碎片</p>
+<h5 id="最佳适应算法"><a href="#最佳适应算法" class="headerlink" title="最佳适应算法"></a>最佳适应算法</h5><p>按空闲分区从小到大进行排序。会产生最多的外部碎片</p>
+<h5 id="最坏适应算法"><a href="#最坏适应算法" class="headerlink" title="最坏适应算法"></a>最坏适应算法</h5><p>按空闲分区从大到小进行排序。会很快导致没有可用的大内存块</p>
+<h4 id="空闲分区合并"><a href="#空闲分区合并" class="headerlink" title="空闲分区合并"></a><strong><font color="red">空闲分区合并</font></strong></h4><p>四种情况，也很简单，依旧也是必考。记得要<strong><font color="blue">合并</font></strong>就好，像开心消消乐一样。</p>
+<h3 id="分页存储管理"><a href="#分页存储管理" class="headerlink" title="分页存储管理"></a>分页存储管理</h3><p>分页管理从计算机的角度考虑设计的，目的是提高内存的利用率，提升计算机的性能</p>
+<h4 id="逻辑地址"><a href="#逻辑地址" class="headerlink" title="逻辑地址"></a>逻辑地址</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/6627e508cad8e3c48e8fa95096c69deb.jpg" alt="6627e508cad8e3c48e8fa95096c69deb" style="zoom:67%;"></p>
+<p>0~11为页内地址，所以页面大小为$2^{12}$，每页4KB；12~31为页号，所以一共有 $2^{20}$ = 1M 页 </p>
+<h4 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h4><p>页表记录了页号到物理块号的映射关系</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116092157351.png" alt="image-20260116092157351" style="zoom: 53%;"></p>
+<h4 id="地址表换机构"><a href="#地址表换机构" class="headerlink" title="地址表换机构"></a>地址表换机构</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116092235757.png" alt="image-20260116092235757" style="zoom:67%;"></p>
+<p>在系统中通常有一个页表寄存器，存放页表在内存的其起始地址F和页表长度M。进程未执行时，页表的始址和页表长度存放在本进程的PCB中，当进程被调度执行时，才将页表始址和页表长度装入页表寄存器中。</p>
+<h5 id="逻辑地址到物理地址（很大概率考）"><a href="#逻辑地址到物理地址（很大概率考）" class="headerlink" title="逻辑地址到物理地址（很大概率考）"></a><font color="red">逻辑地址到物理地址</font>（很大概率考）</h5><p>设页面大小为 L， 逻辑地址 A 到物理地址 E 的变换过程如下</p>
+<ol>
+<li>计算页号 P (P = A/L)， 计算页内偏移（W = A%L）</li>
+<li>比较页号P和页表长度M，若P&gt;M则产生越界中断，否则继续执行</li>
+<li>若表中页号P对应的页表项地址 = 页表始址 F + 页号P <em> <em>*页表项</em></em>长度，取出该页表项内容b，即为物理块号。</li>
+<li>计算 E = b * L + W</li>
+</ol>
+<blockquote>
+<p>用十进制给出和十六进制（二进制）给出的计算过程稍微有些不同。</p>
+</blockquote>
+<h6 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h6><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/9050460093b7d8f5f544c67e48c98bc8.jpg" alt="9050460093b7d8f5f544c67e48c98bc8"></p>
+<h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><h5 id="两次访问内存"><a href="#两次访问内存" class="headerlink" title="两次访问内存"></a><font color="blue">两次访问内存</font></h5><p>第一次访问页表，确定所存取的数据或指令的物理地址</p>
+<p>第二次根据该地址取数据或指令</p>
+<h5 id="页式管理中的地址空间是一维的"><a href="#页式管理中的地址空间是一维的" class="headerlink" title="页式管理中的地址空间是一维的"></a><font color="blue">页式管理中的地址空间是一维的</font></h5><p>页式管理只需要给出一个整数就能确定对应的物理地址，因为页面大小 L 是固定的</p>
+<h4 id="快表"><a href="#快表" class="headerlink" title="快表"></a>快表</h4><p>快表是一个具有<strong>并行查找能力的高速缓冲寄存器</strong>，又称为相联存储区（TLB），用来存放当前访问的若干页表项，以加速地址变换的过程。</p>
+<h3 id="分段存储管理"><a href="#分段存储管理" class="headerlink" title="分段存储管理"></a>分段存储管理</h3><p>分段管理考虑了用户和程序员，以满足方便编程、信息保护和共享、动态增长及动态链接等多方面的需要</p>
+<h4 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h4><p>按照用户进程中的自然段划分逻辑空间。参考ELF文件格式</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116094146171.png" alt="image-20260116094146171" style="zoom:67%;"></p>
+<p>同样的，我们以此来得到段数量和最大段长</p>
+<h4 id="段表"><a href="#段表" class="headerlink" title="段表"></a>段表</h4><p>同样也实现了逻辑空间和内存空间的映射。不过这里相比页表显示给出了段长，因为段长是不固定的而页面大小是固定的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116094231445.png" alt="image-20260116094231445" style="zoom:67%;"></p>
+<h4 id="地址变换机构"><a href="#地址变换机构" class="headerlink" title="地址变换机构"></a>地址变换机构</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116094415243.png" alt="image-20260116094415243" style="zoom:67%;"></p>
+<p>系统中设置了段表寄存器，用于存放段表始址 F 和段表长度 M。从逻辑地址A到物理地址E之间的地址变换过程如下：</p>
+<ol>
+<li>从逻辑地址 A 中取出前几位为段号 S，后几位为段内偏移量 W</li>
+<li>比较段号 S 和段表长度 M，若 S &gt;= M则产生越界中断，否则继续执行</li>
+<li>段号 S 对应的段表项地址 = 段表始址 F + 段号 S * 段表项长度，取出该表项的前几位得到段长C。若段内偏移量 &gt;= C，则产生越界中断。</li>
+<li>取出段表项中该段的始址b，计算 E = b + W，用得到的物理地址E去访问内存。</li>
+</ol>
+<h4 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h4><h5 id="只需要一次访存"><a href="#只需要一次访存" class="headerlink" title="只需要一次访存"></a><font color="blue">只需要一次访存</font></h5><h5 id="分段管理的地址空间是二维的"><a href="#分段管理的地址空间是二维的" class="headerlink" title="分段管理的地址空间是二维的"></a><font color="blue">分段管理的地址空间是二维的</font></h5><h3 id="段页"><a href="#段页" class="headerlink" title="段页"></a>段页</h3><h5 id="三次访存"><a href="#三次访存" class="headerlink" title="三次访存"></a>三次访存</h5><h1 id="第五章-虚拟存储器"><a href="#第五章-虚拟存储器" class="headerlink" title="第五章    虚拟存储器"></a>第五章    虚拟存储器</h1><h2 id="虚拟存储器概述"><a href="#虚拟存储器概述" class="headerlink" title="虚拟存储器概述"></a>虚拟存储器概述</h2><h3 id="局部性原理"><a href="#局部性原理" class="headerlink" title="局部性原理"></a>局部性原理</h3><p>时间局部性：程序中的某条指令一旦执行，则不久后该指令很可能再次被访问<br>空间局部性：一旦程序访问了某个存储单元，则不久后其附近的存储单元也将被访问</p>
+<h3 id="定义-4"><a href="#定义-4" class="headerlink" title="定义"></a>定义</h3><p><strong>具有请求调入功能和置换功能，能从逻辑上扩充内存容量的一种存储器系统</strong></p>
+<h3 id="虚存大小"><a href="#虚存大小" class="headerlink" title="虚存大小"></a>虚存大小</h3><p><strong>一个虚拟存储器的最大容量是由计算机的地址结构确定的</strong></p>
+<p> 若CPU给出的有效地址长度为20位，则程序可以寻址的范围为1M，即虚存的容量：1M。</p>
+<p>在多道程序环境下，一个计算机系统可以为每一个用户建立一个虚拟存储器</p>
+<h3 id="特征-1"><a href="#特征-1" class="headerlink" title="特征"></a>特征</h3><p>多次性、对换性、虚拟性</p>
+<h2 id="请求分页存储管理方式"><a href="#请求分页存储管理方式" class="headerlink" title="请求分页存储管理方式"></a>请求分页存储管理方式</h2><p>它在进本分页系统的基础上增加了<font color="red"><strong>请求调页、页面置换</strong></font>两大功能所形成的页式虚拟存储系统</p>
+<h3 id="请求页表机制"><a href="#请求页表机制" class="headerlink" title="请求页表机制"></a>请求页表机制</h3><p>记一下相比传统页表里多出了这几项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113143735197.png" alt="image-20260113143735197" style="zoom:50%;"></p>
+<h4 id="页面置换算法（必考）"><a href="#页面置换算法（必考）" class="headerlink" title="页面置换算法（必考）"></a><font color="red">页面置换算法（必考）</font></h4><p>要会算缺页次数，缺页率</p>
+<h4 id="最佳置换算法"><a href="#最佳置换算法" class="headerlink" title="最佳置换算法"></a>最佳置换算法</h4><h4 id="先进先出置换算法"><a href="#先进先出置换算法" class="headerlink" title="先进先出置换算法"></a>先进先出置换算法</h4><p>belady现象</p>
+<h4 id="最近最久未使用算法"><a href="#最近最久未使用算法" class="headerlink" title="最近最久未使用算法"></a>最近最久未使用算法</h4><h2 id="请求分段存储管理方式"><a href="#请求分段存储管理方式" class="headerlink" title="请求分段存储管理方式"></a>请求分段存储管理方式</h2><h1 id="第六章-输入输出系统"><a href="#第六章-输入输出系统" class="headerlink" title="第六章    输入输出系统"></a>第六章    输入输出系统</h1><h3 id="层次结构"><a href="#层次结构" class="headerlink" title="层次结构"></a>层次结构</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113152331855.png" alt="image-20260113152331855" style="zoom:50%;"></p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h4 id="按数据传输单位分类"><a href="#按数据传输单位分类" class="headerlink" title="按数据传输单位分类"></a>按数据传输单位分类</h4><h5 id="块设备"><a href="#块设备" class="headerlink" title="块设备"></a>块设备</h5><p><strong><font color="red">速率高，可寻址，DMA方式。主要有磁盘</font></strong></p>
+<h5 id="流设备"><a href="#流设备" class="headerlink" title="流设备"></a>流设备</h5><p><strong><font color="red">速率低，不可寻址，中断驱动方式。主要有键盘</font></strong></p>
+<h3 id="IO接口"><a href="#IO接口" class="headerlink" title="IO接口"></a>IO接口</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113152534247.png" alt="image-20260113152534247"></p>
+<p>和CPU这边，有三类信号线：数据线、地址线、控制线</p>
+<p>和设备这边，有三类信号：数据、状态、控制</p>
+<p>IO逻辑实现对设备的控制。IO通过一组控制线与CPU交互</p>
+<h3 id="IO控制方式"><a href="#IO控制方式" class="headerlink" title="IO控制方式"></a>IO控制方式</h3><h4 id="程序直接控制方式"><a href="#程序直接控制方式" class="headerlink" title="程序直接控制方式"></a>程序直接控制方式</h4><p>CPU一直检测输没输完，是<strong>忙等</strong></p>
+<h4 id="中断驱动方式"><a href="#中断驱动方式" class="headerlink" title="中断驱动方式"></a>中断驱动方式</h4><blockquote>
+<p>中断 vs 陷入</p>
+<p>中断是指CPU对IO设备发来的中断信号的一种响应</p>
+<p>陷入时另外一种由CPU内部事件引发的中断</p>
+</blockquote>
+<ol>
+<li><p>进程要启动I/O设备时，由CPU向该设备控制器发出一条I/O命令，然后立即返回继续执行原来的任务。</p>
+</li>
+<li><p>设备控制器按照命令要求去控制指定设备。</p>
+</li>
+<li><p>设备处理完数据后，便产生一个中断信号。此时，CPU便转而处理该信号。</p>
+</li>
+</ol>
+<p>这个时候CPU和IO设备是<strong>并行</strong>的，但每次传送<strong>以字节为单位</strong></p>
+<h4 id="DMA方式"><a href="#DMA方式" class="headerlink" title="DMA方式"></a>DMA方式</h4><ol>
+<li><p>CPU将IO任务委托给DMA部件</p>
+</li>
+<li><p>DMA将数据直接读取或写入主存，不经过CPU寄存器</p>
+</li>
+<li><p>IO数据传输完成后，DMA向CPU发中断信号</p>
+</li>
+</ol>
+<p>这个是或每次传送<strong>至少一个数据块</strong>，传送的数据从<strong>设备直接送入内存</strong>。仅在传送一个或多个数据块的开始和结束时，才需CPU干预</p>
+<h4 id="通道控制方式"><a href="#通道控制方式" class="headerlink" title="通道控制方式"></a>通道控制方式</h4><blockquote>
+<p>IO通道：具有独立控制逻辑、可执行通道程序，能与主机并行工作的专用处理器。在主机和设备之间，承担IO处理工作</p>
+</blockquote>
+<p>CPU只需向通道发送一条I/O指令。通道在收到该指令后，便从内<br>存中取出本次要执行的通道程序，然后执行该通道程序，仅当通道完成了规定的I/O任务后，才向CPU发中断信号</p>
+<h3 id="SPOOLing技术"><a href="#SPOOLing技术" class="headerlink" title="SPOOLing技术"></a><font color="red">SPOOLing技术</font></h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113160927362.png" alt="image-20260113160927362"></p>
+<h3 id="缓冲技术"><a href="#缓冲技术" class="headerlink" title="缓冲技术"></a>缓冲技术</h3><h2 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h2><p>磁盘盘面上的数据存储在一组同心圆中，称为<strong>磁道</strong>。每个磁道和磁头一样宽，一个盘面上有上千个磁道。磁道又划分为几百个<strong>扇区</strong>，每个扇区固定存储大小，一个扇区称为一个<strong>盘块</strong>。</p>
+<h3 id="磁盘调度算法（必考大题）"><a href="#磁盘调度算法（必考大题）" class="headerlink" title="磁盘调度算法（必考大题）"></a><font color="red">磁盘调度算法（必考大题）</font></h3><h4 id="FCFS"><a href="#FCFS" class="headerlink" title="FCFS"></a>FCFS</h4><p>优点是公平</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-16-10-17-25-079_com.orion.notein.png" alt="Screenshot_2026-01-16-10-17-25-079_com.orion.notein" style="zoom:67%;"></p>
+<h4 id="SSTF"><a href="#SSTF" class="headerlink" title="SSTF"></a>SSTF</h4><p>性能比FCFS号，但会产生饥饿现象</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-16-10-17-49-876_com.orion.notein.png" alt></p>
+<h4 id="SCAN"><a href="#SCAN" class="headerlink" title="SCAN"></a>SCAN</h4><p>寻道性能比较好，可以避免饥饿现象</p>
+<p>顺着方向-反着方向-….</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-16-10-18-24-464_com.orion.notein.png" alt="Screenshot_2026-01-16-10-18-24-464_com.orion.notein" style="zoom:67%;"></p>
+<h4 id="CSCAN"><a href="#CSCAN" class="headerlink" title="CSCAN"></a>CSCAN</h4><p>消除了对两端磁道请求的不公平</p>
+<p>左-右———-左-右</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/Screenshot_2026-01-16-10-19-16-501_com.orion.notein.png" alt="Screenshot_2026-01-16-10-19-16-501_com.orion.notein" style="zoom:67%;"></p>
+<h1 id="第七章-文件管理"><a href="#第七章-文件管理" class="headerlink" title="第七章    文件管理"></a>第七章    文件管理</h1><h3 id="文件的基本概念"><a href="#文件的基本概念" class="headerlink" title="文件的基本概念"></a>文件的基本概念</h3><p>文件是以硬盘为载体存储在计算机上的信息集合。在系统运行是，计算机以进程为基本单位进行资源的调度和分配；而在用户进行的输入、输出中，则以文件为基本单位</p>
+<h4 id="文件的属性"><a href="#文件的属性" class="headerlink" title="文件的属性"></a>文件的属性</h4><p>除了文件数据，操作系统还会保存与文件相关的信息，这些附加信息称为<strong>文件属性</strong>或<strong>文件元数据</strong>。</p>
+<h4 id="文件控制块"><a href="#文件控制块" class="headerlink" title="文件控制块"></a>文件控制块</h4><p><font color="blue"><strong>操作系统通过文件控制块（FCB）来维护文件元数据</strong></font>。FCB包含了<strong>文件基本信息</strong>（文件名、物理位置、逻辑结构..），存储控制信息、使用信息</p>
+<p>FCB的有序集合称为<strong><font color="red">文件目录</font></strong>。一个文件目录也被视为一个文件，称为<strong>目录文件</strong></p>
+<h4 id="索引结点"><a href="#索引结点" class="headerlink" title="索引结点"></a>索引结点</h4><p>文件目录通常存放在磁盘上，在查找目录的过程中，我们用给定的文件名逐一比较。这些操作都在内存中进行，由于元数据的冗余导致占用内存过大，所以我们将<strong>文件名和文件描述信息分开</strong>，使<strong><font color="blue">文件描述信息单独形成一个称为索引结点的数据结构，简称 i结点。</font></strong></p>
+<h3 id="文件的逻辑结构"><a href="#文件的逻辑结构" class="headerlink" title="文件的逻辑结构"></a>文件的逻辑结构</h3><h4 id="无结构文件"><a href="#无结构文件" class="headerlink" title="无结构文件"></a>无结构文件</h4><p>流式文件，以字节为单位。</p>
+<h4 id="有结构文件"><a href="#有结构文件" class="headerlink" title="有结构文件"></a>有结构文件</h4><h5 id="顺序文件"><a href="#顺序文件" class="headerlink" title="顺序文件"></a>顺序文件</h5><p>文件中的记录一个接一个的顺序排列，记录通常是定长的。一类是<strong>串结构</strong>，一般按存入时间先后排序，必须从头开始检索；一类是<strong>顺序结构</strong>，所有记录按关键字排序，可以折半查找</p>
+<p>顺序文件在批量操作效率高，但是需要增删改单个记录时效率低</p>
+<h5 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a>索引文件</h5><p>索引表按关键字排序，本身也是个定长记录的顺序文件。索引文件实现了随机检索。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116103847633.png" alt="image-20260116103847633" style="zoom: 67%;"></p>
+<h5 id="索引顺序文件"><a href="#索引顺序文件" class="headerlink" title="索引顺序文件"></a>索引顺序文件</h5><p>索引顺序文件及那个顺序文件中所有记录分为若干个组，为顺序文件建立一张索引表，在索引表中为每组中的第一条记录建立一个索引项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116104513020.png" alt="image-20260116104513020" style="zoom:67%;"></p>
+<h5 id="直接文件或散列文件"><a href="#直接文件或散列文件" class="headerlink" title="直接文件或散列文件"></a>直接文件或散列文件</h5><p>给定记录的键值或通过散列函数转换的键值决定记录的物理地址。没有顺序的特性。有很高的存取速度。</p>
+<h3 id="文件的物理结构"><a href="#文件的物理结构" class="headerlink" title="文件的物理结构"></a>文件的物理结构</h3><h4 id="连续分配-1"><a href="#连续分配-1" class="headerlink" title="连续分配"></a>连续分配</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116104947911.png" alt="image-20260116104947911" style="zoom:50%;"></p>
+<p>支持顺序访问和直接访问</p>
+<h4 id="链接分配"><a href="#链接分配" class="headerlink" title="链接分配"></a>链接分配</h4><h5 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116105028095.png" alt="image-20260116105028095" style="zoom:50%;"></p>
+<h5 id="显式链接"><a href="#显式链接" class="headerlink" title="显式链接"></a>显式链接</h5><p>显式链接是指把用于连接文件各物理块的指针，从每个物理块的末尾中提取出来，显式地放在内存地一张链接表。该表在磁盘中仅设置一张，称为文件分配表（FAT）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116105042155.png" alt="image-20260116105042155" style="zoom:67%;"></p>
+<h4 id="索引分配"><a href="#索引分配" class="headerlink" title="索引分配"></a>索引分配</h4><h4 id="混合索引分配"><a href="#混合索引分配" class="headerlink" title="混合索引分配"></a>混合索引分配</h4><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><h3 id="目录的基本概念"><a href="#目录的基本概念" class="headerlink" title="目录的基本概念"></a>目录的基本概念</h3><p>FCB地有序集合就是文件目录，一个FCB就是一个文件目录项，文件目录作为一个文件就是目录问九年。</p>
+<h4 id="目录的基本要求"><a href="#目录的基本要求" class="headerlink" title="目录的基本要求"></a>目录的基本要求</h4><ul>
+<li>在用户所需要的文件名和文件之间提供一种映射：要实现按名存取</li>
+<li>提高目录的检索速度</li>
+<li>允许多个用户共享一个文件</li>
+<li>允许不同用户对不同文件采用相同给的名字</li>
+</ul>
+<h3 id="树形目录结构"><a href="#树形目录结构" class="headerlink" title="树形目录结构"></a>树形目录结构</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116105611560.png" alt="image-20260116105611560" style="zoom: 67%;"></p>
+<p>当前目录：因为使用全路径名访问文件太麻烦，又因为运行时访问的文件大多局限于某个范围。所以，可为每个进程设置一个当前目录</p>
+<p>进程对各个文件的访问都相当于对于当前目录进行的</p>
+<p>相对路径名：从当前目录开始直到数据文件为止所构成的路径名</p>
+<p>绝地路径名：从树根开始的路径名</p>
+<h3 id="目录查询"><a href="#目录查询" class="headerlink" title="目录查询"></a>目录查询</h3><p>线性检索法</p>
+<p>Hash法</p>
+<h3 id="文件共享"><a href="#文件共享" class="headerlink" title="文件共享"></a>文件共享</h3><p>硬链接和软链接，类比一下静态链接和动态链接。软链接就像是快捷方式</p>
+<h4 id="基于索引结点的共享方式（硬链接）"><a href="#基于索引结点的共享方式（硬链接）" class="headerlink" title="基于索引结点的共享方式（硬链接）"></a>基于索引结点的共享方式（硬链接）</h4><p>文件的物理地址及其他的文件属性等信息，不再放在目录项中，而是放在索引结点中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116105810610.png" alt="image-20260116105810610" style="zoom:67%;"></p>
+<p>索引结点还有一个链接计数count，当且仅当count=0时才删除该文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260116105939880.png" alt="image-20260116105939880" style="zoom:67%;"></p>
+<h4 id="利用符号链实现文件共享（软链接）"><a href="#利用符号链实现文件共享（软链接）" class="headerlink" title="利用符号链实现文件共享（软链接）"></a>利用符号链实现文件共享（软链接）</h4><p>系统创建一个LINK类型的新文件，，并将该文件写入用户目录中。在新文件中只<strong>包含被链接文件的路径名</strong>。这样的链接方式被称为<strong>符号链接</strong></p>
+<p>在利用符号链方式实现文件共享时, 只有文件主才拥有指向其索引结点的指针。而共享该文件的其他用户只有该文件的路径名,并不拥有指向其索引结点的指针。这样就不会发生在文件主删除一共享文件后留下一<strong><font color="red">悬空指针</font></strong>的情况。当文件主把一个共享文件删除后,若其他用户又试图通 过符号链去访问它时,则会访问失败,于是将符号链删除,此时不会产生任何影响。</p>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>期末复习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计网期末复习</title>
+    <url>/2026/01/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\css\APlayer.min.css"><script src="\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\js\Meting.min.js"></script><h1 id="省流："><a href="#省流：" class="headerlink" title="省流："></a>省流：</h1><h4 id="第1章重点章节概括"><a href="#第1章重点章节概括" class="headerlink" title="第1章重点章节概括"></a>第1章重点章节概括</h4><p>​    1）掌握计算机网络的性能的常用评价指标，能够计算。<br>​    2）掌握理论五层协议结构。<br>​    3）掌握五层协议各层的任务、使用的数据单元、主要协议（运输层、网络层、链路层）。</p>
+<h4 id="第2章重点章节概括"><a href="#第2章重点章节概括" class="headerlink" title="第2章重点章节概括"></a>第2章重点章节概括</h4><p>​    1）掌握常见的数字信号编码方式。<br>​    2）掌握影响数据传输速率的影响因素、理解信噪比、那奎斯特定律、Shannon公式的意义。<br>​    3）理解常见的信道复用技术（频分、时分、统计时分、CDMA)。<br>​    4）理解常见的物理层、链路层设备（集线器、交换机）的主要区别。（我写在了第三章）</p>
+<h4 id="第3章重点章节概括"><a href="#第3章重点章节概括" class="headerlink" title="第3章重点章节概括"></a>第3章重点章节概括</h4><p>​    1）理解数据链路层的三个基本问题。<br>​    2）理解链路、帧等重要概念，最小帧长的影 响因素有哪些？<br>​    3）掌握CSMA/CD 协议的要点，工作流程。</p>
+<h4 id="第4章重点章节概括"><a href="#第4章重点章节概括" class="headerlink" title="第4章重点章节概括"></a>第4章重点章节概括</h4><p>​    1）理解IP地址的概念和特点，特殊IP设置方法（如广播），掌握CIDR地址块划分方法。<br>​    2）理解MAC地址与IP地址的区别，掌握地址解析协议ARP的工作过程。<br>​    3）三个经典路由协议：RIP，OSPF，和 BGP，掌握三个协议的优缺点；<br>​        理解各个协议的基本原理，掌握各个协议过程中的信息交换（如与哪些路由器交换？交换什么信息？何时交换？如何交换（广播？泛洪？）？）<br>​        RIP协议：能够依据邻居的路由信息更新自己的路由信息。<br>​    4）理解运输层中重要的概念。<br>​    5）掌握IP层转发分组的过程</p>
+<h4 id="第5章重点章节概括"><a href="#第5章重点章节概括" class="headerlink" title="第5章重点章节概括"></a>第5章重点章节概括</h4><p>​    1）UDP和TCP基本概念和比较<br>​    2）掌握TCP的流量控制<br>​    3）TCP拥塞控制的主要策略，能综合分析TCP拥塞控制的全过程。<br>​    4）理解TCP链接建立和释放过程<br>​    5）理解TCP链接中数据传输过程。</p>
+<h4 id="第6章重点章节概括"><a href="#第6章重点章节概括" class="headerlink" title="第6章重点章节概括"></a>第6章重点章节概括</h4><p>​    1）理解DNS中的基本概念<br>​    2）DHCP基本过程</p>
+<h4 id="第9章重点章节概括"><a href="#第9章重点章节概括" class="headerlink" title="第9章重点章节概括"></a>第9章重点章节概括</h4><p>​    隐蔽站现象、暴露站现象、CSMA/CA协议（概念、原理）、移动IP（概念、原理）</p>
+<hr>
+<h1 id="绪论"><a href="#绪论" class="headerlink" title="绪论"></a>绪论</h1><h2 id="计算机网络的性能评价"><a href="#计算机网络的性能评价" class="headerlink" title="计算机网络的性能评价"></a>计算机网络的性能评价</h2><h3 id="速率"><a href="#速率" class="headerlink" title="速率"></a>速率</h3><p>指的是数据的传送速率，10Mbit/s是 10 的 六次方 不是 2 的 20 次方。</p>
+<p>如果我们说数据大小的话，一般还是 2 的多少次方</p>
+<h3 id="带宽"><a href="#带宽" class="headerlink" title="带宽"></a>带宽</h3><p>在单位时间内网络中的某信道所能通过的“最高数据率”</p>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>在单位时间内通过某个网络的实际数据量。</p>
+<h3 id="时延"><a href="#时延" class="headerlink" title="时延"></a>时延</h3><script type="math/tex; mode=display">
+总时延 = 发送时延 + 传播时延 + 处理时延+ 排队时延</script><p>一般只考虑前两个时延</p>
+<h4 id="发送时延"><a href="#发送时延" class="headerlink" title="发送时延"></a>发送时延</h4><script type="math/tex; mode=display">
+发送时延 = \frac{数据帧长度（bit）}{发送速率（bit/s）}</script><h4 id="传播时延"><a href="#传播时延" class="headerlink" title="传播时延"></a>传播时延</h4><script type="math/tex; mode=display">
+传播时延 = \frac{信道长度（m）}{电磁波在信道上的传播速率（m/s）}</script><h3 id="时延带宽积"><a href="#时延带宽积" class="headerlink" title="时延带宽积"></a>时延带宽积</h3><p>可以称其为以比特位单位的链路长度。也就是说链路上的比特数目的最大值</p>
+<script type="math/tex; mode=display">
+时延带宽积 = 传播时延 \times 带宽</script><h4 id="每比特的宽度"><a href="#每比特的宽度" class="headerlink" title="每比特的宽度"></a>每比特的宽度</h4><p>链路长度 /  带宽时延积</p>
+<h3 id="往返时间RTT"><a href="#往返时间RTT" class="headerlink" title="往返时间RTT"></a>往返时间RTT</h3><p>考虑发送一条数据，对方会发一个数据量极小（不考虑发送时延）的ACK包，此时一个来回总时延 = A的发送时延 + 2<em>传播时延。这个时候 2 </em> 传播时延 就是RTT</p>
+<h4 id="有效数据率"><a href="#有效数据率" class="headerlink" title="有效数据率"></a>有效数据率</h4><script type="math/tex; mode=display">
+有效数据率 = \frac{数据长度}{发送时间+RTT}</script><h3 id="利用率"><a href="#利用率" class="headerlink" title="利用率"></a>利用率</h3><h4 id="信道利用率"><a href="#信道利用率" class="headerlink" title="信道利用率"></a>信道利用率</h4><p>某信道有百分之几的时间是被利用的。完全空闲的信道利用率是0。</p>
+<p>信道利用率不是越高越好，因为信道的利用率增加的时候，信道引起的时延也迅速增加（堵车）</p>
+<h4 id="网络利用率"><a href="#网络利用率" class="headerlink" title="网络利用率"></a>网络利用率</h4><p>全网络的信道利用率的加权平均值</p>
+<h2 id="边缘和核心"><a href="#边缘和核心" class="headerlink" title="边缘和核心"></a>边缘和核心</h2><p>略，看书</p>
+<h2 id="各层协议的最大传输单元（MTU）"><a href="#各层协议的最大传输单元（MTU）" class="headerlink" title="各层协议的最大传输单元（MTU）"></a>各层协议的最大传输单元（MTU）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112162710819.png" alt></p>
+<h1 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><blockquote>
+<p>基本知识和概念（提供什么服务、四大特性、通信模型图）  选择和填空</p>
+</blockquote>
+<p>物理层考虑的是怎么样才能在连接各种计算机的传输媒体上<strong>传输数据比特流</strong>，而不是指具体的传输媒体。需要尽可能屏蔽掉不同传输媒体和通信手段的差异。</p>
+<h3 id="四个特性（背住）"><a href="#四个特性（背住）" class="headerlink" title="四个特性（背住）"></a>四个特性（背住）</h3><h4 id="机械特性"><a href="#机械特性" class="headerlink" title="机械特性"></a>机械特性</h4><p>接口所用接线器的形状和尺寸…</p>
+<h4 id="电气特性"><a href="#电气特性" class="headerlink" title="电气特性"></a>电气特性</h4><p>接口电缆的各条线上出现的电压的范围</p>
+<h4 id="功能特性"><a href="#功能特性" class="headerlink" title="功能特性"></a>功能特性</h4><p>某条线上出现的某一电平的电压的意义</p>
+<h4 id="过程特性"><a href="#过程特性" class="headerlink" title="过程特性"></a>过程特性</h4><p>对于不同功能的各种可能时间的出现顺序</p>
+<h3 id="通信系统的模型"><a href="#通信系统的模型" class="headerlink" title="通信系统的模型"></a>通信系统的模型</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217165624842.png" alt></p>
+<p>定义：消息（有语义信息的，明文的）、数据（符号序列）、信号（数据的电器表示）、码元（离散数值的基本波形）</p>
+<h2 id="定律"><a href="#定律" class="headerlink" title="定律"></a>定律</h2><blockquote>
+<p>两个定律（基本概念，基本原理）  香农定理、信噪比（信噪比提高几倍，S/N提高几倍）、影响的两个因素</p>
+</blockquote>
+<p>实际的信道存在的问题：<strong>带宽受限、有噪声、干扰和失真</strong></p>
+<p>即传输速率越高、传输距离越远、噪声干扰越大、传输媒体质量越差失真越严重</p>
+<p>限制传输速率的两个因素：<strong>信道能够通过的频率范围、信噪比</strong></p>
+<h3 id="奈氏准则"><a href="#奈氏准则" class="headerlink" title="奈氏准则"></a>奈氏准则</h3><script type="math/tex; mode=display">
+码元传输的最高速率 = 2W Baud</script><p>其中 W 指的是带宽(hz)，Baud 是波特，表示1秒能传多少码元。</p>
+<p>这个公式告诉我们，码元的传输的最高速率是有上限的，超过这个上限就会出现严重的码间串扰问题（接收端收到的信号波形失去了码元之间的清晰界限）</p>
+<p>所以实际的信道所能传输的最高码元速率，要明显地低于奈氏准则给出上限数值。</p>
+<h4 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h4><font color="blue">激励工程人员不断探索更先进的编码技术，使一个码元携带更多比特的信息量</font>
+
+<h3 id="信噪比（必考）"><a href="#信噪比（必考）" class="headerlink" title="信噪比（必考）"></a><font color="red">信噪比（必考）</font></h3><p>信噪比是<strong>信号</strong>的<strong>平均功率</strong>和<strong>噪声</strong>的<strong>平均功率</strong>之比</p>
+<script type="math/tex; mode=display">
+信噪比 = 10~log_{10}(\frac{S}{N}) ~~db</script><p>当 S/N =10 时，信噪比为10dB，而当 S/N =1000 时，信噪比为30dB</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>问：将信噪比提高3倍，那么<code>S/N</code>应该如何变化</p>
+<p>答：提高 $10^3$ 倍</p>
+</blockquote>
+<h3 id="香农公式"><a href="#香农公式" class="headerlink" title="香农公式"></a>香农公式</h3><script type="math/tex; mode=display">
+C = W~log_2(1+\frac{S}{N})~~(bit/s)</script><p>其中 W 是信道的带宽</p>
+<p>这个公式告诉我们</p>
+<ul>
+<li>信道的<strong>带宽</strong>或者信道中的<strong>信噪比越大</strong>，则信息的<strong>极限传输速率</strong>就<strong>越高</strong></li>
+<li>只要信息传输速率<strong>低于</strong>信道的极限信息传输速率，就一定可以找到某种办法来实现无差错的传输</li>
+</ul>
+<h4 id="意义-1"><a href="#意义-1" class="headerlink" title="意义"></a>意义</h4><font color="blue">告诫工作人员，在实际有噪声的信道上，不论采用多么复杂的编码技术，都不可能突破信息传输速率的绝对极限</font>
+
+<h3 id="常见的数字信号编码方式"><a href="#常见的数字信号编码方式" class="headerlink" title="常见的数字信号编码方式"></a>常见的数字信号编码方式</h3><p>调制包含<strong>基带调制</strong>和<strong>带通调制</strong>。编码的行为是基带调制，使用载波进行调制的是带通调制。其中基带调制有<strong>四种基本的编码</strong>，而带通调制有三种：<strong>调幅、调频、调相</strong>（载波是波嘛）</p>
+<blockquote>
+<p>编码的四种方式。基本概念，考选择</p>
+</blockquote>
+<p>不归零制：正电1，负电0</p>
+<p>归零制：正脉冲1，负脉冲0</p>
+<p>曼彻斯特编码：中心向上0，向下1</p>
+<p>差分曼彻斯特编码：开始有跳变为0，没跳变为1</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217195313520.png" alt="image-20251217195313520"></p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><h5 id="信号频率"><a href="#信号频率" class="headerlink" title="信号频率"></a>信号频率</h5><ul>
+<li>曼彻斯特和差分曼彻斯特编码比不归零制高</li>
+</ul>
+<h5 id="自同步能力"><a href="#自同步能力" class="headerlink" title="自同步能力"></a>自同步能力</h5><ul>
+<li>不归零制不能从信号波形本身中提取信号时钟频率（自同步能力）</li>
+<li>两曼有自同步能力</li>
+</ul>
+<h2 id="信道复用技术（必考，看教材p56）"><a href="#信道复用技术（必考，看教材p56）" class="headerlink" title="信道复用技术（必考，看教材p56）"></a><font color="red">信道复用技术（必考，看教材p56）</font></h2><blockquote>
+<p>复用的几种方式  能够理解含义，进行比较优缺点。是本章最大的重点。其中还有CDMA工作原理，有关计算</p>
+</blockquote>
+<h3 id="复用"><a href="#复用" class="headerlink" title="复用"></a>复用</h3><p>相对于专用信道而言。允许用户使用高一个共享信道进行通信。</p>
+<h3 id="频分复用（FDM）"><a href="#频分复用（FDM）" class="headerlink" title="频分复用（FDM）"></a>频分复用（FDM）</h3><ul>
+<li>是<strong>最基本</strong>的</li>
+<li>将<strong>整个带宽分为多份</strong>，用户在分配到一定的频带后，在通信过程中<strong><font color="red">自始至终</font></strong>都占用这个频带</li>
+<li>所有用户在同样的时间占用<strong>不同</strong>的带宽（即频带）资源</li>
+</ul>
+<blockquote>
+<p>​    这里的带宽是<strong>频率带宽</strong>而不是数据的发送速率</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217200452286.png" alt="image-20251217200452286" style="zoom:50%;"></p>
+<p>可让 N 个用户各使用一个频带，或让更多的用户轮流使用这 N 个频带。这种方式称为频分多址接入 FDMA (Frequency Division Multiple Access)，简称为<strong>频分多址</strong>。</p>
+<h3 id="时分复用（TDM）"><a href="#时分复用（TDM）" class="headerlink" title="时分复用（TDM）"></a>时分复用（TDM）</h3><ul>
+<li>将时间划分为一段段等长的时分复用帧（TDM帧）</li>
+<li>每一个时分复用的用户<strong><font color="blue">在每一个TDM帧中占用固定序号的</font> </strong><font color="red"><strong>时隙</strong></font></li>
+<li>每一个用户所占用的时隙是<strong><font color="red">周期性</font></strong>地出现（其周期就是TDM帧地长度）的</li>
+<li>TDM信号也成为<strong><font color="red">等时</font></strong>信号</li>
+<li>所有用户在不同的时间占用<strong><font color="red">相同的</font></strong>频带宽度</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217201029575.png" alt="image-20251217201029575"></p>
+<p>可让 N 个用户各使用一个时隙，或让更多的用户轮流使用这 N 个时隙。这种方式称为时分多址接入 TDMA (Time Division Multiple Access)，简称为<strong>时分多址</strong>。</p>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>当用户无数据发送的时候，分配给该用户的时隙就只能处于空闲状态。所以 <strong><font color="red">时分复用会导致信道利用率不高</font></strong></p>
+<h3 id="统计时分复用（STDM）"><a href="#统计时分复用（STDM）" class="headerlink" title="统计时分复用（STDM）"></a>统计时分复用（STDM）</h3><p>STDM不是固定分配时隙，而是 <strong><font color="blue">按需动态地</font></strong> 分配时隙，因此可以提高线路的利用率</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217201516794.png" alt="image-20251217201516794"></p>
+<ol>
+<li>集中器按顺序依次将用户发的数据输入缓存，把缓存中的数据放入STDM帧中。对没有数据的帧就跳过去</li>
+<li>当一个帧的数据放满了，就发送出去</li>
+</ol>
+<h4 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h4><ul>
+<li>统计时分复用又称为 异步时分复用，普通地时分复用又称为 同步时分复用</li>
+<li>虽然统计时分复用地输出线路上地数据率小于输入酰氯数据率地综合，但从平均地角度来看，这二者是平衡地。</li>
+<li>由于STDM帧中地时隙并不是固定地分配给某个用户地，因此在每个时隙中还必须有用户的地址信息。图中输出线路每个时隙前还有一个短时隙放入这样的地址信息</li>
+</ul>
+<h3 id="波分复用"><a href="#波分复用" class="headerlink" title="波分复用"></a>波分复用</h3><p>光的频分复用。使用一根光纤来同时传输多个光载波信号</p>
+<h3 id="码分复用"><a href="#码分复用" class="headerlink" title="码分复用"></a>码分复用</h3><ul>
+<li>每一个用户可以在相同的时间使用相同的频带进行通信</li>
+</ul>
+<h4 id="CDMA工作原理"><a href="#CDMA工作原理" class="headerlink" title="CDMA工作原理"></a><font color="red">CDMA工作原理</font></h4><ul>
+<li>每一个比特时间划分为m个短的间隔，称为 <strong><font color="blue">码片</font></strong> （chip）</li>
+<li>为每个站指派一个 <font color="blue"><strong>唯一的</strong></font> m bit 码片序列<ul>
+<li>发送比特1：发送自己的 m bit 码片序列</li>
+<li>发送比特0：发送自己的 m bit 码片序列反码</li>
+</ul>
+</li>
+</ul>
+<h5 id="码片序列实现了扩频"><a href="#码片序列实现了扩频" class="headerlink" title="码片序列实现了扩频"></a>码片序列实现了扩频</h5><p>要发送信息的数据率 = b bit/s，实际发送的数据率 = mb bit/s，同时，所占用频带宽度也提高到原来的 m 倍。</p>
+<h4 id="CDMA的重要特点"><a href="#CDMA的重要特点" class="headerlink" title="CDMA的重要特点"></a>CDMA的重要特点</h4><ul>
+<li>每个站分配的码片序列：各不相同，且必须<strong><font color="blue">正交</font></strong></li>
+<li><strong>任何一个码片向量和该码片向量自己的规格化内积都是1</strong></li>
+<li><strong>一个码片向量和该码片反码的向量的规格化内积值是-1</strong></li>
+</ul>
+<h4 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h4><p>共有四个站进行码分多址CDMA通信，四个站的码片序列为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">A：(-1  -1  -1  +1  +1  -1  +1  +1)</span><br><span class="line">B：(-1  -1  +1  -1  +1  +1  +1  -1)</span><br><span class="line">C：(-1  +1  -1  +1  +1  +1  -1  -1)</span><br><span class="line">D：(-1  +1  -1  -1  -1  -1  +1  -1)</span><br></pre></td></tr></table></figure>
+<p>现有</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">（-1  +1  -3  +1  -1  -3  +1  +1）</span><br></pre></td></tr></table></figure>
+<p>问哪个站发送了数据？发送的是1还是0？</p>
+<blockquote>
+<p>解法一：A、B、C、D分别与接受信息求内积，得到的正数越大说明发送了越多的1，得到0说明没发，得到负数越小说明发送了越多的-1。这里求内积分别得到8，-8，0，8，说明ABD发了数据，A和D发的是1，B发的是0。</p>
+<p>解法二：找到最大的数字：3，还存在1，所以不止一个。再次尝试枚举后，发现至少得三个站，然后再枚举尝试…这个比较简单枚举出来挺快的</p>
+</blockquote>
+<hr>
+<h1 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h1><h2 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h2><blockquote>
+<p>什么是帧   物理/逻辑链路 </p>
+</blockquote>
+<h3 id="数据链路和帧"><a href="#数据链路和帧" class="headerlink" title="数据链路和帧"></a>数据链路和帧</h3><h4 id="链路"><a href="#链路" class="headerlink" title="链路"></a>链路</h4><ul>
+<li><strong><font color="blue">物理链路</font></strong></li>
+<li>一条无源的点到点的物理线路段，中间没有任何其他的交换系欸但</li>
+<li>一条链路只是一条通路的一个组成部分</li>
+</ul>
+<h4 id="数据链路"><a href="#数据链路" class="headerlink" title="数据链路"></a>数据链路</h4><ul>
+<li><font color="blue">**逻辑链路**</font></li>
+<li>把实现控制数据传输的协议的硬件和软件加到链路上</li>
+</ul>
+<h4 id="帧"><a href="#帧" class="headerlink" title="帧"></a>帧</h4><ul>
+<li><strong>数据链路层协议数据单元</strong></li>
+</ul>
+<h2 id="三个基本问题"><a href="#三个基本问题" class="headerlink" title="三个基本问题"></a>三个基本问题</h2><blockquote>
+<p>解决的三个基本问题   帧的长度的约束因素  如何实现透明传输（字符/字节）</p>
+</blockquote>
+<h3 id="封装成帧"><a href="#封装成帧" class="headerlink" title="封装成帧"></a>封装成帧</h3><ul>
+<li>在一段数据的前后分别添加首部和尾部，构成一个帧。</li>
+<li>首部和尾部的一个重要作用就是进行<strong><font color="blue">帧定界</font></strong></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217205045459.png" alt="image-20251217205045459"></p>
+<blockquote>
+<p>其中MTU指<font color="red">最大传送单元</font></p>
+</blockquote>
+<h4 id="用控制字符作为帧定界符"><a href="#用控制字符作为帧定界符" class="headerlink" title="用控制字符作为帧定界符"></a>用控制字符作为帧定界符</h4><ul>
+<li>控制字符SOH（Start Of Header）放在一帧的最前面，表示帧的首部开始</li>
+<li>控制字符EOT（End Of Transmission）放在一帧的末尾，表示帧的结束</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217205418050.png" alt="image-20251217205418050"></p>
+<h3 id="透明传输"><a href="#透明传输" class="headerlink" title="透明传输"></a>透明传输</h3><blockquote>
+<p>问题引入：如果数据中的某个字节的二进制代码恰好和 SOH 或 EOT意义，数据链路层就会 错误 地找到帧的边界。类比一下蛋白质</p>
+</blockquote>
+<p>用字节填充或字符填充可以解决早期的ASCII码传输的问题</p>
+<h4 id="字节填充"><a href="#字节填充" class="headerlink" title="字节填充"></a>字节填充</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217210036516.png" alt="image-20251217210036516"></p>
+<p>SOH和EOT作为开始和结束定界符，在内容中出现需要转义。我们使用ESC作为转义符，所以转义符本身也是一个特殊符号。</p>
+<p>实际实现中，发送方内容中一旦出现SOH、EOT、ESC就在前面加上一个ESC，接收方一旦得到ESC就丢掉。</p>
+<h4 id="零比特填充"><a href="#零比特填充" class="headerlink" title="零比特填充"></a>零比特填充</h4><p><a href="#tra">跳转</a></p>
+<h3 id="差错控制"><a href="#差错控制" class="headerlink" title="差错控制"></a>差错控制</h3><blockquote>
+<p>差错控制并没有实现可靠传输。<strong>可靠传输指的是：数据链路层的发送端发送什么，在接收端就收到什么</strong></p>
+<p>传输差错可以分为：比特差错；帧丢失、帧重复、帧失序+</p>
+</blockquote>
+<p>误码率BER：传输错误的比特占所传输比特总数的比率</p>
+<h4 id="CRC循环冗余检验"><a href="#CRC循环冗余检验" class="headerlink" title="CRC循环冗余检验"></a>CRC循环冗余检验</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251217210542391.png" alt="image-20251217210542391"></p>
+<blockquote>
+<p>二进制除法就是异或。相同为0，不相同为1</p>
+</blockquote>
+<p>这种为了进行检错而添加的冗余码常称为 <strong><font color="blue">帧检验序列 FCS</font></strong>（也就是说 （M concat 0..0） / P 的余数 ）</p>
+<ul>
+<li>CRC是一种检错方法，FCS是添加在数据后面的冗余码</li>
+<li><p>FCS可以用CRC得出，但CRC并非用来获得FCS的唯一方法</p>
+</li>
+<li><p>CTC只能做到 <strong><font color="red">无差错接受</font></strong>，也就是说只能检测出有错，而不知道哪里错。所以并不是可靠传输</p>
+</li>
+</ul>
+<blockquote>
+<p>区分<strong>无比特差错</strong>和<strong>无传输差错</strong>。链路层可以实现无比特差错，但是由传输层实现无传输差错（帧丢失、帧重复等等）</p>
+</blockquote>
+<h5 id="余数的多项式表达方法"><a href="#余数的多项式表达方法" class="headerlink" title="余数的多项式表达方法"></a>余数的多项式表达方法</h5><p>CRC-16 = $X^{16} +X^{15} + X^2 + 1$ </p>
+<p>等价于一个十七位的二进制数：1 10000000 00000101，除完后得到16位FCS</p>
+<h2 id="点对点协议PPP"><a href="#点对点协议PPP" class="headerlink" title="点对点协议PPP"></a>点对点协议PPP</h2><blockquote>
+<p>PPP协议基本概念，如何引入的CSMA/CD</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230080556346.png" alt="image-20251230080556346"></p>
+<h3 id="PPP协议的帧格式（封装成帧）"><a href="#PPP协议的帧格式（封装成帧）" class="headerlink" title="PPP协议的帧格式（封装成帧）"></a>PPP协议的帧格式（封装成帧）</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230080707946.png" alt="image-20251230080707946" style="zoom:67%;"></p>
+<p>其MTU是1500B</p>
+<h3 id="PPP的透明传输"><a href="#PPP的透明传输" class="headerlink" title="PPP的透明传输"></a>PPP的透明传输</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>异步传输 (Asynchronous)</strong></th>
+<th><strong>同步传输 (Synchronous)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>传输单位</strong></td>
+<td>以<strong>字符（字节）</strong>为单位</td>
+<td>以<strong>比特流</strong>为单位</td>
+</tr>
+<tr>
+<td><strong>同步方式</strong></td>
+<td>依靠起始位和停止位（Start/Stop bits）</td>
+<td>依靠统一的<strong>外部时钟信号</strong></td>
+</tr>
+<tr>
+<td><strong>数据间隔</strong></td>
+<td>字节间的间隔时间不固定</td>
+<td>比特流是连续的，间隔固定且紧凑</td>
+</tr>
+<tr>
+<td><strong>透明传输手段</strong></td>
+<td><strong>字符填充</strong> (Byte Stuffing)</td>
+<td><strong>零比特填充</strong> (Bit Stuffing)</td>
+</tr>
+<tr>
+<td><strong>应用场景</strong></td>
+<td>传统的拨号调制解调器（Modem）</td>
+<td>专线、光纤链路（如 SONET/SDH）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="字节填充（异步传输）"><a href="#字节填充（异步传输）" class="headerlink" title="字节填充（异步传输）"></a>字节填充（异步传输）</h4><font color="red">**7D填充再异或**</font>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230080814887.png" alt="image-20251230080814887" style="zoom:67%;"></p>
+<p>这里有两个符号：<strong>帧定界符</strong>（0x7E）、<strong>转义符</strong>（0x7D）</p>
+<ul>
+<li><h5 id="如果出现0x7E"><a href="#如果出现0x7E" class="headerlink" title="如果出现0x7E"></a>如果出现0x7E</h5><ul>
+<li>先填入转义字符，再将<code>0x7E</code>与<code>0x20</code>做异或，最后填入异或结果0x5E</li>
+</ul>
+</li>
+<li><h5 id="如果出现0x7D"><a href="#如果出现0x7D" class="headerlink" title="如果出现0x7D"></a>如果出现0x7D</h5><ul>
+<li>先填入转义字符，再将<code>0x7D</code>与<code>0x20</code>做异或，最后填入异或结果0x5D</li>
+</ul>
+</li>
+<li><h5 id="如果出现控制字符（-lt-0x20）"><a href="#如果出现控制字符（-lt-0x20）" class="headerlink" title="如果出现控制字符（&lt;0x20）"></a>如果出现控制字符（&lt;0x20）</h5><ul>
+<li>先填入转义字符，再将<code>0x03</code>与<code>0x20</code>做异或，最后填入异或结果0x23 </li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>0x20在ASCII码中对应的是空格。与之异或相当于将该字节的<strong>第 6 位（从右往左数）取反</strong>。</p>
+</blockquote>
+<h4 id="零比特填充（同步传输）"><a href="#零比特填充（同步传输）" class="headerlink" title="零比特填充（同步传输）"></a>零比特填充（同步传输）</h4><p><a id="tra"></a></p>
+<p>帧界定符是：01111110。所以<font color="red"><strong>遇到五个1插入一个0</strong></font></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230082400543.png" alt="image-20251230082400543" style="zoom:67%;"></p>
+<h2 id="CSMA-CD"><a href="#CSMA-CD" class="headerlink" title="CSMA/CD"></a>CSMA/CD</h2><blockquote>
+<p>CSMA/CD的所有细节（存在问题，cs、ma、cd含义，工作过程，流程图的每一个细节）</p>
+</blockquote>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>然而PPP协议只支持两个主机之间的通信，无法满足局域网中的广播功能。</p>
+<p>所以最早开始我们将多个主机连接到一条总线上，当且仅当<strong>帧首部的目的地址</strong>和<strong>适配器硬件地址一致</strong>时，才接受这个帧</p>
+<p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20251230090317193.png" alt="image-20251230090317193" style="zoom:67%;"></p>
+<p>但是这样存在问题：多个站点同时发送时，会产生发送碰撞或冲突，导致发送失败。对此以太网采取了两种重要措施</p>
+<ul>
+<li>采用较为灵活的无连接的工作方式<ul>
+<li>不先建立连接，不编号（不可靠）</li>
+<li>同一时间只能允许一台计算机发送</li>
+</ul>
+</li>
+<li>发送的数据都使用曼彻斯特编码<ul>
+<li>导致所占带宽比原始基带信号增加了一倍</li>
+<li>曼彻斯特编码使得信号特征非常明显，网卡通过检测线路上电压幅度的异常增加或相位冲突，可以极快地判定“撞车”了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="CSMA-CD-协议的要点"><a href="#CSMA-CD-协议的要点" class="headerlink" title="CSMA/CD 协议的要点"></a>CSMA/CD 协议的要点</h3><p><strong>CS</strong>：载波监听。即“边发送边监听”。不管在想要发送数据之前，还是在发送数据之中，每个站都必须<strong>不停地检测信道</strong></p>
+<p><strong>MA</strong>：多点接入。说明这是总线型网络。许多计算机以多点接入地方式连接在一根总线上。</p>
+<p><strong>CD</strong>：碰撞检测。适配器边发送数据，边检测信道上的信号电压的变化情况。电压摆动值超过一定的门限值时，就认为总线上至少有两个站在同时发送数据，表明产生了碰撞（或冲突）</p>
+<h3 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h3><p><strong><font color="red">先听后发、边听边发、冲突停发、随机重发</font></strong></p>
+<p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20251230094424503.png" alt="image-20251230094424503" style="zoom:67%;"></p>
+<h4 id="发送前监听"><a href="#发送前监听" class="headerlink" title="发送前监听"></a>发送前监听</h4><p>等待96bit时间，如果空闲就开始发送该帧；如果信道忙就持续检测直到信道空闲</p>
+<blockquote>
+<p>对于10Mbit的以太网来说，就是9.6微秒</p>
+</blockquote>
+<h4 id="发送时监听"><a href="#发送时监听" class="headerlink" title="发送时监听"></a>发送时监听</h4><ul>
+<li><strong>发送成功</strong>：争用期（2$\tau$）内一直未检测到冲突，该帧一定发送成功</li>
+<li><strong>发送失败</strong>：争用期（2$\tau$）内检测到冲突<ul>
+<li>立即停止发送</li>
+<li>广播碰撞通知信息<ul>
+<li>这个时候发送人为干扰信号（32或48比特）来强化冲突</li>
+</ul>
+</li>
+<li>执行指数退避算法</li>
+</ul>
+</li>
+</ul>
+<h4 id="截断二进制指数退避"><a href="#截断二进制指数退避" class="headerlink" title="截断二进制指数退避"></a>截断二进制指数退避</h4><ol>
+<li>确定<strong>基本退避时间 t</strong>：一般是争用期  2$\tau$</li>
+<li>定义<strong>重传次数 k</strong>：$k= Min(重传次数，10)$</li>
+<li>得到<strong>重传时间 r</strong>：$r = random(0,1,2,…,(2^k-1)) * t$</li>
+</ol>
+<h5 id="例题-1"><a href="#例题-1" class="headerlink" title="例题"></a>例题</h5><h6 id="书上3-25"><a href="#书上3-25" class="headerlink" title="书上3-25"></a>书上3-25</h6><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/1768214465245.png" alt="1768214465245" style="zoom: 80%;"></p>
+<p>几个关键点：</p>
+<ul>
+<li>发数据前要等待96bit时间来确定信道空闲</li>
+<li><font color="red">**从发完干扰信息后，开始计时退避时间。**</font>
+
+</li>
+</ul>
+<h4 id="争用期"><a href="#争用期" class="headerlink" title="争用期"></a>争用期</h4><p>对于 <strong>10Mbit/s</strong> 的以太网而言，争用期的长度为 <strong>51.2$\mu s$</strong>，也就是说<strong>512bit时间</strong>，即<strong>64B 时间</strong></p>
+<p>所以太网在发送数据的时候，若前64字节没有发生冲突，则后续的数据就不会发生冲突</p>
+<p>故以太网规定了 <strong>最短有效帧长为64字节</strong>。凡长度小于64字节的帧都是由于冲突而异常中止的无效帧，应当立即将其丢弃。</p>
+<h5 id="影响帧最短长度的因素"><a href="#影响帧最短长度的因素" class="headerlink" title="影响帧最短长度的因素"></a>影响帧最短长度的因素</h5><p>在上述 Ethernet Ⅱ中，我们计算的最小帧长度的公式是：</p>
+<script type="math/tex; mode=display">
+MTU = 2 \times \tau \times 带宽
+\\
+= 2 \times \frac{距离}{传播速率} \times 带宽</script><p>实际做题中，传播速率一般不会变化。我们一般有：<strong>MTU减少多少，距离如何变</strong>；或者是简单的已知推未知</p>
+<p>对于<strong>MTU减少多少，距离如何变</strong>这种，我们可以以此计算：<font color="red">减少的往返时间 = 减少的发送时延</font></p>
+<h2 id="以太网的MAC层"><a href="#以太网的MAC层" class="headerlink" title="以太网的MAC层"></a>以太网的MAC层</h2><p>适配器收到的发往本站的帧主要有以下三类：</p>
+<ul>
+<li><strong>单播帧</strong>：一对一。即收到的帧的MAC地址和本站的MAC地址相同</li>
+<li><strong>广播帧</strong>：一对全体。即发送给本局域网上所有站点的帧（全1地址）</li>
+<li><strong>多播帧</strong>：一对多。即发送给本局域网上一部分站点的帧</li>
+</ul>
+<h4 id="MAC帧的格式"><a href="#MAC帧的格式" class="headerlink" title="MAC帧的格式"></a>MAC帧的格式</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113210809317.png" alt></p>
+<h2 id="集线器与交换机"><a href="#集线器与交换机" class="headerlink" title="集线器与交换机"></a>集线器与交换机</h2><blockquote>
+<p>集线器交换机的区别（带宽方面，交换机并行）</p>
+</blockquote>
+<h3 id="集线器"><a href="#集线器" class="headerlink" title="集线器"></a>集线器</h3><h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>用电子器件来模拟实际电缆线的工作。系统仍然像一个<font color="blue">传统的以太网</font></li>
+<li>使用集线器的以太网<font color="blue">在逻辑上仍是一个总线网</font>，各工作站使用的还是 CSMA/CD协议，并共享逻辑上的总线</li>
+<li>像一个多接口的转发器，工作在<strong>物理层</strong></li>
+</ul>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>使原来属于不同碰撞域的计算机能够<strong>跨碰撞域通信</strong></li>
+<li>扩大了以太网覆盖的地理范围</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><strong><font color="red">碰撞域增大了，总的吞吐量未提高</font></strong></li>
+<li>如果使用不同的以太网技术，那么就不能用集线器将它们互联起来</li>
+</ul>
+<h3 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h3><h4 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>工作在<strong>数据链路层</strong></li>
+<li><strong><font color="red">多端口的网桥</font></strong>。网桥根据MAC帧的目的地址对收到的帧进行转发和过滤。</li>
+<li>每个接口都直接与一个单台主机或另一个以太网交换机相连，并且一般工作在<strong><font color="red">全双工</font></strong>方式</li>
+<li>具有<strong><font color="red">并行性</font></strong><ul>
+<li>能同时连通多对接口，使多对主机能同时通信</li>
+<li>相互通信的主机都独占传输媒体，无碰撞地传输数据</li>
+<li><font color="blue">每一个端口和连接到端口的主机构成了一个碰撞域</font></li>
+</ul>
+</li>
+<li>接口有存储器</li>
+<li>即插即用。其内部的帧交换表（地址表）通过<strong>自学习算法</strong>自动地主键建立起来</li>
+</ul>
+<h4 id="自学习算法"><a href="#自学习算法" class="headerlink" title="自学习算法"></a>自学习算法</h4><p>以太网交换机是一种即插即用设备，其内部的帧交换表（又称为地址表）是通过自学习算法自动的逐渐建立起来的。实际上，这种交换表就是一个内容可寻址存储器CAM。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/922f9dfe4e787b6561d72bfd8b55373e.jpg" style="zoom:67%;"></p>
+<p>这里如果A先向B发送1帧：</p>
+<ol>
+<li>从端口1进入交换机</li>
+<li>交换机查找表中有没有B的地址</li>
+<li>没有，于是交换机把源地址 A  和端口 1 写入交换表中</li>
+<li>向除了端口1以外的端口广播这个帧，此时C、D会过滤这个帧</li>
+</ol>
+<p>接着 B 通过端口3 向A发送1帧</p>
+<ol>
+<li>从端口3进入交换机</li>
+<li>交换机查找表</li>
+<li>发现有地址A，所以从端口1转发出去</li>
+<li>最后将（B，3）写入帧交换表</li>
+</ol>
+<h5 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/027796315228f0f0d25c57277890eea5.jpg" alt="027796315228f0f0d25c57277890eea5" style="zoom: 33%;"></p>
+<p>比如这里A发B，由于广播导致兜圈子。我们采用<strong>生成树协议（STP</strong>），不改变网络的实际拓扑，在逻辑上切断某些链路，使得一台主机到所有其他主机的路径是<strong>无环路的树状结构</strong></p>
+<h4 id="优点（重点）"><a href="#优点（重点）" class="headerlink" title="优点（重点）"></a>优点（重点）</h4><ul>
+<li>每个用户独享带宽，增加了总容量。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230140724311.png" alt="image-20251230140724311" style="zoom:67%;"></p>
+<h2 id="碰撞域和冲突域"><a href="#碰撞域和冲突域" class="headerlink" title="碰撞域和冲突域"></a>碰撞域和冲突域</h2><ul>
+<li>碰撞域（collision domain）又称为冲突域，指网络中一个站点发出的帧会与其他站点发出的帧产生碰撞或冲突的那部分网络。</li>
+<li>碰撞域越大，发生碰撞的概率越高。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230132925708.png" alt="image-20251230132925708" style="zoom:67%;"></p>
+<p>通过用多个集线器我们可以连城更大的以太网</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230135923258.png" alt="image-20251230135923258" style="zoom:67%;"></p>
+<hr>
+<h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><h2 id="网络提供的两种服务"><a href="#网络提供的两种服务" class="headerlink" title="网络提供的两种服务"></a>网络提供的两种服务</h2><h4 id="让网络负责可靠交付——虚电路服务"><a href="#让网络负责可靠交付——虚电路服务" class="headerlink" title="让网络负责可靠交付——虚电路服务"></a>让网络负责可靠交付——虚电路服务</h4><p>面向连接地可靠交付</p>
+<h4 id="网络提供数据报服务——数据报服务"><a href="#网络提供数据报服务——数据报服务" class="headerlink" title="网络提供数据报服务——数据报服务"></a>网络提供数据报服务——数据报服务</h4><p>无连接地、尽最大努力交付地数据报服务，不提供服务质量地承诺</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230141807319.png" alt="image-20251230141807319" style="zoom: 67%;"></p>
+<h2 id="网络层两个层面（数据、控制）"><a href="#网络层两个层面（数据、控制）" class="headerlink" title="网络层两个层面（数据、控制）"></a>网络层两个层面（数据、控制）</h2><p>在路由器之间传送的信息有以下两大类：数据、路由信息</p>
+<h3 id="数据层面"><a href="#数据层面" class="headerlink" title="数据层面"></a>数据层面</h3><ul>
+<li>路由表根据本路由器生成的<strong>转发表</strong>，把收到的分组从查找到的对应接口<strong>转发</strong>出去</li>
+<li><strong>独立</strong>工作</li>
+<li>采用<strong>硬件</strong>进行转发，快</li>
+</ul>
+<h3 id="控制层面"><a href="#控制层面" class="headerlink" title="控制层面"></a>控制层面</h3><ul>
+<li>根据路由选择协议所用的路由算法<strong>计算路由</strong>，创建出本路由器的<strong>路由表</strong></li>
+<li>许多路由器<strong>协同</strong>动作</li>
+<li>采用<strong>软件</strong>计算，慢</li>
+</ul>
+<h2 id="IPv4三个配套协议（基本概念）"><a href="#IPv4三个配套协议（基本概念）" class="headerlink" title="IPv4三个配套协议（基本概念）"></a>IPv4三个配套协议（基本概念）</h2><h3 id="地址解析协议-ARP（要知道工作过程）"><a href="#地址解析协议-ARP（要知道工作过程）" class="headerlink" title="地址解析协议 ARP（要知道工作过程）"></a>地址解析协议 ARP（要知道工作过程）</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>从IP地址解析处MAC地址</p>
+<h4 id="ARP高速缓存"><a href="#ARP高速缓存" class="headerlink" title="ARP高速缓存"></a>ARP高速缓存</h4><ul>
+<li>存放IP地址到MAC地址的映射表</li>
+<li>映射表动态更新</li>
+<li>格式：<IP地址；MAC地址；生存时间；类型\></IP地址；MAC地址；生存时间；类型\></li>
+</ul>
+<h4 id="ARP工作"><a href="#ARP工作" class="headerlink" title="ARP工作"></a>ARP工作</h4><h5 id="同一局域网内两主机"><a href="#同一局域网内两主机" class="headerlink" title="同一局域网内两主机"></a>同一局域网内两主机</h5><p><strong><font color="red">有缓存</font></strong>，<strong><font color="red">直接取</font></strong>，写入MAC的目的地址</p>
+<p><strong><font color="red">无缓存</font></strong>，本局域网上A<strong><font color="red">广播发</font></strong>ARP请求（请求包含A的IP，MAC，B的IP），B更新ARP高速缓存并<strong><font color="red">单播回</font></strong>应（B的MAC），然后A更新高速缓存</p>
+<h5 id="不同局域网"><a href="#不同局域网" class="headerlink" title="不同局域网"></a>不同局域网</h5><p>A通过上述过程得到路由器R的MAC并把IP数据报交给R，剩下工作交给R，R通过上述过程得到B的MAC地址，或者是下一个路由器R2的MAC地址。</p>
+<h3 id="网际控制报文协议-ICMP"><a href="#网际控制报文协议-ICMP" class="headerlink" title="网际控制报文协议 ICMP"></a>网际控制报文协议 ICMP</h3><h4 id="作用-1"><a href="#作用-1" class="headerlink" title="作用"></a>作用</h4><p>允许主机或路由器<strong><font color="red">报告差错</font></strong>情况或提供有关异常情况的报告</p>
+<h4 id="种类"><a href="#种类" class="headerlink" title="种类"></a>种类</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>ICMP</strong>  <strong>报文种类</strong></th>
+<th style="text-align:center"><strong>类型的值</strong></th>
+<th style="text-align:center">ICMP报文的类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>差错报告报文</strong></td>
+<td style="text-align:center"><strong>3</strong></td>
+<td style="text-align:center"><strong>终点不可达</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"><strong>11</strong></td>
+<td style="text-align:center"><strong>时间超过</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"><strong>12</strong></td>
+<td style="text-align:center"><strong>参数问题</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"><strong>5</strong></td>
+<td style="text-align:center"><strong>改变路由（Redirect）</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>询问报文</strong></td>
+<td style="text-align:center"><strong>8</strong> <strong>或</strong>  <strong>0</strong></td>
+<td style="text-align:center"><strong>回送</strong> <strong>(Echo)</strong>  <strong>请求或回答</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"><strong>13</strong> <strong>或</strong>  <strong>14</strong></td>
+<td style="text-align:center"><strong>时间戳</strong> <strong>(Timestamp)</strong>  <strong>请求或回答</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="引用举例"><a href="#引用举例" class="headerlink" title="引用举例"></a>引用举例</h4><p>PING、Traceroute</p>
+<h3 id="网际组管理协议-IGMP"><a href="#网际组管理协议-IGMP" class="headerlink" title="网际组管理协议 IGMP"></a>网际组管理协议 IGMP</h3><p>使多播路由器知道多播组成员信息</p>
+<p>IGMP 协议是让连接在本地局域网上的多播路由器知道本局域网上是否有主机参加或退出了某个多播组。IGMP 不知道 IP 多播组包含的成员数，也不知道这些成员都分布在哪些网络上。</p>
+<h2 id="跳的含义"><a href="#跳的含义" class="headerlink" title="跳的含义"></a>跳的含义</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230143450520.png" alt="image-20251230143450520" style="zoom:50%;"></p>
+<h2 id="4-2-2-IP地址（所有）"><a href="#4-2-2-IP地址（所有）" class="headerlink" title="4.2.2 IP地址（所有）"></a>4.2.2 IP地址（所有）</h2><h3 id="IP地址及其表示方法"><a href="#IP地址及其表示方法" class="headerlink" title="IP地址及其表示方法"></a>IP地址及其表示方法</h3><p>IP地址在整个互联网范围内是唯一的，指明了连接到某个网络上的一个主机</p>
+<h4 id="采用二级结构：网络号，主机号"><a href="#采用二级结构：网络号，主机号" class="headerlink" title="采用二级结构：网络号，主机号"></a>采用二级结构：网络号，主机号</h4><h5 id="网络号"><a href="#网络号" class="headerlink" title="网络号"></a>网络号</h5><p>标志主机（或路由器）所连接到的网络，一个网络号在整个互联网范围内必须是唯一的。</p>
+<h5 id="主机号"><a href="#主机号" class="headerlink" title="主机号"></a>主机号</h5><p>标志网络中的主机（或路由器），一个主机号在它前面的网络号所指明的网络范围内必须是唯一的</p>
+<h3 id="分类的IP地址"><a href="#分类的IP地址" class="headerlink" title="分类的IP地址"></a>分类的IP地址</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230144431771.png" alt="image-20251230144431771" style="zoom: 57%;"></p>
+<p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20251230144608170.png" alt="image-20251230144608170" style="zoom: 53%;"></p>
+<h4 id="特殊的IP地址"><a href="#特殊的IP地址" class="headerlink" title="特殊的IP地址"></a>特殊的IP地址</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230144959112.png" alt="image-20251230144959112" style="zoom:67%;"></p>
+<p>网络号全0：默认路由或非特定网络</p>
+<h3 id="无分类编制CIDR（重点）"><a href="#无分类编制CIDR（重点）" class="headerlink" title="无分类编制CIDR（重点）"></a>无分类编制CIDR（重点）</h3><p>无分类域间路由选择，能更加有效地分配IPv4的地址空间，但无法解决IP地址枯竭的问题。</p>
+<p>CIDR的作用是将不同的子网汇聚成一个超网</p>
+<h5 id="网络前缀"><a href="#网络前缀" class="headerlink" title="网络前缀"></a>网络前缀</h5><p>略</p>
+<h5 id="地址块"><a href="#地址块" class="headerlink" title="地址块"></a>地址块</h5><p>把网络前缀都相同的所有连续的IP地址组成一个CIDR地址块。此时这个地址块的IP地址数目（主机数）为$2^{(32-n)}-2$ 个</p>
+<h5 id="地址掩码"><a href="#地址掩码" class="headerlink" title="地址掩码"></a>地址掩码</h5><p>IP地址 AND 地址掩码 = 网络地址</p>
+<h5 id="三个特殊的CIDR地址块"><a href="#三个特殊的CIDR地址块" class="headerlink" title="三个特殊的CIDR地址块"></a>三个特殊的CIDR地址块</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20251230150424256.png" alt="image-20251230150424256" style="zoom:67%;"></p>
+<h3 id="IP地址的特点"><a href="#IP地址的特点" class="headerlink" title="IP地址的特点"></a>IP地址的特点</h3><ul>
+<li><h5 id="每个IP地址由两部分组成"><a href="#每个IP地址由两部分组成" class="headerlink" title="每个IP地址由两部分组成"></a>每个IP地址由两部分组成</h5><ul>
+<li>IP地址是一种分等级的地址结构<ul>
+<li>方便了IP地址的分配和管理</li>
+<li>实现路由聚合</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h5 id="标志一台主机和一条链路的接口"><a href="#标志一台主机和一条链路的接口" class="headerlink" title="标志一台主机和一条链路的接口"></a>标志一台主机和一条链路的接口</h5><ul>
+<li>一台主机在两个网络上时，也会有两个IP地址，这种叫多归属主机</li>
+<li>一个路由器至少应当连接到两个网络，所以一个路由器至少有两个IP地址</li>
+</ul>
+</li>
+<li><h5 id="转发器或交换机连接起来的若干个局域网仍为一个网络"><a href="#转发器或交换机连接起来的若干个局域网仍为一个网络" class="headerlink" title="转发器或交换机连接起来的若干个局域网仍为一个网络"></a>转发器或交换机连接起来的若干个局域网仍为一个网络</h5><ul>
+<li>一个网络是指具有相同网络前缀的主机的集合。转发器或交换机连接起来的若干个局域网都具有相同的网络号</li>
+<li>具有不同网络号的局域网必须使用路由器进行互连</li>
+</ul>
+</li>
+<li><h5 id="所有分配到网络前缀的网络都是平等的"><a href="#所有分配到网络前缀的网络都是平等的" class="headerlink" title="所有分配到网络前缀的网络都是平等的"></a>所有分配到网络前缀的网络都是平等的</h5></li>
+</ul>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ul>
+<li>同一个局域网上的<font color="red">主机</font>或<font color="red">路由器（端口）</font>的IP地址中的网络号必须一样</li>
+<li>IP源地址和目的地址在转发过程中不变，但是MAC的源和目的地址一直在变化（除了首尾）</li>
+</ul>
+<h3 id="IP数据报的格式"><a href="#IP数据报的格式" class="headerlink" title="IP数据报的格式"></a>IP数据报的格式</h3><p>IP首部如果不扩展就是   <strong><font color="red">20字节</font></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107204926861.png" alt="image-20260107204926861" style="zoom:67%;"></p>
+<ul>
+<li>版本：4 或者 6</li>
+<li>首部长度：4位，每一位表示  <strong><font color="red">4B</font></strong>    ，所以IP<strong>首部最大值是   60字节（并且是4的倍数）</strong></li>
+<li>区分服务：8位</li>
+<li>总长度：16位，所以IP数据报最大长度 65535B（MTU）</li>
+<li>标识：16位，identification，计数器，也可以看成序列号</li>
+<li>标志：3位，主要前两位有意义：MF、DF</li>
+<li>片偏移：13位，每一位表示<font color="red"> <strong>8B</strong></font>。（<strong>分片的数据长度必须为8的整数</strong>）（因为片偏移比总长度少了3位）</li>
+<li>生存时间：8位，TTL，可通过的路由器的最大值，最大跳数</li>
+<li>协议：8位，比如说ICMP什么的</li>
+<li>首部校验和：16位，只检测首部不检测数据</li>
+<li>源地址：32位</li>
+<li>目的地址：32位</li>
+</ul>
+<h4 id="分片例子"><a href="#分片例子" class="headerlink" title="分片例子"></a>分片例子</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107205714713.png" alt="image-20260107205714713" style="zoom: 67%;"></p>
+<p>并且分片的标识（identification）和没分片的一样</p>
+<h3 id="IP转发分组的过程"><a href="#IP转发分组的过程" class="headerlink" title="IP转发分组的过程"></a>IP转发分组的过程</h3><h4 id="基于终点的转发"><a href="#基于终点的转发" class="headerlink" title="基于终点的转发"></a>基于终点的转发</h4><h5 id="转发表"><a href="#转发表" class="headerlink" title="转发表"></a>转发表</h5><p>&lt;目的<strong><font color="red">网络</font></strong>地址，下一跳地址></p>
+<h5 id="转发表中的两种特殊路由"><a href="#转发表中的两种特殊路由" class="headerlink" title="转发表中的两种特殊路由"></a>转发表中的两种特殊路由</h5><ul>
+<li>主机路由<ul>
+<li>网络前缀是a.b.c.d/32</li>
+<li>是对特定目的主机的IP地址专门指定的一个路由</li>
+</ul>
+</li>
+<li>默认路由<ul>
+<li>网络前缀是0.0.0.0/0</li>
+<li>作为一个兜底机制</li>
+</ul>
+</li>
+</ul>
+<h5 id="转发过程（必考）"><a href="#转发过程（必考）" class="headerlink" title="转发过程（必考）"></a><font color="red">转发过程（必考）</font></h5><ul>
+<li>主机H1检查目的地址<font color="blue">是否连接在本网络上</font>（<strong><font color="green">和子网掩码按位与得到网络地址</font></strong>）<ul>
+<li>如果是，则直接交付</li>
+<li>如果不是，交给路由器R1</li>
+</ul>
+</li>
+<li>路由器R1<font color="blue">收到分组后查找转发表</font>，从第一行开始</li>
+</ul>
+<h4 id="最长前缀匹配"><a href="#最长前缀匹配" class="headerlink" title="最长前缀匹配"></a>最长前缀匹配</h4><h5 id="最长前缀匹配原则"><a href="#最长前缀匹配原则" class="headerlink" title="最长前缀匹配原则"></a>最长前缀匹配原则</h5><p>选择前缀最长的一个作为匹配的前缀。需要把前缀最长的排在转发表的第一行，以加快查表</p>
+<h4 id="前缀二叉线索树（原理、如何加速）"><a href="#前缀二叉线索树（原理、如何加速）" class="headerlink" title="前缀二叉线索树（原理、如何加速）"></a>前缀二叉线索树（原理、如何加速）</h4><h5 id="二叉线索树结构"><a href="#二叉线索树结构" class="headerlink" title="二叉线索树结构"></a>二叉线索树结构</h5><ul>
+<li>从根节点自顶向下最多32层，每一层对应IP地址的一位</li>
+<li>使用唯一前缀来构造二叉线索</li>
+<li>广泛使用了各种压缩技术</li>
+</ul>
+<h5 id="加速原理"><a href="#加速原理" class="headerlink" title="加速原理"></a>加速原理</h5><ul>
+<li><p>减少比较次数：最多只需要32次位操作</p>
+</li>
+<li><p>自动实现最长前缀匹配</p>
+</li>
+<li>路径压缩：共同部分（如都已101..开头，且中间5位没有其他变化），二叉线索数可以将这些节点压缩成一条路径，跳过了不必要的中间判断</li>
+</ul>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107214545990.png" alt="image-20260107214545990" style="zoom:67%;"></p>
+<p>我们先检查IP地址左边的第一位，如果为0，则第一层的节点在根节点左下方。。。直到找到叶节点</p>
+<p>如果找到一个叶节点</p>
+<ul>
+<li>将目的IP地址和该叶节点的子网掩码进行按位与运算</li>
+<li>如果结果和叶节点的网络前缀匹配，就按吓一跳的接口转发该分组。否则丢弃</li>
+</ul>
+<p>如果在分支里发现不存在的字符</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107215011527.png" alt="image-20260107215011527" style="zoom:67%;"></p>
+<ul>
+<li>查到第三个字符0的时候，发现找不到匹配的，说明这个地址不在这个二叉线索中</li>
+<li>检查是否存在默认路由。有就丢给默认。没有就丢了</li>
+</ul>
+<h2 id="三个路由协议（原理，能比较，给出场景选协议）"><a href="#三个路由协议（原理，能比较，给出场景选协议）" class="headerlink" title="三个路由协议（原理，能比较，给出场景选协议）"></a>三个路由协议（原理，能比较，给出场景选协议）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107220459463.png" alt="image-20260107220459463" style="zoom:33%;"></p>
+<blockquote>
+<p>每种协议维持什么表、表内什么信息、和谁交换、如何交换、什么频率交换、如何更新</p>
+<p>RIP和OSPF横向对比</p>
+<p>三种协议使用的网络协议</p>
+<p>泛洪法和普通广播有什么不同</p>
+<p>RIP频率：状态变化或30min。OSPF频率</p>
+</blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th><strong>RIP</strong></th>
+<th><strong>OSPF</strong></th>
+<th><strong>BGP</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>封装协议</strong></td>
+<td>UDP</td>
+<td>IP</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td><strong>传播方式</strong></td>
+<td>逐跳</td>
+<td>泛洪</td>
+<td>TCP 会话间传递</td>
+</tr>
+<tr>
+<td><strong>更新内容</strong></td>
+<td>全表，周期性</td>
+<td>链路状态，事件驱动</td>
+<td>路径属性，事件驱动</td>
+</tr>
+<tr>
+<td><strong>拓扑视图</strong></td>
+<td>无全局视图</td>
+<td>拥有全图</td>
+<td>无全图，仅路径属性</td>
+</tr>
+<tr>
+<td><strong>计算算法</strong></td>
+<td>Bellman-Ford</td>
+<td>Dijkstra</td>
+<td>策略驱动</td>
+</tr>
+<tr>
+<td><strong>收敛速度</strong></td>
+<td>慢</td>
+<td>快</td>
+<td>慢（但更稳定）</td>
+</tr>
+<tr>
+<td><strong>带宽占用</strong></td>
+<td>高（周期发全表）</td>
+<td>中（仅更新变化）</td>
+<td>低（TCP 控制精细）</td>
+</tr>
+<tr>
+<td><strong>扩展性</strong></td>
+<td>差</td>
+<td>较好</td>
+<td>极强</td>
+</tr>
+<tr>
+<td><strong>应用场景</strong></td>
+<td>小型网络</td>
+<td>企业内部网络</td>
+<td>运营商/跨 AS 互联</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="RIP"><a href="#RIP" class="headerlink" title="RIP"></a>RIP</h3><p>路由信息协议（RIP）是一种分布式的、基于距离向量的路由选择协议。使用的算法时<strong><font color="red">距离向量算法</font></strong>。最大优点是简单，要求网络中的每个路由器都要维护从它自己到其他每一个目的网络的<strong>距离记录</strong>。其中距离也称为跳数，每经过一个路由器，条数就加一。</p>
+<h4 id="路由表结构"><a href="#路由表结构" class="headerlink" title="路由表结构"></a>路由表结构</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[目的网络		最短距离		下一跳地址]</span><br></pre></td></tr></table></figure>
+<p>刚开始路由表都是空的，然后得到直接连接的网络距离为1，之后相邻路由器交换并更新路由信息，最后收敛（自治系统中所有的节点都得到正确的路由选择信息的过程）。直接及交付的话，下一条地址用 <code>-</code>标识</p>
+<h4 id="特点-3"><a href="#特点-3" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>仅和<strong><font color="blue">相邻</font></strong>路由器交换信息</li>
+<li><strong><font color="blue">交换的信息</font></strong>是当前本路由器所知道的全部信息，即自己的<strong><font color="blue">路由表</font></strong></li>
+<li>按<font color="blue"><strong>固定时间间隔</strong></font>交换路由信息。网络<strong><font color="blue">拓扑发生变化</font></strong>时也进士交换变换后的路由信息</li>
+<li>好消息传播得快，<strong><font color="blue">坏消息传播的慢</font></strong>（坏消息慢收敛）。也就是说，当网络出现故障时，要经过比较长得时间才能将此消息（坏消息）传送到所有得路由器</li>
+<li>最大距离有限，适用于<strong><font color="red">网络规模较小</font></strong>的情况</li>
+<li>实现简单，开销较小</li>
+<li>采用<strong><font color="blue">UDP</font></strong>协议</li>
+</ul>
+<h4 id="距离向量算法"><a href="#距离向量算法" class="headerlink" title="距离向量算法"></a>距离向量算法</h4><ol>
+<li>把邻居 X 发来的路由表<strong><font color="orange">下一跳都改成 X</font></strong> ，并把所有的所有的距离都 <strong><font color="orange">加1</font></strong></li>
+<li>对发来的修改后的路由表, 重复以下操作<ol>
+<li>如果自己的路由表<strong><font color="orange">没有</font></strong>目的网络 N，就直接把这条记录<strong><font color="orange">加进</font></strong>路由表中</li>
+<li>如果自己的路由表有目标网络 N<ol>
+<li>如果 N <strong><font color="orange">是邻居</font></strong> X，用邻居发来的新的项<strong><font color="orange">替换</font></strong>原来的项</li>
+<li>如果 N <strong><font color="orange">不是邻居</font></strong>X，并且N的距离<font color="orange"><strong>小于</strong></font>路由表中的距离，则用收到项目<strong><font color="orange">更新</font></strong>原路由表中的项目</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>若三分钟还未收到相邻路由器的更新路由表，则把次相邻路由器记为不可达路由器（距离=16）</li>
+</ol>
+<h3 id="OSPF"><a href="#OSPF" class="headerlink" title="OSPF"></a>OSPF</h3><p>是为了克服RIP的缺点而开发。使用了Dijkstra 提出的最短路径算法 SPF。采用分布式的链路状态协议</p>
+<h4 id="特点-4"><a href="#特点-4" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>采用<strong><font color="blue">（可靠的）洪泛法</font></strong>。向本AS中<strong><font color="blue">所有路由器</font></strong>发送消息</li>
+<li>发送的信息是与本路由器相邻的所有路由器的<strong><font color="blue">链路状态</font></strong></li>
+<li>将自治系统划分为两种不同的区域，分层次划分区域使通信量大大减小，因而能<strong><font color="red">用于规模很大的AS中</font></strong>（因为OFPS链路状态只涉及相邻路由器，与整个互联网的规模并无直接关系，所以OFPS在大规模网络比RIP好，并且没有坏消息传播慢的问题）</li>
+<li>采用<strong><font color="red">IP协议</font></strong></li>
+</ul>
+<blockquote>
+<p>洪泛 vs 广播。广播是一种<strong>通信模式</strong>。发送者将报文发给网络中的<strong>所有</strong>成员。洪泛是一种<strong>转发算法</strong>。接收到一个包后，向除了“来路”以外的所有接口转发。</p>
+</blockquote>
+<h4 id="链路状态数据库"><a href="#链路状态数据库" class="headerlink" title="链路状态数据库"></a>链路状态数据库</h4><h5 id="链路状态"><a href="#链路状态" class="headerlink" title="链路状态"></a>链路状态</h5><p>说明本路由器都和哪些路由器相邻，以及该链路的度量</p>
+<h5 id="内容和特点"><a href="#内容和特点" class="headerlink" title="内容和特点"></a>内容和特点</h5><ul>
+<li>包含全网的拓扑结构图</li>
+<li>在全网范围内一致</li>
+<li>每个路由器使用链路状态数据库中的数据构造自己的路由表</li>
+</ul>
+<h4 id="工作过程"><a href="#工作过程" class="headerlink" title="工作过程"></a>工作过程</h4><ol>
+<li><p>确定邻站可达</p>
+<ul>
+<li>相隔路由器每隔10s发送一次问候分组</li>
+<li>40s没收到问候分组则该邻居不可达</li>
+</ul>
+</li>
+<li><p>同步链路状态数据库</p>
+<ul>
+<li>同步：指不同路由器的<strong><font color="orange">链路状态数据库的内容</font></strong>是一样的</li>
+<li>两个同步的路由器叫做完全邻接的路由器</li>
+</ul>
+</li>
+<li><p>更新链路状态</p>
+<ul>
+<li><strong><font color="red">只要链路状态发生变化</font></strong>，路由器就使用链路状态更新分组，采用<strong><font color="orange">可靠的洪泛法</font></strong>向全网更新链路状态</li>
+<li>规定<strong><font color="red">每隔一段时间</font></strong>，如30分钟要刷新一次数据库中的链路状态</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107225612999.png" alt="image-20260107225612999" style="zoom: 50%;"></p>
+</li>
+</ol>
+<h3 id="BGP"><a href="#BGP" class="headerlink" title="BGP"></a>BGP</h3><p>是不同AS的路由器之间交换路由信息的协议</p>
+<h4 id="特点-5"><a href="#特点-5" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>用于AS之间的路由选择</li>
+<li>只能力求选出一条能够到达目的网络且比较好的路由，而并非要计算出一条最佳路由</li>
+<li>采用了路径向量路由选择协议</li>
+<li>使用<strong><font color="red">TCP协议</font></strong></li>
+</ul>
+<h4 id="路由信息"><a href="#路由信息" class="headerlink" title="路由信息"></a>路由信息</h4><p>BGP路由 = [前缀， BGP属性] =</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[前缀，	AS-PATH,	NEXT-HOP]</span><br></pre></td></tr></table></figure>
+<p>前缀：指明到哪一个子网（CIDR）</p>
+<p>AS-PATH：自治系统路径，<strong><font color="red">不允许出现相同的AS号</font></strong>避免兜圈子</p>
+<p>NEXT-HOP：下一跳</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><h5 id="BGP发言者"><a href="#BGP发言者" class="headerlink" title="BGP发言者"></a>BGP发言者</h5><p>指一个AS的边界路由器，和其他AS的边界路由器交换信息</p>
+<h5 id="eBGP"><a href="#eBGP" class="headerlink" title="eBGP"></a>eBGP</h5><ul>
+<li>AS之间，BGP发言者在半永久性TCP连接上建立BGP会话，这称为eBGP连接</li>
+<li>BGP发言者在不同AS之间交换路由信息</li>
+</ul>
+<h5 id="iBGP"><a href="#iBGP" class="headerlink" title="iBGP"></a>iBGP</h5><ul>
+<li>AS内部，任何相互通信的两个路由器之间有一个逻辑连接（也是用TCP）。AS内部所有的路由器是全连通的。这种连接称为iBGP连接</li>
+<li>AS内部的路由器之间交换BGP路由信息</li>
+</ul>
+<h5 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h5><ul>
+<li><p>在 eBGP 连接的对等端得知的前缀信息，可以通报给一个 iBGP 连接的对等端。反过来也是可以的。</p>
+</li>
+<li><p>但从 iBGP 连接的对等端得知的前缀信息，则不能够通报给另一个 iBGP 连接的对等端。</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260107230718643.png" alt="image-20260107230718643" style="zoom:67%;"></p>
+<h2 id="NAT网络地址转换"><a href="#NAT网络地址转换" class="headerlink" title="NAT网络地址转换"></a>NAT网络地址转换</h2><p>在专用网上使用专用地址的主机如何与互联网上的主机通信（不需要加密）？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260113214756031.png" alt="image-20260113214756031"></p>
+<p>在内部主机与外部主机通信时，NAT路由器上发生了两次地址转换：</p>
+<ol>
+<li>离开专用网时：替换源地址，将内部地址替换为全球地址</li>
+<li>进入专用网时：替换目的地址，将全球地址替换为内部地址</li>
+</ol>
+<hr>
+<h1 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h1><h2 id="基本概念-2"><a href="#基本概念-2" class="headerlink" title="基本概念"></a>基本概念</h2><blockquote>
+<p>基本概念  两个协议的数据单元和比较   复用和分用  端口号</p>
+</blockquote>
+<h3 id="运输协议数据单元"><a href="#运输协议数据单元" class="headerlink" title="运输协议数据单元"></a>运输协议数据单元</h3><p>两个对等运输实体在通信时的数据单位叫做运输协议数据单元（<strong>TPDU</strong>）</p>
+<p>TCP传送的数据单位协议是 <strong>TCP报文段</strong>（segment）</p>
+<p>UDP传送的数据单位协议是 <strong>UDP报文</strong> 或 <strong>用户数据报</strong></p>
+<h3 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h3><p>在运输层使用协议端口号 (protocol port number)，或通常简称为端口 (port)。把端口设为通信的抽象终点。</p>
+<p>端口数运输层与应用层的服务接口，运输层的复用和分用功能通过端口实现</p>
+<h5 id="复用-1"><a href="#复用-1" class="headerlink" title="复用"></a>复用</h5><p>应用进程都可以通过运输层再传送到IP层。</p>
+<h5 id="分用"><a href="#分用" class="headerlink" title="分用"></a>分用</h5><p>运输层从IP层收到发送给应用进程的数据后，必须分别交付给知名的各应用进程。</p>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>无连接不可靠</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108122040672.png" alt="image-20260108122040672"></p>
+<p>计算校验和的时候，临时把12字节的“伪首部”和UDP用户数据报连接在一起。</p>
+<h2 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h2><h3 id="TCP和UDP区别"><a href="#TCP和UDP区别" class="headerlink" title="TCP和UDP区别"></a>TCP和UDP区别</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>TCP (Transmission Control Protocol)</strong></th>
+<th><strong>UDP (User Datagram Protocol)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>连接性</strong></td>
+<td><strong>面向连接</strong>。传输前需“三次握手”建立通道。</td>
+<td><strong>无连接</strong>。想发就发，不需要提前打招呼。</td>
+</tr>
+<tr>
+<td><strong>可靠性</strong></td>
+<td><strong>极高</strong>。有确认、重传、排序机制，保证不丢包。</td>
+<td><strong>不可靠</strong>。尽力而为，丢了就丢了，不保证顺序。</td>
+</tr>
+<tr>
+<td><strong>传输方式</strong></td>
+<td><strong>字节流</strong>。没有明确边界，像自来水一样流动。</td>
+<td><strong>数据报</strong>。保留报文边界，一个包一个包地发。</td>
+</tr>
+<tr>
+<td><strong>速度与效率</strong></td>
+<td>较慢。因为头部大（20字节）且有复杂的控制机制。</td>
+<td>极快。头部小（8字节），开销极低。</td>
+</tr>
+<tr>
+<td><strong>拥塞控制</strong></td>
+<td><strong>有</strong>。网络拥堵时会主动减速。</td>
+<td><strong>无</strong>。网络再堵也会按原速发送。</td>
+</tr>
+<tr>
+<td><strong>通信对象</strong></td>
+<td>一对一（单播）。</td>
+<td>支持一对一、一对多（组播）、多对多。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="特点-6"><a href="#特点-6" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>面向连接</li>
+<li>点对点</li>
+<li>可靠交付</li>
+<li>全双工</li>
+<li>面向字节流<ul>
+<li>不保证双方发送和接收的数据块大小完全相同</li>
+<li>保证双方发出的和收到的字节流完全一样</li>
+</ul>
+</li>
+</ul>
+<h3 id="TCP的连接"><a href="#TCP的连接" class="headerlink" title="TCP的连接"></a>TCP的连接</h3><p>TCP把连接作为最基本的抽象</p>
+<p>TCP连接的端点是：<strong>套接字</strong></p>
+<p>同一个IP地址可以有多个不同的TCP连接</p>
+<p>同一个端口号也可以出现再多个不同的TCP连接中</p>
+<h4 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h4><p>每一条TCP连接唯一地被通信两端地两个端点（套接字）所确定</p>
+<script type="math/tex; mode=display">
+套接字 socket = (IP地址 : 端口号)</script><script type="math/tex; mode=display">
+TCP 连接 ::= {socket1, socket2} = {(IP1: port1)，(IP2: port2)}</script><h3 id="TCP报文首部格式"><a href="#TCP报文首部格式" class="headerlink" title="TCP报文首部格式"></a>TCP报文首部格式</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108123238630.png" alt="image-20260108123238630" style="zoom: 67%;"></p>
+<ul>
+<li><p><strong>源端口</strong>：（16位）2字节，实现运输车的分用</p>
+</li>
+<li><p><strong>目的端口</strong>：（16位）2字节，实现运输层的复用</p>
+</li>
+<li><p><strong>序号</strong>：（32位）4字节，TCP连接中传送的数据流中的<font color="green">每一个字节都有一个序号</font>。序号字段的值则指的是本报文段所发送的数据的<font color="green">第一个字节的序号</font></p>
+</li>
+<li><strong>确认号</strong>：（32位）4字节，是期望收到的对方的下一个报文段的数据的第一个字节的序号。（ACK N = <strong><font color="green">到N-1为止</font></strong>的所有数据均已正确收到）</li>
+<li><strong>数据偏移</strong>：（4位），指出TCP报文段的<strong><font color="blue">数据起始处</font></strong>距离TCP<strong><font color="blue">报文段的起始处</font></strong>有多远，单位是<strong><font color="green">4字节（32位）</font></strong>，所以最长是60字节。同时最短是20字节</li>
+<li><strong>保留</strong>：（6位），全置为0</li>
+<li><strong>标识</strong>：（6位）<ul>
+<li>紧急URG：控制位，URG=1代表有紧急数据，要求快速传输</li>
+<li>确认ACK：控制位，ACK=1时，确认号字段才有效</li>
+<li>推送PSH：控制位，接收TCP收到PSH=1的报文段后，就尽快交付接收应用进程，不再等到整个缓存都填满再交付</li>
+<li>复位RST：控制位，RST=1表明TCP连接出现严重差错，必须释放连接然后重新建立运输连接</li>
+<li>同步SYN：控制位，SYN=1表示这是一个连接请求或连接接收报文<ul>
+<li>SYN=1，ACK=0，表明这是一个连接请求报文段</li>
+<li>SYN=1，ACK=1，表明这是一个连接接受报文段</li>
+</ul>
+</li>
+<li>终止FIN：控制位，FIN=1表示此报文段的发送端的数据已经发送完毕，并要求释放运输连接</li>
+</ul>
+</li>
+<li><strong>窗口</strong>：（16位）2字节，窗口值告诉对方，从本报文段首部的确认号算起，接收方目前允许对方发送的数据量（以字节为单位）</li>
+<li><strong>校验和</strong>：（16位）2字节，加上12字节伪首部计算</li>
+<li><strong>紧急指针</strong>：（16位）2字节，URG=1时，指出本报文段中的紧急数据的字节数，指出了紧急数据的末尾再报文段中的位置</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108124855573.png" alt="image-20260108124855573" style="zoom:67%;"></p>
+<h4 id="MSS"><a href="#MSS" class="headerlink" title="MSS"></a>MSS</h4><p>MSS是TCP报文段中的数据字段的最大长度（报文段长度 - TCP首部长度），可以在首部中的选项字段出现。其和接受窗口大小没有关系</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108125210479.png" alt="image-20260108125210479"></p>
+<h3 id="以字节为单位的滑动窗口"><a href="#以字节为单位的滑动窗口" class="headerlink" title="以字节为单位的滑动窗口"></a>以字节为单位的滑动窗口</h3><h4 id="发送窗口"><a href="#发送窗口" class="headerlink" title="发送窗口"></a>发送窗口</h4><p>在没有收到确认的情况下，发送发可以<strong>连续把窗口内的数据全部发送出去</strong>，凡是已经<strong>发送过的数据</strong>，在<strong>未收到确认之前</strong>都必须<strong>暂时保留</strong>，以便在超时重传时使用</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108130230374.png" alt="image-20260108130230374" style="zoom:50%;"></p>
+<h5 id="发送缓存"><a href="#发送缓存" class="headerlink" title="发送缓存"></a>发送缓存</h5><h4 id="接受窗口"><a href="#接受窗口" class="headerlink" title="接受窗口"></a>接受窗口</h4><p>只允许接收落入窗口内的数据</p>
+<h5 id="接受缓存"><a href="#接受缓存" class="headerlink" title="接受缓存"></a>接受缓存</h5><h3 id="超时重传时间的选择"><a href="#超时重传时间的选择" class="headerlink" title="超时重传时间的选择"></a>超时重传时间的选择</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108132147260.png" alt="image-20260108132147260" style="zoom: 50%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108132219338.png" alt="image-20260108132219338"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260108132243608.png" alt="image-20260108132243608"></p>
+<h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a><font color="red">流量控制</font></h2><p>流量控制：让发送方的发送速率不要太快，使接收方来得及接收</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>拥塞控制：拥塞控制是作用于网络的，它是防止过多的数据注入到网络中，避免出现网络负载过大的情况；常用的方法就是：（ 1 ）慢开始、拥塞避免（ 2 ）快重传、快恢复。</p>
+<p>流量控制：流量控制是作用于接收者的，它是控制发送者的发送速度从而使接收者来得及接收，防止分组丢失的。<br>拥塞控制就是防止这种现象的发生，或者缓解拥堵问题。</p>
+</blockquote>
+<h3 id="利用滑动窗口实现流量控制（必考）"><a href="#利用滑动窗口实现流量控制（必考）" class="headerlink" title="利用滑动窗口实现流量控制（必考）"></a><font color="red">利用滑动窗口实现流量控制</font>（必考）</h3><p>这张图必考，然后还会考到<strong><font color="red">持续计时器</font></strong>这一个细节。</p>
+<blockquote>
+<p>MSS=100。连接过程中接收方发送rwnd=400</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260109211924292.png" alt="image-20260109211924292" style="zoom: 200%;"></p>
+<ul>
+<li>发送方得知拥塞窗口大小是400，所以按计划应该发送1，101，201，301四个数据包</li>
+<li>在发完201后，接受到ACK包，ACK201代表200以前（1，201）都收到了，同时修改拥塞窗口为300。此时发送方从201开始发300，分别是201，301，401</li>
+<li>重传计时器超时后没有收到ACK 201，于是重新发送ACK 201</li>
+<li>收到ACK 501，rwnd=100，意味着从1~500都受到了，此时从501传100字节即可，即发送501包</li>
+<li>接收方得到全部内容，设置接收窗口为0</li>
+</ul>
+<p>如果最后一条rwnd=0发送成功，但是后续有一条rwnd=400丢失了，就会发生<strong><font color="red">死锁</font></strong>：发送方等到接收方发送新的指令，接收方等到发送方发来包</p>
+<h4 id="持续计时器"><a href="#持续计时器" class="headerlink" title="持续计时器"></a>持续计时器</h4><p>TCP连接的一方收到对方的零窗口通知，就启动该持续计时器</p>
+<ul>
+<li>若持续计时器设置的时间到期，就发送一个零窗口探测报文段</li>
+<li>若窗口依然是0，收到这个报文段的一方就重新设置持续计时器</li>
+<li>若窗口不是零，则死锁的僵局就可以打破了</li>
+</ul>
+<h3 id="TCP的传输效率"><a href="#TCP的传输效率" class="headerlink" title="TCP的传输效率"></a>TCP的传输效率</h3><p>略</p>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><h4 id="拥塞产生的原因"><a href="#拥塞产生的原因" class="headerlink" title="拥塞产生的原因"></a>拥塞产生的原因</h4><ul>
+<li>节点缓存容量太小</li>
+<li>链路容量不足</li>
+<li>处理机处理速率太慢</li>
+<li>拥塞本身会进一步加剧拥塞</li>
+</ul>
+<h3 id="拥塞控制-vs-流量控制（重点）"><a href="#拥塞控制-vs-流量控制（重点）" class="headerlink" title="拥塞控制 vs 流量控制（重点）"></a>拥塞控制 vs 流量控制（重点）</h3><h4 id="拥塞控制-1"><a href="#拥塞控制-1" class="headerlink" title="拥塞控制"></a>拥塞控制</h4><ul>
+<li>防止过多的数据注入到网络中，避免路由器或链路过载</li>
+<li>是一个全局性的过程，涉及所有的主机、路由器以及与降低网络传输性能的有关的所有因素</li>
+</ul>
+<h4 id="流量控制-1"><a href="#流量控制-1" class="headerlink" title="流量控制"></a>流量控制</h4><ul>
+<li>抑制发送端发送数据的速率，以使接收端来得及接收</li>
+<li>点对点通信量的控制，是个端到端的问题</li>
+</ul>
+<h3 id="TCP的拥塞控制方法"><a href="#TCP的拥塞控制方法" class="headerlink" title="TCP的拥塞控制方法"></a>TCP的拥塞控制方法</h3><ul>
+<li>TCP采用<strong>滑动窗口的方法</strong>进行拥塞控制，属于闭环控制方法</li>
+</ul>
+<blockquote>
+<p>闭环的意思是根据网络当前运行状态采取相应控制措施。而开环控制的意思是设计网络的事先实现考虑周全</p>
+</blockquote>
+<ul>
+<li>TCP发送方维持一个拥塞窗口 cwnd</li>
+</ul>
+<font color="red">真正的发送窗口大小</font>
+$$
+发送窗口值 = Min(接收方通知的窗口值，拥塞窗口值)
+$$
+
+### 四种方法
+
+![img](https://pica.zhimg.com/v2-4e24049a7b2985a74d9042bfdf5f881e_r.jpg)
+
+#### 慢开始
+
+##### 目的
+
+探测网络的负载能力或拥塞程度
+
+##### 算法
+
+- 设定开始的cwnd=1，SSTH = 16（自定义）
+- 每收到一个ACK，cwnd +=SMSS（拥塞窗口增加最多一个发送方的最大报文段SMSS） . 每个RTT cwnd翻倍
+- 到达SSTH，开始执行用三个避免算法
+
+![image-20260109221746253](https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260109221746253.png)
+
+#### 拥塞避免
+
+##### 目的
+
+让用拥塞窗口缓慢增大，避免出现拥塞
+
+##### 算法
+
+每经过一个RTT，cwnd = cwnd + 1
+
+#### 当网络出现拥塞时
+
+就是重传定时器超时的时候
+
+##### 算法
+
+1. SSTH =MIN(cwnd/2, 2)
+2. cwnd = 1
+3. 开始慢开始
+
+#### 快重传
+
+##### 目的
+
+让发送方尽早知道发生了个别报文段的丢失
+
+##### 算法
+
+发送方连续收到三个重复的确认，立即进行重传，不会超时
+
+#### 快恢复
+
+收到连续三个ACK后，不执行慢开始而是快恢复
+
+##### 算法
+
+1. SSTH = cwnd / 2、
+2. cwnd = SSTH（新的）
+3. 执行拥塞避免算法
+
+#### 示意图
+
+<img src="../../AppData/Roaming/Typora/typora-user-images/image-20260109222327022.png" alt="image-20260109222327022" style="zoom:67%;">
+
+#### 算法流程图
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260109222617249.png" alt="image-20260109222617249" style="zoom:67%;">
+
+结合图，每一步状态、发生了什么、如何处理、以及同一个方法的不同版本
+
+## 三次握手和四次挥手
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112203537385.png" alt="image-20260112203537385" style="zoom:67%;">
+
+中间这里客户的ack应该一直是201，图有问题
+
+### 握手过程
+
+1. 客户请求连接（SYN=1），消耗一个序号（seq=100）。
+2. 服务器收到你的连接（SYN=1），并且同意连接（ACK=1 ack=101），消耗一个序号（seq = 200）
+3. 客户收到服务器的收到（ACK=1, ack = 201），不消耗序号（seq = 101）（下方第一次客户发数据的序号也是101）
+
+第三条如果携带了数据，就要消耗一个序号
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112204911411.png" alt="image-20260112204911411" style="zoom: 50%;">
+
+### 挥手过程
+
+1. 用户主动关闭连接（FIN=1），消耗一个序号（seq = 613）
+2. 服务器收到你的终止（ACK=1，ack=614）， 这个时候用户到服务器的连接终止。（主要看这里的seq=201）
+   - 如果服务端还有没发完的数据就接着发...
+3. 服务器终止连接（FIN=1），消耗一个序号（seq=w，如果没有2.1这一步那么w=201），等待最后客户的确认（ACK=1， ack=614）
+4. 客户收到服务器的终止（ACK=1）， （seq=614，ack=202）
+5. 此时TCP连接没有完全释放掉，必须经过**时间等待计时器**设置的时间2MSL（最大报文生存时间）后，才释放TCP连接
+
+> 等待2MSL时间的作用：保证最后一个ACK报文段能够到达客户；防止已失效的连接请求报文段出现在本来连接中
+
+注意这里，带FIN的地方都会消耗一个序号
+
+> 保活计时器：2h还没收到客户消息，服务器发送探测报文段，若发送了10个探测报文段还没有响应，就假定客户出了故障，因此终止连接。
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112204940511.png" alt="image-20260112204940511" style="zoom: 50%;">
+
+# 应用层
+
+## DNS
+
+### 四种域名服务器 
+
+<img src="../../AppData/Roaming/Typora/typora-user-images/image-20260112205842498.png" alt="image-20260112205842498" style="zoom:50%;">
+
+四种分别是：**根域名服务器，顶级域名服务器，权限域名服务器，本地域名服务器**
+
+#### 根域名服务器
+
+最高层次，最为重要。
+
+所有根域名服务器都知道所有的顶级域名服务器的域名和 IP 地址
+
+根域名服务器总共只有 13 个不同 IP 地址的域名，但并非仅由13台机器所组成。
+
+#### 顶级域名服务器
+
+顶级域名服务器（即 TLD 服务器）负责管理在该顶级域名服务器注册的所有二级域名。
+
+#### 权限域名服务器
+
+负责一个区（zone）的域名服务器。
+当一个权限域名服务器还不能给出最后的查询回答时，就会告诉发出查询请求的 DNS 客户，下一步应当找哪一个权限域名服务器。 
+
+#### 本地域名服务器
+
+当一个主机发出 DNS 查询请求时，该查询请求报文就发送给本地域名服务器。
+每一个互联网服务提供者 ISP 或一个大学，都可以拥有一个本地域名服务器。
+当所要查询的主机也属于**同一个本地 ISP 时**，该本地域名服务器立即就能将所查询的主机名转换为它的 IP 地址，而**不需要再去询问其他的域名服务器**。
+本地域名服务器有时也称为**默认域名服务器**。
+
+### 域名的解析过程
+
+#### 迭代查询
+
+本地域名服务器向根域名服务器的查询通常采用迭代查询
+
+请求方（本地 DNS 服务器）把解析任务 完全交给 对方。
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112205608282.png" alt="image-20260112205608282" style="zoom:50%;">
+
+在域名解析过程中，**本地域名服务器** 向根域名服务器发送的通常是迭代查询。
+
+当 **根域名服务器** 收到查询请求后，不会代替本地域名服务器继续查询，而是返回结果中的两种情况之一：
+
+- 若能解析出所需的 IP 地址，则直接返回；
+- 若不能解析，则告知本地域名服务器应当联系的下一级顶级域名服务器。
+
+随后，本地域名服务器根据指引，向对应的 **顶级域名服务器** 继续查询。顶级域名服务器的处理方式类似：
+
+- 若能解析出所需的 IP 地址，则返回结果；
+- 否则告知本地域名服务器应当访问的下一步权限域名服务器。
+
+#### 递归查询
+
+主机向本地域名服务器的查询通常使用递归查询
+
+如果主机所询问的本地域名服务器不知道被查询域名的IP地址，那么本地域名和服务器就以DNS客户的身份，向其他根域名服务器继续发出查询请求报文。
+
+<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112205633774.png" alt="image-20260112205633774" style="zoom:50%;">
+
+## DHCP
+
+UDP端口68
+
+动态主机配置协议 DHCP (Dynamic Host Configuration Protocol) 提供了即插即用连网 (plug-and-play networking) 的机制，允许一台计算机加入网络和获取 IP 地址，而不用手工配置
+
+### 工作方式
+
+1. 需要IP地址的主机向DHCP服务器**<font color="blue">广播</font>**发送**<font color="red">发现报文</font>**（DHCPDISCOVER）
+
+> [!IMPORTANT]
+>
+> 发现报文中
+>
+> <font color="orange">**源地址：0.0.0.0**</font>
+>
+> <font color="orange">**目的地址：225.225.225.225**</font>
+
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112210330267.png" alt="image-20260112210330267" style="zoom:50%;"></p>
+<ol>
+<li>DHCP服务器<strong><font color="blue">单播</font></strong>回答<strong><font color="red">提供报文</font></strong>（DHCPOFFER），提供IP地址等配置信息</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112210431747.png" alt="image-20260112210431747" style="zoom:50%;"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260115094417033.png" alt="image-20260115094417033" style="zoom:67%;"></p>
+<ul>
+<li>DHCP被动打开端口67，等待用户发来的报文</li>
+<li>用户从UDP端口68发送 DHCP发送报文</li>
+<li>凡是收到DHCP发现报文的DHCP服务器都发出DHCP提供报文，因此可能收到多个DHCP提供报文</li>
+<li>DHCP客户从几个DHCP服务器中选择其中给的一个，并向所选择的DHCP服务器发送DHCP请求报文</li>
+<li>被选择的DHCP服务器发送确认报文DHCPACK。从这时起，DHCP客户就可以使用这个IP地址了。这种状态叫做已绑定状态，因为DHCP客户端的IP地址和MAC地址已经完成绑定，并且可以开始使用得到的临时IP地址了。</li>
+<li>租用期过了一半，DHCP客户发送请求报文要求更新租用期</li>
+<li>DHCP服务器同意就发送DHCPACK更新计时器，不然就发送DHCPNACK，此时客户立即停止使用原来的IP地址，并且重新申请IP地址。</li>
+<li>DHCP客户可以随时提前终止服务器所提供的租用期，这是只需向DHCP服务器发送释放报文DHCPRELEASE即可。</li>
+</ul>
+<h3 id="DHCP服务器不在本地网络"><a href="#DHCP服务器不在本地网络" class="headerlink" title="DHCP服务器不在本地网络"></a><font color="red">DHCP服务器不在本地网络</font></h3><p>若当前网络没有DHCP服务器，那么当前网络一定有DHCP中继代理，它配置了<strong>DHCP服务器的IP地址信息</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260115095429308.png" alt="image-20260115095429308" style="zoom:50%;"></p>
+<ul>
+<li>DHCP中继代理收到主机广播发送的<strong>发现报文</strong>后，就以<strong><font color="blue">单播</font></strong>方式向DHCP服务器转发此报文，并等待其回答</li>
+<li>收到DHCP服务器回答的<strong>提供报文</strong>后，DHCP中继代理再将其发回给主机</li>
+</ul>
+<h1 id="无线网"><a href="#无线网" class="headerlink" title="无线网"></a>无线网</h1><h2 id="CSMA-CA"><a href="#CSMA-CA" class="headerlink" title="CSMA/CA"></a>CSMA/CA</h2><blockquote>
+<p>CSMA/CA 为什么要用CA 隐蔽站和暴露站现象是什么 基本概念 工作过程 图 每一步在干什么  争用过程</p>
+</blockquote>
+<h3 id="不能使用CSMA-CD原因"><a href="#不能使用CSMA-CD原因" class="headerlink" title="不能使用CSMA/CD原因"></a>不能使用CSMA/CD原因</h3><ul>
+<li>CD要求：一个站点在发送本站数据的同时，还必须不间断地检测信道，但接收到地信号强度往往会远远小于发送信号地强度，在无线局域网地设备中要实现这种功能就<strong><font color="blue">花费过大</font></strong></li>
+<li>即使能够实现碰撞检测地功能，并且在发送数据时检测到信道是空闲的时候，在接收端仍然有<font color="blue"><strong>可能发生碰撞</strong></font><ul>
+<li>检测到信道空闲，其实信道可能并不空闲；即使能够在硬件上实现无线局域网的碰撞检测功能（无线局域网的适配器无法实现碰撞检测），也无法检测出隐蔽站问题带来的碰撞</li>
+</ul>
+</li>
+</ul>
+<h4 id="隐蔽站问题"><a href="#隐蔽站问题" class="headerlink" title="隐蔽站问题"></a>隐蔽站问题</h4><p>由于无线信号<strong><font color="green">覆盖范围</font></strong>和<strong><font color="green">穿透能力</font></strong>有限，A和C检测不到彼此的无线信号，都以为B是空闲的，因而都向B发送数据，结果发生碰撞</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260110143232053.png" alt="image-20260110143232053" style="zoom:50%;"></p>
+<h4 id="暴露站问题"><a href="#暴露站问题" class="headerlink" title="暴露站问题"></a>暴露站问题</h4><p>无线网络中，一个本可以发送数据的节点（暴露站）因为检测到信道上有一个正在通信的节点（B）发出的信号，从而放弃发送，即使这个通信并不会干扰到其目标节点（C）</p>
+<h3 id="改进为CA"><a href="#改进为CA" class="headerlink" title="改进为CA"></a>改进为CA</h3><p>无线局域网不能使用CSMA/CD但是可以使用CSMA协议，故</p>
+<ul>
+<li>增加<strong><font color="red">碰撞避免CA</font></strong>：尽量减少碰撞发生的概率</li>
+<li>使用CSMA/CA的同时，使用<strong><font color="red">停止等待协议</font></strong>：链路层确认，解决碰撞后重传</li>
+</ul>
+<h3 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h3><p><img src="../../AppData/Roaming/Typora/typora-user-images/image-20260110144042957.png" alt="image-20260110144042957"></p>
+<h4 id="DIFS"><a href="#DIFS" class="headerlink" title="DIFS"></a>DIFS</h4><p>在完成发送后，必须再等待一段很短的时间（继续监听）才能发送下一帧，这段时间的统称是 <strong>帧间间隔</strong>（IFS）。</p>
+<ul>
+<li><p>DIFS是 分布协调功能帧间间隔。</p>
+</li>
+<li><p>SIFS是 短帧间间隔</p>
+</li>
+</ul>
+<h5 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h5><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260110145006940.png" alt="image-20260110145006940"></p>
+<ul>
+<li><p>A监听信道，若信道在时间间隔DIFS一直都是空闲的，A就可以在t0时间发送数据帧DATA</p>
+</li>
+<li><p>B收到数据帧，必须进行CRC校验，若校验无差错，再从接收状态转为发送状态，经过时间间隔SIFS后，向A发送确认帧</p>
+</li>
+</ul>
+<p>在（DATA+SIFS+ACK）时间段中，必须不允许任何其他站发送数据</p>
+<h5 id="虚拟载波监听"><a href="#虚拟载波监听" class="headerlink" title="虚拟载波监听"></a>虚拟载波监听</h5><p>由软件实现，源站A要把占用信道的时间（DATA+SIFS+ACK）写入数据帧DATA的首部吗，所有处在站点A的广播范围内的各站都能够收到这信息，并创建自己的网络分配向量（NAV）：信道忙的持续时间，其他站点不能在这段时间发送数据</p>
+<p>区分与载波监听，其在物理层由硬件实现，每个站检测收到的信号强度超过一定的门限数值代表有其他移动站在信道上发送数据。</p>
+<h4 id="争用信道"><a href="#争用信道" class="headerlink" title="争用信道"></a>争用信道</h4><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260110145902024.png" alt="image-20260110145902024"></p>
+<p>A和B通信过程中，C和D也要发送数据。但C和D检测到信道忙，因此必须<strong>推迟接入</strong>（经过DIFS发现信道空），以免发生碰撞</p>
+<p>在等待信道进入空闲状态后，都经过规定的时间间隔 DIFS 再同时发送数据必然产生碰撞。因此，CSMA/CA 规定：<strong>所有推迟接入的站都必须<font color="blue">在争用期执行统一的退避算法</font>开始公平地争用信道。</strong></p>
+<h5 id="争用期-1"><a href="#争用期-1" class="headerlink" title="争用期"></a>争用期</h5><p>也叫做争用窗口 CW。征用窗口由许多时隙组成。在下一个时隙开始时，每个站点都能检测出在前一个时隙开始时信道是否在忙</p>
+<p>CSMA/CA规定，如果未收到确认帧，则必须重传，但每重传一次，争用窗口的数值就近似加倍</p>
+<h5 id="退避算法"><a href="#退避算法" class="headerlink" title="退避算法"></a>退避算法</h5><ul>
+<li>站点<strong>进入争用期</strong>时，应在 0~CW 个时隙中随机生成一个退避时隙数，并设置<font color="red"><strong>退避计时器</strong></font></li>
+<li>当几个站同时争用信道时，计时器<strong><font color="blue">最先将为零</font></strong>的站首先接入媒体，发送数据帧。此时信道转为忙，而其他正在退避的站则<strong><font color="red">冻结</font></strong>其计时器，保留计时器的数值不变，推迟到下次争用信道是<strong><font color="red">接着倒计时</font></strong></li>
+</ul>
+<h2 id="移动IP"><a href="#移动IP" class="headerlink" title="移动IP"></a>移动IP</h2><blockquote>
+<p>9.4 移动IP 基本过程（9.4.1）</p>
+</blockquote>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>移动IP：允许计算机移动到外地时，仍然保留其原来的IP地址</p>
+<p>解决的问题：使用户的移动性对上层的网络应用透明</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112210731602.png" alt="image-20260112210731602"></p>
+<p>移动站 A 必须有一个<strong>原始地址</strong>，即<strong><font color="red">永久地址</font></strong>，或<strong><font color="red">归属地址</font></strong> (home address)。移动站原始连接到的网络叫做<strong><font color="blue">归属网络</font></strong> (home network)。<strong><font color="orange">永久地址和归属网络的关联是不变的</font></strong>。<strong><font color="blue">归属代理</font></strong> (home agent) <strong>让地址的改变对互联网的其余部分透明</strong>，它通常就是连接在归属网络上的路由器，代理功能在应用层完成。归属代理既是路由器，也是主机。</p>
+<p>当移动站 A 移动到<strong>另一个地点</strong>，接入的网络称为<strong><font color="red">被访网络</font></strong> (visited network)或外地网络 (foreign network)。被访网络中使用的代理叫做<strong><font color="blue">外地代理</font></strong> (foreign agent)，它通常就是<strong>连接在被访网络上的路由器</strong>。为移动站 A 在<strong>被访网络中创建的临时地址叫做转交地址</strong> (care-of address)。</p>
+<blockquote>
+<p>转交地址是供移动站、归属代理以及外地代理使用的，各种应用程序都不使用这种转交地址。</p>
+<p>转交地址在互联网中并不唯一</p>
+</blockquote>
+<h3 id="通信者B和移动站A通信的四个重要步骤"><a href="#通信者B和移动站A通信的四个重要步骤" class="headerlink" title="通信者B和移动站A通信的四个重要步骤"></a>通信者B和移动站A通信的四个重要步骤</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112211440802.png" alt="image-20260112211440802" style="zoom:67%;"></p>
+<ol>
+<li>B 发送给 A 的数据报的目的地址是：131.8.6.7。此数据报被 A 的归属代理截获（只有当 A 离开归属网络时，归属代理才能截获发给 A 的数据）</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112211450276.png" alt="image-20260112211450276" style="zoom:67%;"></p>
+<ol>
+<li>归属代理把 B 发来的数据再进行封装，新的数据包的目的地址是： 15.5.6.7， 就是 A 现在的转交地址， 使用 隧道技术 或 IP-in-IP 将信封装的数据报发送到被访网络的外地代理</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112211726843.png" alt="image-20260112211726843" style="zoom:67%;"></p>
+<ol>
+<li>被访网络中的外地代理把收到的封装的数据报进行拆封，取出 B 发送的原始数据报，然后转发给移动站 A。这个数据报的目的地址是：131.8.6.7，就是 A 的永久地址。A 收到 B 发送的原始数据报后，也得到了 B 的IP地址。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260112211646755.png" alt="image-20260112211646755" style="zoom:67%;"></p>
+<ol>
+<li>如果现在 A 要向 B 发送数据报，A 仍然使用自己的永久地址作为数据报的源地址，用 B 的 IP 地址作为数据报的目的地址。这个数据报显然没有必要在通过 A 的归属代理进行转发了。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>计算机</category>
+      </categories>
+      <tags>
+        <tag>期末复习</tag>
       </tags>
   </entry>
 </search>
