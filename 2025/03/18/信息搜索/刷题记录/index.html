@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CTF SHOW Web 1~17  总的来说，信息搜集首先需要经历扫盘，F12，抓包三大件 注意结合题目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-SHOW 刷题记录Web1">
+<meta property="og:url" content="https://pocon041.github.io/2025/03/18/%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="CTF SHOW Web 1~17  总的来说，信息搜集首先需要经历扫盘，F12，抓包三大件 注意结合题目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309220604925.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309220749006.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309225706862.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310091841160.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310092820855.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250310093014910.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310094639676.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310130431844.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310130459383.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310132821579.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310132857228.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310134850993.png">
+<meta property="article:published_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:modified_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309220604925.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2025/03/18/%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CTF-SHOW 刷题记录Web1 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/137775897_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2025/03/18/%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTF-SHOW 刷题记录Web1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-18 16:23:07" itemprop="dateCreated datePublished" datetime="2025-03-18T16:23:07+08:00">2025-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
+<p>Web 1~17</p>
+</blockquote>
+<p>总的来说，信息搜集首先需要经历扫盘，F12，抓包三大件</p>
+<p>注意结合题目</p>
+<h2 id="Web1"><a href="#Web1" class="headerlink" title="Web1"></a>Web1</h2><p>F12</p>
+<h2 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h2><p>本质是js前台拦截，无法呼出右键菜单，也无法使用f12</p>
+<ol>
+<li>url前加入<code>view-source:</code>查看源代码</li>
+<li><code>ctrl+u</code>查看源码</li>
+<li>打开一个空白网页，按F12，再把网址复制进去并回车</li>
+<li>bp抓包，放到repeater中</li>
+</ol>
+<h2 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h2><ol>
+<li><p>使用bp抓个包看看</p>
+</li>
+<li><p>f12—网络——刷新——查看消息头</p>
+</li>
+</ol>
+<h2 id="Web4"><a href="#Web4" class="headerlink" title="Web4"></a>Web4</h2><p>扫目录得到敏感文件<code>robots.txt</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirsearch -u https://bc86a6ed-f331-45f2-a6d2-6079ed4ba162.challenge.ctf.show -e* -i 200,201,201-300 -t 30</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309220604925.png" alt="image-20250309220604925" style="zoom: 33%;"></p>
+<p>查看<code>robots.txt</code></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://bc86a6ed-f331-45f2-a6d2-6079ed4ba162.challenge.ctf.show/robots.txt</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309220749006.png" alt="image-20250309220749006" style="zoom:50%;"></p>
+<p>查看<code>flagishere.txt</code></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://bc86a6ed-f331-45f2-a6d2-6079ed4ba162.challenge.ctf.show/flagishere.txt</span><br></pre></td></tr></tbody></table></figure>
+<p>得到flag</p>
+<h2 id="Web5"><a href="#Web5" class="headerlink" title="Web5"></a>Web5</h2><h3 id="phps文件泄露"><a href="#phps文件泄露" class="headerlink" title="phps文件泄露"></a>phps文件泄露</h3><font color="red">phps文件就是php的源代码文件</font>，通常用于提供给用户（访问者）直接通过Web浏览器查看php代码的内容
+
+因为用户无法直接通过web浏览器看到php文件的内容，所以需要用phps文件代替。<font color="red">用户访问phps文件就能看到对应php文件的源码</font>
+
+<p>phps通常作为备份文件。其他常见的有linux的备份文件，比如index.php.swp，还有www.zip等</p>
+<p>可使用工具：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/shanyuhe/fzbk">https://github.com/shanyuhe/fzbk</a></p>
+<p>或者burp打一波fuzz</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/3had0w/Fuzzing-Dicts/blob/master/常见网站备份文件字典（2954）.txt">https://github.com/3had0w/Fuzzing-Dicts/blob/master/%E5%B8%B8%E8%A7%81%E7%BD%91%E7%AB%99%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%AD%97%E5%85%B8%EF%BC%882954%EF%BC%89.txt</a></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>并不能看到网页源码，盲猜有phps的事儿，<del>使用dirsearch扫目录能扫到index.phps（有人说扫出来了但我扫不出来）</del></p>
+<p>url后加上/index.phps查看源码</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-09-01 14:14:17</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-09-01 14:34:53</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//ctfshow{fc679ea6-d6b2-4715-bf93-5257f91fd750}</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"web5:where is flag ?"</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web6"><a href="#Web6" class="headerlink" title="Web6"></a>Web6</h2><p>www.zip泄露</p>
+<h2 id="Web7"><a href="#Web7" class="headerlink" title="Web7"></a>Web7</h2><p>标题一眼git泄露</p>
+<blockquote>
+<p>git init初始化时，会在当前目录下自动创建一个.git目录用来记录代码的变更记录等。发布代码的时候，如果没有把这个.git删除，就直接发布到了服务器上，攻击者就可以通过它来恢复源代码</p>
+</blockquote>
+<h2 id="Web8"><a href="#Web8" class="headerlink" title="Web8"></a>Web8</h2><p>通过dirsearch扫目录得出是svn泄露</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250309225706862.png" alt="image-20250309225706862"></p>
+<blockquote>
+<p>SVN是一个开放源代码的版本控制系统，在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要的源代码信息。网站管理员在发布代码时，没有使用”导出“功能，而是直接复制代码文件夹道WEB服务器上，这就使.svn隐藏文件夹被暴露于外网环境，可以利用.svn/entries文件，获取到服务器源码</p>
+</blockquote>
+<h2 id="Web9"><a href="#Web9" class="headerlink" title="Web9"></a>Web9</h2><p>dirsearch没扫出来，但是题目提示很清楚</p>
+<p>直接访问index.php.swp</p>
+<blockquote>
+<p>在使用vim时会创建临时缓存文件，关闭vim时缓存文件则会被删除。当vim异常退出后，因为未处理缓存文件，导致可以通过缓存文件恢复原始文件内容。</p>
+<p>以 index.php 为例：</p>
+<p>第一次产生的交换文件名为 .index.php.<font color="blue">swp</font><br>再次意外退出后，将会产生名为 .index.php.<font color="blue">swo </font>的交换文件<br>第三次产生的交换文件则为 .index.php.<font color="blue">swn</font></p>
+</blockquote>
+<h2 id="Web10"><a href="#Web10" class="headerlink" title="Web10"></a>Web10</h2><p>抓包，信息头中cookie里有</p>
+<h2 id="Web11"><a href="#Web11" class="headerlink" title="Web11"></a>Web11</h2><p>有时候域名地址会包含某些信息</p>
+<p>如 flag.ctfshow.com</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">查询域名解析地址 基本格式：nslookup host [server]</span><br><span class="line"></span><br><span class="line">查询域名的指定解析类型的解析记录 基本格式：nslookup -type=type host [server]</span><br><span class="line"></span><br><span class="line">查询全部 基本格式：nslookup -query=any host [server]</span><br><span class="line"></span><br><span class="line">nslookup -query=any flag.ctfshow.com </span><br><span class="line">服务器: public-dns-a.baidu.com Address: 180.76.76.76 </span><br><span class="line">非权威应答: flag.ctfshow.com text = "flag{just_seesee}"</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web12"><a href="#Web12" class="headerlink" title="Web12"></a>Web12</h2><p>扫盘的到以下</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310091841160.png" alt="image-20250310091841160"></p>
+<p>进入admin页面，发现需要登录账号和密码。账户不必多说为admin，密码根据题目提示，在网站主页中，根据猜测为下方的一个不寻常的电话热线</p>
+<h2 id="Web13"><a href="#Web13" class="headerlink" title="Web13"></a>Web13</h2><p>document技术文档信息泄露</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310092820855.png" alt="image-20250310092820855" style="zoom:50%;"></p>
+<p>点开document后得到以下</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250310093014910.png" alt="image-20250310093014910" style="zoom:67%;"></p>
+<p>注意your-domain是你的靶场域名</p>
+<h2 id="Web14"><a href="#Web14" class="headerlink" title="Web14"></a>Web14</h2><p>扫盘得到/editor/</p>
+<p>发现其中插入文件的文件空间是本地文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310094639676.png" alt="image-20250310094639676"></p>
+<p>首先看这个网页    var/www/html</p>
+<p>发现有个文件夹nothinghere</p>
+<p>点开看有fl000g.txt</p>
+<p>所以只需要在靶场url后加上/nothinghere/fl000g.txt即可</p>
+<h2 id="Web15"><a href="#Web15" class="headerlink" title="Web15"></a>Web15</h2><p>气笑了</p>
+<p>扫盘得到admin后台登录页面</p>
+<p>账号默认admin，发现有个忘记密码</p>
+<p>通过查询主页给出的qq账号得出所在地是西安，于是重置密码了</p>
+<h2 id="Web16"><a href="#Web16" class="headerlink" title="Web16"></a>Web16</h2><p>探针泄露</p>
+<blockquote>
+<p>php探针是用来探测空间、服务器运行状况和PHP信息用的，探针可以实时查看服务器硬盘资源、内存占用、网卡流量、系统负载、服务器时间等信息</p>
+</blockquote>
+<p>默认探针为<code>tz.php</code></p>
+<p>进入探针，找到PHP信息（phpinfo）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310130431844.png" alt="image-20250310130431844" style="zoom:50%;"></p>
+<p>在环境变量中找到flag</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310130459383.png" alt="image-20250310130459383" style="zoom:67%;"></p>
+<h2 id="Web17"><a href="#Web17" class="headerlink" title="Web17"></a>Web17</h2><p>扫盘得到敏感文件<code>backup.sql</code></p>
+<p>访问后下载文件，打开后得到flag</p>
+<h2 id="Web18"><a href="#Web18" class="headerlink" title="Web18"></a>Web18</h2><p>界面是一个经典红温小游戏</p>
+<p>我们查看它的js代码</p>
+<p>发现通关条件为<code>game_over=true&amp;&amp;score&gt;100</code></p>
+<p>所以我们只需要打开F12，在控制台中输入相应信息，再运行游戏即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310132821579.png" alt="image-20250310132821579" style="zoom:67%;"></p>
+<p>得到提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310132857228.png" alt="image-20250310132857228" style="zoom:67%;"></p>
+<p>进去就是flag</p>
+<p>（但我发现，得到的内容是个文件路径，在js脚本中是unicode形式，找到源码了直接把unicode编码变成中文即可）</p>
+<h2 id="Web19"><a href="#Web19" class="headerlink" title="Web19"></a>Web19</h2><p>看到这种登录界面首先想到的是sql注入啊，不过这里是POST方法，所以暂时抛弃</p>
+<p>查看源码，发现一段隐藏脚本</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="variable">$flag</span>=<span class="string">"fakeflag"</span></span><br><span class="line">    <span class="variable">$u</span> = <span class="variable">$_POST</span>[<span class="string">'username'</span>];</span><br><span class="line">    <span class="variable">$p</span> = <span class="variable">$_POST</span>[<span class="string">'pazzword'</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$u</span>) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$p</span>)){</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$u</span>===<span class="string">'admin'</span> &amp;&amp; <span class="variable">$p</span> ===<span class="string">'a599ac85a73384ee3219fa684296eaa62667238d608efa81837030bd1ce1bf04'</span>){</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">        }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p><del>这么长一串应该是加密了，都在0~f所以应该是十六进制ASCII码</del></p>
+<p>其实这个是AES加密，因为不仅是十六进制而且还是32个十六进制数（16字节，128位）</p>
+<p>源码可见：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">function</span> <span class="title function_">checkForm</span>(<span class="params"></span>){</span><br><span class="line">    <span class="keyword">var</span> key = <span class="string">"0000000372619038"</span>;</span><br><span class="line">    <span class="keyword">var</span> iv = <span class="string">"ilove36dverymuch"</span>;</span><br><span class="line">    <span class="keyword">var</span> pazzword = $(<span class="string">"#pazzword"</span>).<span class="title function_">val</span>();</span><br><span class="line">    pazzword = <span class="title function_">encrypt</span>(pazzword,key,iv);</span><br><span class="line">    $(<span class="string">"#pazzword"</span>).<span class="title function_">val</span>(pazzword);</span><br><span class="line">    $(<span class="string">"#loginForm"</span>).<span class="title function_">submit</span>();</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">encrypt</span>(<span class="params">data,key,iv</span>) { <span class="comment">//key,iv：16位的字符串</span></span><br><span class="line">    <span class="keyword">var</span> key1  = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Latin1</span>.<span class="title function_">parse</span>(key);</span><br><span class="line">    <span class="keyword">var</span> iv1   = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Latin1</span>.<span class="title function_">parse</span>(iv);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">CryptoJS</span>.<span class="property">AES</span>.<span class="title function_">encrypt</span>(data, key1,{</span><br><span class="line">        iv : iv1,</span><br><span class="line">        mode : <span class="title class_">CryptoJS</span>.<span class="property">mode</span>.<span class="property">CBC</span>,</span><br><span class="line">        padding : <span class="title class_">CryptoJS</span>.<span class="property">pad</span>.<span class="property">ZeroPadding</span></span><br><span class="line">    }).<span class="title function_">toString</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">密钥为key = "0000000372619038";</span><br><span class="line">偏移量为iv = "ilove36dverymuch";</span><br><span class="line">模式为CBC</span><br><span class="line">填充为ZeroPadding</span><br><span class="line">编码为Hex</span><br></pre></td></tr></tbody></table></figure>
+<p>但还没学AES，有没有什么不吃操作的</p>
+<p>有的有的</p>
+<ol>
+<li>使用bp抓包修改POST参数</li>
+<li>使用hackbarPOST传参</li>
+</ol>
+<p>内容为：<code>username=admin&amp;pazzword=a599ac85a73384ee3219fa684296eaa62667238d608efa81837030bd1ce1bf04</code></p>
+<h2 id="Web20"><a href="#Web20" class="headerlink" title="Web20"></a>Web20</h2><p>使用<code>dirsearch递归搜索</code>，发挥最佳性能</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310134850993.png" alt="image-20250310134850993"></p>
+<p>查看/db/db.mdb</p>
+<p>flag就在其中</p>
+<blockquote>
+<p>mdb文件是早期asp+access架构的数据库文件，文件泄露相当于数据库被脱裤了。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/RCE%E6%BC%8F%E6%B4%9E/" rel="prev" title="RCE漏洞">
+      <i class="fa fa-chevron-left"></i> RCE漏洞
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E4%BF%A1%E6%81%AF%E6%90%9C%E7%B4%A2/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" rel="next" title="信息收集">
+      信息收集 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-SHOW"><span class="nav-number">1.</span> <span class="nav-text">CTF SHOW</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web1"><span class="nav-number">1.1.</span> <span class="nav-text">Web1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web2"><span class="nav-number">1.2.</span> <span class="nav-text">Web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web3"><span class="nav-number">1.3.</span> <span class="nav-text">Web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web4"><span class="nav-number">1.4.</span> <span class="nav-text">Web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web5"><span class="nav-number">1.5.</span> <span class="nav-text">Web5</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#phps%E6%96%87%E4%BB%B6%E6%B3%84%E9%9C%B2"><span class="nav-number">1.5.1.</span> <span class="nav-text">phps文件泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.5.2.</span> <span class="nav-text">思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web6"><span class="nav-number">1.6.</span> <span class="nav-text">Web6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web7"><span class="nav-number">1.7.</span> <span class="nav-text">Web7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web8"><span class="nav-number">1.8.</span> <span class="nav-text">Web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web9"><span class="nav-number">1.9.</span> <span class="nav-text">Web9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web10"><span class="nav-number">1.10.</span> <span class="nav-text">Web10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web11"><span class="nav-number">1.11.</span> <span class="nav-text">Web11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web12"><span class="nav-number">1.12.</span> <span class="nav-text">Web12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web13"><span class="nav-number">1.13.</span> <span class="nav-text">Web13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web14"><span class="nav-number">1.14.</span> <span class="nav-text">Web14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web15"><span class="nav-number">1.15.</span> <span class="nav-text">Web15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web16"><span class="nav-number">1.16.</span> <span class="nav-text">Web16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web17"><span class="nav-number">1.17.</span> <span class="nav-text">Web17</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web18"><span class="nav-number">1.18.</span> <span class="nav-text">Web18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web19"><span class="nav-number">1.19.</span> <span class="nav-text">Web19</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web20"><span class="nav-number">1.20.</span> <span class="nav-text">Web20</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

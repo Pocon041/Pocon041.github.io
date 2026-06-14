@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这是显示在首页的概述，正文内容均会被隐藏。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-SHOW 刷题记录Web2">
+<meta property="og:url" content="https://pocon041.github.io/2025/03/18/%E7%88%86%E7%A0%B4/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="这是显示在首页的概述，正文内容均会被隐藏。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223044875.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223132131.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223253005.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223520745.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223536652.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223920172.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224026389.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224033662.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224226022.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311132227471.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311154351542.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311201058074.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311202238331.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250311202420630.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311202449498.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250311202851294.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311204825109.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311210447707.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311213016197.png">
+<meta property="article:published_time" content="2025-03-18T08:23:08.000Z">
+<meta property="article:modified_time" content="2025-03-18T08:23:08.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223044875.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2025/03/18/%E7%88%86%E7%A0%B4/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CTF-SHOW 刷题记录Web2 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/133825160_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2025/03/18/%E7%88%86%E7%A0%B4/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTF-SHOW 刷题记录Web2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-18 16:23:08" itemprop="dateCreated datePublished" datetime="2025-03-18T16:23:08+08:00">2025-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">这是显示在首页的概述，正文内容均会被隐藏。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
+<p>Web 21~28</p>
+</blockquote>
+<h2 id="Web21"><a href="#Web21" class="headerlink" title="Web21"></a>Web21</h2><p>使用bp进行抓包，在Authorization里发现奇怪的东西</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223044875.png" alt="image-20250310223044875"></p>
+<p>base64解密后获得以下东西</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223132131.png" alt="image-20250310223132131" style="zoom:50%;"></p>
+<p>发现是我们输入的账号和密码。题目已经说了账号是admin，所以我们需要爆破得出密码即可。密码本题目已经给了。</p>
+<p>使用自定义迭代器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223253005.png" alt="image-20250310223253005" style="zoom:50%;"></p>
+<p>格式是：用户名:密码，分为三部分</p>
+<p>第一部分是：admin</p>
+<p>第二部分是：“ : ”</p>
+<p>第三部分就是密码了。这里密码一个个替换成字典中的密码（记得用题目给的附件，不然时间太久了），然后看是否返回一个有效页面（200OK）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223520745.png" alt="image-20250310223520745" style="zoom:33%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223536652.png" alt="image-20250310223536652" style="zoom:33%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310223920172.png" alt="image-20250310223920172" style="zoom:33%;"></p>
+<p>接着，需要对发送的内容进行base64加密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224026389.png" alt="image-20250310224026389" style="zoom: 33%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224033662.png" alt="image-20250310224033662" style="zoom:33%;"></p>
+<p>最后记得把payload encoding关掉，避免影响base64密文</p>
+<p>开始攻击</p>
+<p>得到一个成功的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250310224226022.png" alt="image-20250310224226022"></p>
+<p>我们查看返回的页面即可获得flag</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web22"><a href="#Web22" class="headerlink" title="Web22"></a>Web22</h2><p>域名爆破</p>
+<h2 id="Web23"><a href="#Web23" class="headerlink" title="Web23"></a>Web23</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-09-03 11:43:51</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-09-03 11:56:11</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(<span class="string">'flag.php'</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'token'</span>])){</span><br><span class="line">    <span class="variable">$token</span> = <span class="title function_ invoke__">md5</span>(<span class="variable">$_GET</span>[<span class="string">'token'</span>]);</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) &amp;&amp; <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) ===<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>)){</span><br><span class="line">        <span class="keyword">if</span>((<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>))+<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>))+<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))/<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">31</span>,<span class="number">1</span>))){</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="前置基础知识"><a href="#前置基础知识" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="substr函数"><a href="#substr函数" class="headerlink" title="substr函数"></a>substr函数</h5><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">substr</span>(<span class="keyword">string</span>, start, length)</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li><p>string：必需。规定要返回其中一部分的字符串</p>
+</li>
+<li><p>start：必需。规定在字符串的何处开始</p>
+<ul>
+<li>正数：在字符串的指定位置开始</li>
+<li>负数：在从字符串结尾的指定位置开始</li>
+<li>0：在字符串的第一个字符处开始</li>
+</ul>
+</li>
+<li>length：可选。规定要返回的字符串长度。默认是直到字符串的结尾<ul>
+<li>正数：从start参数所在的位置返回</li>
+<li>负数：从字符串末端返回</li>
+</ul>
+</li>
+</ul>
+<h5 id="isset函数"><a href="#isset函数" class="headerlink" title="isset函数"></a>isset函数</h5><p>用于检测变量是否已设置并且非 NULL</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> <span class="keyword">isset</span>(<span class="keyword">mixed</span> <span class="variable">$var</span> [, <span class="keyword">mixed</span> $...] )</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>$var：要检测的变量</li>
+</ul>
+<p>如果一次传入多个参数，那么 isset() 只有在全部参数都被设置时返回 TRUE，计算过程从左至右，中途遇到没有设置的变量时就会立即停止。</p>
+<h5 id="intval函数"><a href="#intval函数" class="headerlink" title="intval函数"></a>intval函数</h5><p>用于获取变量的整数值</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">intval</span>( <span class="keyword">mixed</span> <span class="variable">$var</span> [, <span class="keyword">int</span> <span class="variable">$base</span> = <span class="number">10</span>] )</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>$var：要转换成integer的数量值</li>
+<li>$base：转化所使用的进制</li>
+</ul>
+<p>如果base是0，则通过检测var的格式来决定使用的进制：</p>
+<ul>
+<li>如果字符串包含了“0x”，使用16进制</li>
+<li>如果字符串以“0”开头，使用八进制</li>
+<li>否则使用十进制</li>
+</ul>
+<h5 id="md5加密"><a href="#md5加密" class="headerlink" title="md5加密"></a>md5加密</h5><p>信息摘要算法，用于认证。将任意长信息生成128比特的（0，1）串。</p>
+<h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>抓包得到以下内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311132227471.png" alt="image-20250311132227471" style="zoom:50%;"></p>
+<p>根据题目分析，需要手动设置token。其中:</p>
+<ol>
+<li><p>token通过md5加密</p>
+</li>
+<li><p>token[1]=[14]=[17]</p>
+</li>
+<li><p>(token[1]+[14]+[17]) / token[1] = token[31]</p>
+</li>
+</ol>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span> (<span class="number">100000</span>):</span><br><span class="line">    token = <span class="built_in">str</span>(i)</span><br><span class="line">    token_md5 = hashlib.md5(token.encode()).hexdigest()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> token_md5[<span class="number">1</span>].isdigit() <span class="keyword">and</span> token_md5[<span class="number">14</span>] <span class="keyword">and</span> token_md5[<span class="number">17</span>].isdigit() <span class="keyword">and</span> token_md5[<span class="number">31</span>].isdigit():</span><br><span class="line">        <span class="keyword">if</span> token_md5[<span class="number">1</span>] == token_md5[<span class="number">14</span>] == token_md5[<span class="number">17</span>] <span class="keyword">and</span> <span class="built_in">int</span>(token_md5[<span class="number">1</span>]) !=<span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">int</span>(token_md5[<span class="number">1</span>]) + <span class="built_in">int</span>(token_md5[<span class="number">14</span>]) + <span class="built_in">int</span>(token_md5[<span class="number">17</span>])) / <span class="built_in">int</span>(token_md5[<span class="number">1</span>]) == <span class="built_in">int</span>(token_md5[<span class="number">31</span>]):</span><br><span class="line">                <span class="built_in">print</span>(token)</span><br><span class="line">                <span class="built_in">print</span>(token_md5)</span><br></pre></td></tr></tbody></table></figure>
+<p>将得到的符合要求的token加到url后即可，如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://f3489a03-f66f-418a-996e-8ad7d1ec9ac6.challenge.ctf.show/?token=422</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="其他思路"><a href="#其他思路" class="headerlink" title="其他思路"></a>其他思路</h3><p>使用burp爆破得到token</p>
+<h2 id="Web24"><a href="#Web24" class="headerlink" title="Web24"></a>Web24</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-09-03 13:26:39</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-09-03 13:53:31</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">"flag.php"</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'r'</span>])){</span><br><span class="line">    <span class="variable">$r</span> = <span class="variable">$_GET</span>[<span class="string">'r'</span>];</span><br><span class="line">    <span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>)===<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>())){</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    }</span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">'cat /proc/version'</span>);</span><br><span class="line">}</span><br><span class="line"><span class="meta">?&gt;</span> Linux version <span class="number">5.4</span>.<span class="number">0</span>-<span class="number">163</span>-<span class="title function_ invoke__">generic</span> (buildd@lcy02-amd64-<span class="number">067</span>) (gcc version <span class="number">9.4</span>.<span class="number">0</span> (Ubuntu <span class="number">9.4</span>.<span class="number">0</span>-<span class="number">1</span>ubuntu1~<span class="number">20.04</span>.<span class="number">2</span>)) <span class="comment">#180-Ubuntu SMP Tue Sep 5 13:21:23 UTC 2023 Linux version 5.4.0-163-generic (buildd@lcy02-amd64-067) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.2)) #180-Ubuntu SMP Tue Sep 5 13:21:23 UTC 2023</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="前置基础知识-1"><a href="#前置基础知识-1" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="mt-srand函数"><a href="#mt-srand函数" class="headerlink" title="mt_srand函数"></a>mt_srand函数</h5><p>函数播种MErsenne Twister随机数生成器</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">mt_srand</span>(seed);</span><br></pre></td></tr></tbody></table></figure>
+<p>seed: 可选。规定播种值</p>
+<h5 id="种子确定的随机数生成器生成序列相同"><a href="#种子确定的随机数生成器生成序列相同" class="headerlink" title="种子确定的随机数生成器生成序列相同"></a>种子确定的随机数生成器生成序列相同</h5><h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>题目给了种子：372619038</p>
+<p>同时发现了下方有时间戳等等信息</p>
+<p>是以哦那个随机数生成器，要求r和指定种子生成的随机数相同才能给flag</p>
+<h3 id="脚本-1"><a href="#脚本-1" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>());</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>结果得到：</p>
+<p>标准输出：1155388967</p>
+<p>故只需要在url后加上<code>r=1155388967</code>即可</p>
+<h2 id="Web25"><a href="#Web25" class="headerlink" title="Web25"></a>Web25</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Author</span>: h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Date</span>:   2020-09-03 13:56:57</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified by:   h1xa</span></span><br><span class="line"><span class="comment"># <span class="doctag">@Last</span> Modified time: 2020-09-03 15:47:33</span></span><br><span class="line"><span class="comment"># <span class="doctag">@email</span>: h1xa<span class="doctag">@ctfer</span>.com</span></span><br><span class="line"><span class="comment"># <span class="doctag">@link</span>: https://ctfer.com</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">"flag.php"</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'r'</span>])){</span><br><span class="line">    <span class="variable">$r</span> = <span class="variable">$_GET</span>[<span class="string">'r'</span>];</span><br><span class="line">    <span class="title function_ invoke__">mt_srand</span>(<span class="title function_ invoke__">hexdec</span>(<span class="title function_ invoke__">substr</span>(<span class="title function_ invoke__">md5</span>(<span class="variable">$flag</span>), <span class="number">0</span>,<span class="number">8</span>)));</span><br><span class="line">    <span class="variable">$rand</span> = <span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>)-<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>());   <span class="comment">#第一个随机数</span></span><br><span class="line">    <span class="keyword">if</span>((!<span class="variable">$rand</span>)){</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$_COOKIE</span>[<span class="string">'token'</span>]==(<span class="title function_ invoke__">mt_rand</span>()+<span class="title function_ invoke__">mt_rand</span>())){	<span class="comment">#第二个和第三个随机数</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">        }</span><br><span class="line">    }<span class="keyword">else</span>{</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$rand</span>;</span><br><span class="line">    }</span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">'cat /proc/version'</span>);</span><br><span class="line">}</span><br><span class="line">Linux version <span class="number">5.4</span>.<span class="number">0</span>-<span class="number">163</span>-<span class="title function_ invoke__">generic</span> (buildd@lcy02-amd64-<span class="number">067</span>) (gcc version <span class="number">9.4</span>.<span class="number">0</span> (Ubuntu <span class="number">9.4</span>.<span class="number">0</span>-<span class="number">1</span>ubuntu1~<span class="number">20.04</span>.<span class="number">2</span>)) <span class="comment">#180-Ubuntu SMP Tue Sep 5 13:21:23 UTC 2023 Linux version 5.4.0-163-generic (buildd@lcy02-amd64-067) (gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.2)) #180-Ubuntu SMP Tue Sep 5 13:21:23 UTC 2023</span></span><br></pre></td></tr></tbody></table></figure>
+<h3 id="前置基础知识-2"><a href="#前置基础知识-2" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="hexdec函数"><a href="#hexdec函数" class="headerlink" title="hexdec函数"></a>hexdec函数</h5><p>把十六进制转化为十进制</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">hexdec</span>(hex_string)</span><br></pre></td></tr></tbody></table></figure>
+<p>hex_string: 必需。规定要转换的十六进制字符串</p>
+<h5 id="php-mt-seed工具"><a href="#php-mt-seed工具" class="headerlink" title="php_mt_seed工具"></a>php_mt_seed工具</h5><p>随机数的产生基于种子。但是可以通过产生的随机数来猜测种子，进而猜测后续的随机数</p>
+<p>需要指明的是，不同版本的php，同一个种子产生的随机数有可能不同</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./php_mt_seed [number]</span><br></pre></td></tr></tbody></table></figure>
+<p>后续会得到不同版本php下对应可能的种子</p>
+<h3 id="题目分析-2"><a href="#题目分析-2" class="headerlink" title="题目分析"></a>题目分析</h3><p>需要GET请求发送r的值</p>
+<ol>
+<li>设置种子。种子为<code>hexdec(substr(md5($flag), 0,8))</code></li>
+</ol>
+<ul>
+<li>将flag进行md5加密（得到长度为32的16进制串）</li>
+<li>截取flag_md5的0~8子串</li>
+<li>将子串转化为十进制数</li>
+</ul>
+<ol>
+<li><p>得到rand。rand为：</p>
+<p><code>输入的r转化为int - 生成的第一个随机数</code></p>
+<p>要求结果为0，即输入数等于生成的随机数</p>
+</li>
+<li><p>需要设置cookie，cookie为生成的第二个随机数 + 第三个随机数</p>
+</li>
+</ol>
+<h3 id="脚本-2"><a href="#脚本-2" class="headerlink" title="脚本"></a>脚本</h3><p>首先通过分析，得出输入0可以得到生成的第一个随机数的相反数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311154351542.png" alt="image-20250311154351542" style="zoom:67%;"></p>
+<p>也就是说，生成的第一个随机数是<code>1059248734</code></p>
+<p>这个时候需要使用到<code>php_mt_seed</code>工具进行爆破</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311201058074.png" alt="image-20250311201058074" style="zoom: 67%;"></p>
+<p>最后通过尝试，得出php的版本是7.1.0+</p>
+<p>后续省略了（因为<del>赶时间</del>懒不做了）</p>
+<h2 id="Web26"><a href="#Web26" class="headerlink" title="Web26"></a>Web26</h2><p>我就抓了个点击同意安装后的包后，重发，就找到flag了？？？</p>
+<p>还真是这样做的，不知道和爆破有什么关系</p>
+<h2 id="Web27"><a href="#Web27" class="headerlink" title="Web27"></a>Web27</h2><p>这个题我感觉是很有感觉的</p>
+<p>打开是一个教务管理系统的登录页面</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311202238331.png" alt="image-20250311202238331" style="zoom:50%;"></p>
+<p>注意到下方还有两个链接</p>
+<p>一个打开后下载了名单</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250311202420630.png" alt="image-20250311202420630" style="zoom:50%;"></p>
+<p>另一个打开后是录取查询</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311202449498.png" alt="image-20250311202449498"></p>
+<p>由于名单中给出了姓名和部分身份证号码，所以我们可以进行爆破</p>
+<p>我选择爆一下这个党员，因为主播觉得要严查一下这个党员</p>
+<p>首先抓包</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250311202851294.png" alt="image-20250311202851294" style="zoom:50%;"></p>
+<p>密码并没有进行加密，所以直接对生日这一块进行爆破就可以</p>
+<p>而<strong>如何缩短爆破的条数</strong>是我们需要考虑的</p>
+<p>这里需要设置<code>payload</code>格式为<code>date</code>，且<code>date</code>自定义格式为<code>yyyyMMdd</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311204825109.png" alt="image-20250311204825109" style="zoom:50%;"></p>
+<p>得到有一个回复特别长的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311210447707.png" alt="image-20250311210447707" style="zoom:50%;"></p>
+<p>一般这种就是成功的了</p>
+<p>得到以下内容</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{"0":"success","msg":"\u606d\u559c\u60a8\uff0c\u60a8\u5df2\u88ab\u6211\u6821\u5f55\u53d6\uff0c\u4f60\u7684\u5b66\u53f7\u4e3a10167653 \u521d\u59cb\u5bc6\u7801\u4e3a\u8eab\u4efd\u8bc1\u53f7\u7801"}</span><br></pre></td></tr></tbody></table></figure>
+<p>这中文使用给的Unicode编码，解密一下就好了</p>
+<p>得到以下内容</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">恭喜您，您已被我校录取，你的学号为10167653 初始密码为身份证号码</span><br></pre></td></tr></tbody></table></figure>
+<p>大功告成了</p>
+<p>身份证号码即为：360730199110167653</p>
+<h2 id="Web28"><a href="#Web28" class="headerlink" title="Web28"></a>Web28</h2><p>乍看有点像信息搜索</p>
+<p>所以我就使用信息搜索三件套试试看</p>
+<p>都没有成果</p>
+<p>接着看这个网址有点蹊跷</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://26e2702c-3e14-4f64-a9f7-631273587e0b.challenge.ctf.show/0/1/2.txt</span><br></pre></td></tr></tbody></table></figure>
+<p>试试直接访问flag.txt没有成功</p>
+<p>访问1/被拦在外面了</p>
+<p>乍一看能入手的地方只有这个url了，完全没有思路啊</p>
+<h3 id="前置基础知识-3"><a href="#前置基础知识-3" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="302跳转"><a href="#302跳转" class="headerlink" title="302跳转"></a>302跳转</h5><p>待编写</p>
+<h3 id="题目分析-3"><a href="#题目分析-3" class="headerlink" title="题目分析"></a>题目分析</h3><p>用bp抓包后，发现原url是进行了302跳转才进入了原url /0/1/2.txt</p>
+<p>如果直接访问 /0/1，会进行302跳转，然后跳转就会进入死循环，最后打不开</p>
+<p>根据题目提示需要爆破，那么爆破点只能是原url后面这两个目录了</p>
+<p>如何设置payload这里就不详细解释了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250311213016197.png" alt="image-20250311213016197"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/18/SSRF/SSRF%E6%BC%8F%E6%B4%9E/" rel="prev" title="SSRF漏洞">
+      <i class="fa fa-chevron-left"></i> SSRF漏洞
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/10/07/SVM/" rel="next" title="支持向量机（SVM）">
+      支持向量机（SVM） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-SHOW"><span class="nav-number">1.</span> <span class="nav-text">CTF SHOW</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web21"><span class="nav-number">1.1.</span> <span class="nav-text">Web21</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web22"><span class="nav-number">1.2.</span> <span class="nav-text">Web22</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web23"><span class="nav-number">1.3.</span> <span class="nav-text">Web23</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.3.2.</span> <span class="nav-text">前置基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#substr%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.2.0.1.</span> <span class="nav-text">substr函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#isset%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.2.0.2.</span> <span class="nav-text">isset函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#intval%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.2.0.3.</span> <span class="nav-text">intval函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#md5%E5%8A%A0%E5%AF%86"><span class="nav-number">1.3.2.0.4.</span> <span class="nav-text">md5加密</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.3.3.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC"><span class="nav-number">1.3.4.</span> <span class="nav-text">脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%80%9D%E8%B7%AF"><span class="nav-number">1.3.5.</span> <span class="nav-text">其他思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web24"><span class="nav-number">1.4.</span> <span class="nav-text">Web24</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">前置基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mt-srand%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.2.0.1.</span> <span class="nav-text">mt_srand函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A7%8D%E5%AD%90%E7%A1%AE%E5%AE%9A%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E5%99%A8%E7%94%9F%E6%88%90%E5%BA%8F%E5%88%97%E7%9B%B8%E5%90%8C"><span class="nav-number">1.4.2.0.2.</span> <span class="nav-text">种子确定的随机数生成器生成序列相同</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC-1"><span class="nav-number">1.4.4.</span> <span class="nav-text">脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web25"><span class="nav-number">1.5.</span> <span class="nav-text">Web25</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-2"><span class="nav-number">1.5.2.</span> <span class="nav-text">前置基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#hexdec%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.2.0.1.</span> <span class="nav-text">hexdec函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#php-mt-seed%E5%B7%A5%E5%85%B7"><span class="nav-number">1.5.2.0.2.</span> <span class="nav-text">php_mt_seed工具</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-2"><span class="nav-number">1.5.3.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC-2"><span class="nav-number">1.5.4.</span> <span class="nav-text">脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web26"><span class="nav-number">1.6.</span> <span class="nav-text">Web26</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web27"><span class="nav-number">1.7.</span> <span class="nav-text">Web27</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web28"><span class="nav-number">1.8.</span> <span class="nav-text">Web28</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-3"><span class="nav-number">1.8.1.</span> <span class="nav-text">前置基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#302%E8%B7%B3%E8%BD%AC"><span class="nav-number">1.8.1.0.1.</span> <span class="nav-text">302跳转</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-3"><span class="nav-number">1.8.2.</span> <span class="nav-text">题目分析</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

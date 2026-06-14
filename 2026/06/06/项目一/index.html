@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="项目标题：细粒度图像分类挑战 项目背景：细粒度图像分类的目标，是区分同一超级类别下外观高度相似的多个子类别。与普通图像分类相比，细粒度分类不能只依赖整体轮廓或主体语义，还需要识别花蕊形态、花瓣边缘、局部纹理和颜色分布等细微视觉差异。这些能够区分相似类别的关键局部区域，通常称为判别性区域">
+<meta property="og:type" content="article">
+<meta property="og:title" content="细粒度图像分类挑战">
+<meta property="og:url" content="https://pocon041.github.io/2026/06/06/%E9%A1%B9%E7%9B%AE%E4%B8%80/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="项目标题：细粒度图像分类挑战 项目背景：细粒度图像分类的目标，是区分同一超级类别下外观高度相似的多个子类别。与普通图像分类相比，细粒度分类不能只依赖整体轮廓或主体语义，还需要识别花蕊形态、花瓣边缘、局部纹理和颜色分布等细微视觉差异。这些能够区分相似类别的关键局部区域，通常称为判别性区域">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260612232457398.png">
+<meta property="article:published_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:modified_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260612232457398.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/06/06/%E9%A1%B9%E7%9B%AE%E4%B8%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>细粒度图像分类挑战 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/137775897_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/06/06/%E9%A1%B9%E7%9B%AE%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          细粒度图像分类挑战
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-06 15:43:22" itemprop="dateCreated datePublished" datetime="2026-06-06T15:43:22+08:00">2026-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="项目标题："><a href="#项目标题：" class="headerlink" title="项目标题："></a>项目标题：</h2><p>细粒度图像分类挑战</p>
+<h2 id="项目背景："><a href="#项目背景：" class="headerlink" title="项目背景："></a>项目背景：</h2><p>细粒度图像分类的目标，是区分同一超级类别下外观高度相似的多个子类别。与普通图像分类相比，细粒度分类不能只依赖整体轮廓或主体语义，还需要识别花蕊形态、花瓣边缘、局部纹理和颜色分布等细微视觉差异。这些能够区分相似类别的关键局部区域，通常称为判别性区域</p>
+<p>以往工作常常从以下角度提升</p>
+<ul>
+<li>判别性区域定位<ul>
+<li>早期方法常依赖部件位置、目标框或局部区域标注，以显式定位关键区域。这类强监督方法具有较强的可解释性，但标注成本高，且不同类别的关键部件并不完全一致，难以扩展到大规模类别体系。</li>
+<li>弱监督方法只使用图像级类别标签，通过注意力机制、类激活图、多实例学习或区域排序等方式自动发现与分类相关的局部区域。由于模型无需额外局部标注，更适合实际应用场景。</li>
+</ul>
+</li>
+<li>学习细粒度特征<ul>
+<li>定位局部区域后，还需要学习具有判别力的局部表征。常见方法包括多尺度特征融合、局部特征聚合和高阶特征交互。以双线性卷积网络为例，模型通过外积操作建模不同特征通道之间的高阶关系，从而增强对局部纹理和细微结构的表达能力。部分方法还会分别建立全局分支和局部分支，使整体语义与局部细节形成互补。</li>
+</ul>
+</li>
+<li>优化表征空间<ul>
+<li>仅使用交叉熵损失时，模型主要关注分类边界是否正确，但不一定能够形成紧凑、可分的特征空间。对比学习、度量学习和基于间隔的约束可以进一步拉近同类样本，并分离外观相似但类别不同的困难样本，从而提高细粒度识别能力。</li>
+</ul>
+</li>
+</ul>
+<p>此次比赛要求对152类花卉进行分类，每类花卉样本数不超过200，存在某些花卉样本数在50左右。比赛要求模型大小不超过500MB，推理时间不超过100ms一张。禁止外部标注数据。</p>
+<p>因此，本项目面向一个低资源、弱监督且具有部署约束的细粒度花卉分类任务。模型需要在缺少部件标注的情况下，自动定位判别性区域，增强局部特征表达，并以较低的参数量和计算成本实现全局语义与局部细节的协同分类。</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h3><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260612232457398.png" alt="image-20260612232457398"></p>
+<h4 id="从输入到显著区域"><a href="#从输入到显著区域" class="headerlink" title="从输入到显著区域"></a>从输入到显著区域</h4><p>我们输入大小为448*448大小的图像进入冻结的DINOv3 backbone。利用Attention Rollout的思想，取5、8、11层的attention矩阵（B, 12, 789, 789）进行累乘。具体来说是每次先使用softmax归一化后，加上单位矩阵除以二，因为考虑到残差连接。最后对每个head求平均，得到输出rollout矩阵大小为（B，789，789），其中rollout[: 0, 1+reg] 就是显著性分数，大小为（B，784）</p>
+<p>得到显著性分数后，我们每次选出一个patch后屏蔽其3 * 3邻域内的patch，如果遍历一次结束但候选池未满，则取消屏蔽从头再次遍历知道选出32个候选区域。</p>
+<h4 id="从显著区域到判别性区域"><a href="#从显著区域到判别性区域" class="headerlink" title="从显著区域到判别性区域"></a>从显著区域到判别性区域</h4><p>我们从最后一层中取出cand_idx对应的token，并且输入到一个简单的线性中获取一个判别性分数。此分数只用于排序而不是分类所以计算很简单。</p>
+<p>实际训练时，这个判别性分数在前期主要依赖于显著性分数，后期显著性分数的占比逐步下降</p>
+<script type="math/tex; mode=display">
+ select\_score = α × attention显著性 + (1 - α) × rationale判别性</script><p>实际应用时，我们从多层取出这些parts，并进行对齐融合。</p>
+<p>在知道目标标签的时候很好选出对应Top-k，但是我们在实际推理的时候是没有对应标签的，所以对于这些候选区，不仅需要进行分类，还要进行ranking。从一张图的32个候选区域选出6个判别区域的过程有些像多实例学习。</p>
+<p>为了学好分类器，我们先挑出logit最高的四个区域，然后取出这四个区域完整的logis向量<script type="math/tex">z_m=
+[z_{m,1},z_{m,2},\dots,z_{m,C}]</script>求平均（<a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_cvpr_2015/papers/Li_Multiple_Instance_Learning_2015_CVPR_paper.pdf">参考</a>）后softmax，最后计算交叉熵。这里取top-r pooling本质上就好比找出最有价值的局部区域共同投票。</p>
+<p>而DecisionRank的目的是训练一个不依赖标签的评分器。它对每个候选区只输出一个标量，推理阶段真正参与局部区域筛选的是这个评分分数，而这个ranking Loss的作用就是在训练阶段教会它哪些区域应该排在前面。也就是说，上述的分类器作为老师，而这个评分器作为学生。我们设计评分机制<script type="math/tex">D_m
+=
+z_{m,y}
+-
+\operatorname{logsumexp}
+\left(
+\operatorname{TopQ}_{c\neq y}z_{m,c}
+\right)</script>，也就是说<script type="math/tex">D_m
+=
+\text{正确类别得分}
+-
+\text{几个最强错误类别的综合得分}</script>，我们可以依据这个分数对候选区域进行排序。</p>
+<p>老师希望区域A得学生分数至少比区域B高出一个margin（γ = 0.05），所以定义Ranking Loss：<script type="math/tex">\mathcal L_{A,B}=\max\left[0,\gamma-(s_A-s_B)\right]</script></p>
+<h4 id="判别性区域辅助分类"><a href="#判别性区域辅助分类" class="headerlink" title="判别性区域辅助分类"></a>判别性区域辅助分类</h4><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.06635">CAP</a>  提出细粒度识别不仅需要定位信息区域，还要考虑信息区域的空间结构和上下文关系。它关注的是具有空间连续性的 imformative integral，而不是孤立点。对此我们聚合空间邻近 3*3 的 token，具体来说我们收集这个中心点的周围一圈，总共9个token：<script type="math/tex">\mathcal N(k)
+=
+\{x_{k,1},x_{k,2},\dots,x_{k,9}\}</script>，然后我们对每个领域token根据Attention Rollout分数做softmax后加权求和<script type="math/tex">w_{k,u}
+=
+\frac{
+e^{a_{k,u}}
+}{
+\sum_{v\in\mathcal N(k)}e^{a_{k,v}}
+}</script>，<script type="math/tex">n_k
+=
+\sum_{u\in\mathcal N(k)}
+w_{k,u}x_{k,u}</script>。领域聚合完成后，我们对中心patch做残差融合<script type="math/tex">\tilde{x}_k
+=
+x_k
++
+\alpha(n_k-x_k)</script>，其中α = 0.6</p>
+<p>到了这里我们已经拥有了6个局部区域token，我们让全局CLS主动读取局部区域信息，从而得到一个局部增强后的全局表征。</p>
+<p>我们对CLS和parts做cross attention。其中q=CLS，k=选出来的六个局部区域，v也是六个被读取得parts。</p>
+<p>具体来说，当前只有一个CLS Query，<script type="math/tex">Q\in\mathbb{R}^{B\times1\times384}</script>。六个局部Parts为：<script type="math/tex">K,V\in\mathbb{R}^{B\times6\times384}</script>。Cross-Attention输出<script type="math/tex">O\in\mathbb{R}^{B\times1\times384}</script>得到一个被局部信息增强的全局分类表征。如果将CLS作为key的话，每个Part都无条件读取相同的CLS信息，无法在六个局部区域之间做选择，同时还需要额外设计一个池化操作，将六个增强后的part汇总成一个分裂表征。</p>
+<p>具体计算过程中，我们先计算Q K转置，也就是求内积得到CLS和每个part的相似度，接着除以根号dk进行缩放，然后softmax得到六个局部区域的权重。最后对Value进行加权求和。</p>
+<p>最后我们得到两类logits后加权求和</p>
+<h4 id="对比学习"><a href="#对比学习" class="headerlink" title="对比学习"></a>对比学习</h4><p>我们对局部增强表征做监督对比学习。我们将一个batch内的表征先做L2归一化后求点积衡量相似度（点积有一个温度参数）。对此我们定义Loss</p>
+<script type="math/tex; mode=display">\mathcal L_{\mathrm{Part\text{-}Con}}=\frac{1}{B^2}\sum_{i=1}^{B}\sum_{j=1}^{B}\begin{cases}1-\cos(h_i,h_j),&y_i=y_j\\\max\left(0,\cos(h_i,h_j)-m\right),&y_i\neq y_j\end{cases}</script><p>其中m=0.4.这个Loss和TransFG完全一样。属于是最基础的pair-wise loss。</p>
+<h3 id="训练技巧"><a href="#训练技巧" class="headerlink" title="训练技巧"></a>训练技巧</h3><h4 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>参数</th>
+<th>强度</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RandomResizedCrop</td>
+<td><code>(0.70, 1.0)</code></td>
+<td>保守</td>
+<td>保留花朵主体</td>
+</tr>
+<tr>
+<td>随机旋转</td>
+<td><code>±60°</code></td>
+<td>较强</td>
+<td>增强方向鲁棒性</td>
+</tr>
+<tr>
+<td>90 度旋转</td>
+<td><code>p=0.2</code></td>
+<td>中等偏低</td>
+<td>进一步减少方向依赖</td>
+</tr>
+<tr>
+<td>RandAugment</td>
+<td><code>N=2, M=4</code></td>
+<td>轻中等</td>
+<td>增强颜色/形变/光照鲁棒性</td>
+</tr>
+<tr>
+<td>Random Erasing</td>
+<td><code>p=0.05</code>, area <code>2%~8%</code></td>
+<td>很轻</td>
+<td>防止过度依赖单一区域</td>
+</tr>
+<tr>
+<td>自定义增强</td>
+<td><code>p=0.18</code></td>
+<td>偏轻</td>
+<td>降低背景/环境依赖</td>
+</tr>
+<tr>
+<td>MixUp</td>
+<td><code>alpha=0.0</code></td>
+<td>关闭</td>
+<td>避免破坏局部区域监督</td>
+</tr>
+<tr>
+<td>CutMix</td>
+<td><code>alpha=0.30</code></td>
+<td>中等</td>
+<td>提高局部鲁棒性</td>
+</tr>
+<tr>
+<td>CR-CPL SnapMix</td>
+<td>开启</td>
+<td>关键增强</td>
+<td>用语义区域修正 CutMix 标签权重</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="学习率调度"><a href="#学习率调度" class="headerlink" title="学习率调度"></a>学习率调度</h4><p>前5个epoch线性warm up</p>
+<p>cosine Annealing 缓慢下降</p>
+<h4 id="EMA"><a href="#EMA" class="headerlink" title="EMA"></a>EMA</h4><h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"># 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/06/Loss/" rel="prev" title="损失函数">
+      <i class="fa fa-chevron-left"></i> 损失函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/06/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E4%BC%98%E5%8C%96%E5%99%A8/" rel="next" title="从梯度下降到优化器">
+      从梯度下降到优化器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%A0%87%E9%A2%98%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">项目标题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">项目背景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.1.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E8%BE%93%E5%85%A5%E5%88%B0%E6%98%BE%E8%91%97%E5%8C%BA%E5%9F%9F"><span class="nav-number">3.1.1.</span> <span class="nav-text">从输入到显著区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E6%98%BE%E8%91%97%E5%8C%BA%E5%9F%9F%E5%88%B0%E5%88%A4%E5%88%AB%E6%80%A7%E5%8C%BA%E5%9F%9F"><span class="nav-number">3.1.2.</span> <span class="nav-text">从显著区域到判别性区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E5%88%AB%E6%80%A7%E5%8C%BA%E5%9F%9F%E8%BE%85%E5%8A%A9%E5%88%86%E7%B1%BB"><span class="nav-number">3.1.3.</span> <span class="nav-text">判别性区域辅助分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.1.4.</span> <span class="nav-text">对比学习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7"><span class="nav-number">3.2.</span> <span class="nav-text">训练技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA"><span class="nav-number">3.2.1.</span> <span class="nav-text">数据增强</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E5%BA%A6"><span class="nav-number">3.2.2.</span> <span class="nav-text">学习率调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EMA"><span class="nav-number">3.2.3.</span> <span class="nav-text">EMA</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
