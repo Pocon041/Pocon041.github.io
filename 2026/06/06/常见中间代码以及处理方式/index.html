@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="从代码到图抽象语法树AST强调程序由哪些结构嵌套组成。它不保留所有表面语法细节，例如括号、分号和部分语法糖。 论文中将AST描述为有序树：其中内部节点通常是操作符或语法结构，叶节点通常是常量、标识符等操作数。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从代码到图">
+<meta property="og:url" content="https://pocon041.github.io/2026/06/06/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BB%A5%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="从代码到图抽象语法树AST强调程序由哪些结构嵌套组成。它不保留所有表面语法细节，例如括号、分号和部分语法糖。 论文中将AST描述为有序树：其中内部节点通常是操作符或语法结构，叶节点通常是常量、标识符等操作数。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:modified_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/06/06/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BB%A5%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从代码到图 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/133825160_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/06/06/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BB%A5%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从代码到图
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-06 15:43:22" itemprop="dateCreated datePublished" datetime="2026-06-06T15:43:22+08:00">2026-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="从代码到图"><a href="#从代码到图" class="headerlink" title="从代码到图"></a>从代码到图</h1><h2 id="抽象语法树"><a href="#抽象语法树" class="headerlink" title="抽象语法树"></a>抽象语法树</h2><p>AST强调<strong>程序由哪些结构嵌套组成</strong>。它不保留所有表面语法细节，例如括号、分号和部分语法糖。</p>
+<p><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/6956589">论文</a>中将AST描述为有序树：其中内部节点通常是操作符或语法结构，叶节点通常是常量、标识符等操作数。</p>
+<h4 id="Joern-AST"><a href="#Joern-AST" class="headerlink" title="Joern AST"></a>Joern AST</h4><p>在Joern CPG中，AST子节点通过AST边连接，节点通常带有：</p>
+<ul>
+<li>CODE：节点对应的原始代码片段</li>
+<li>ORDER：该节点在兄弟节点中的次序</li>
+<li>LINE_NUMBER：起始行号</li>
+<li>节点类型，例如METHOD、BLOCK、CALL、IDENTIFIER、LITERAL、CONTROL_STRUCTURE</li>
+</ul>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li><p>语法结构清晰</p>
+<ul>
+<li>具有层级的特征，优先级和结合性确定</li>
+</ul>
+</li>
+<li><p>适合识别局部漏洞模式</p>
+<ul>
+<li>对于某些危险函数能够很快识别出来</li>
+</ul>
+</li>
+<li><p>易于生成、结构相对稳定</p>
+</li>
+</ul>
+<p>也就是说，AST更适合用于检测局部危险API模式、指针和数组访问模式、</p>
+<p>算数表达模式、类型转换异常等与语法强相关的漏洞候选点。</p>
+<h4 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h4><p>只能知道代码长什么样，不知道代码如何运行，数据如何流动。也就是说，AST不显式编码控制流和数据依赖，因此不适合独立完成死代码检测、未初始化变量分析等更复杂的任务。</p>
+<h2 id="控制流图"><a href="#控制流图" class="headerlink" title="控制流图"></a>控制流图</h2><p>控制流图是一个有向图，它表示当前语句执行完以后，下一句话可能执行哪条语句。它以基本快（basic block）为节点，以控制流转移（比如if/else，while、goto）为边，描述了程序所有可能的执行路径</p>
+<h4 id="Joern-CFG"><a href="#Joern-CFG" class="headerlink" title="Joern CFG"></a>Joern CFG</h4><p>这里的CFG只由一部分AST节点构成，同时CFG表示控制从源节点流向目的节点。Joern还会建模表达式内部的执行顺序，而不只是语句之间的顺序。</p>
+<h4 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>显式表示可能的执行路径<ul>
+<li>一个风险函数出现不代表程序有漏洞，危险操作只有在条件满足可达时才能报警</li>
+</ul>
+</li>
+<li>适合分析检查逻辑<ul>
+<li>适合检查边界检查、空指针检查、权限检查、错误处理、资源释放路径、条件缺失等等这类模式</li>
+</ul>
+</li>
+<li>适合提取执行路径序列<ul>
+<li>CFG可以将一个函数拆成多条潜在执行路径</li>
+</ul>
+</li>
+</ul>
+<h4 id="局限-1"><a href="#局限-1" class="headerlink" title="局限"></a>局限</h4><p>CFG知道谁先执行，但不知道数据是谁传给谁的。例如</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> size = get_user_input();</span><br><span class="line"><span class="type">int</span> x = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> y = calculate();</span><br><span class="line"><span class="built_in">log</span>(y);</span><br><span class="line"><span class="built_in">memcpy</span>(buf, src, size);</span><br></pre></td></tr></tbody></table></figure>
+<p>CFG能够完整保留执行顺序</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get_user_input → x = 0 → calculate → log → memcpy</span><br></pre></td></tr></tbody></table></figure>
+<p>但没有显式说明真正和memcpy风险相关的是size，而不是x或y。因此，长函数中大量与漏洞无关的语句会成为噪声。</p>
+<h2 id="程序依赖图"><a href="#程序依赖图" class="headerlink" title="程序依赖图"></a>程序依赖图</h2><p>PDG不再关心下一条执行什么，而是关心某条语句是否会受到另一条语句的影响。PDG通常由DDG和CDG组成，其中前者是数据依赖图，后者是控制依赖图。</p>
+<h4 id="DDG"><a href="#DDG" class="headerlink" title="DDG"></a>DDG</h4><p>例如</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = get_user_input();</span><br><span class="line"><span class="type">int</span> size = n * <span class="number">2</span>;</span><br><span class="line"><span class="built_in">memcpy</span>(buf, src, size);</span><br></pre></td></tr></tbody></table></figure>
+<p>数据依赖可以表示如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n = get_user_input()</span><br><span class="line">        ↓  n</span><br><span class="line">size = n * 2</span><br><span class="line">        ↓  size</span><br><span class="line">memcpy(buf, src, size)</span><br></pre></td></tr></tbody></table></figure>
+<p>其中size = n<em>2依赖于get_user_input()。而memcpy又依赖于size = n\</em>2，在Joern中这类边被称为 <code>REACHING_DEF</code>，意思是<strong>源节点产生的变量在沿途没有被重新赋值的情况下可以达到目标节点</strong></p>
+<p>同时<code>REACHING_DEF</code>边还带有 <code>VARIABLE</code> 属性， 用于记录传播的是哪个变量</p>
+<h4 id="CDG"><a href="#CDG" class="headerlink" title="CDG"></a>CDG</h4><p>例如</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (n &gt; 0) {</span><br><span class="line">    memcpy(buf, src, n);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>其中mcmcpy是否执行，依赖于 <code>n&gt;0</code>，因此存在控制依赖</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (n &gt; 0)</span><br><span class="line">     ↓ CDG</span><br><span class="line">memcpy(buf, src, n)</span><br></pre></td></tr></tbody></table></figure>
+<p>在Joern中，这类关系通过CDG边表示，边的定义为<strong>目标节点在控制上依赖于源节点</strong></p>
+<h4 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h4><ul>
+<li><p>能跨越长距离</p>
+</li>
+<li><p>能够压缩无关代码</p>
+</li>
+<li>适合污点传播于程序切片</li>
+</ul>
+<h4 id="局限-2"><a href="#局限-2" class="headerlink" title="局限"></a>局限</h4><ul>
+<li>丢失完整执行顺序<ul>
+<li>PDG表示的是依赖，而不是先后次序。如果两个函数之间没有数据依赖和控制依赖，PDG可能不会显式连接它们。</li>
+</ul>
+</li>
+<li>静态分析存在近似误差<ul>
+<li>当静态分析出现指针，指针的内容是一个函数返回地址，且静态分析无法知道具体地址，于是只能做保守推断这个地址可能是上面的某个变量，于是出现多条路径。尽管真实运行的时候这个指针只指向其中一个对象。这个问题也叫做 <strong>过度近似</strong></li>
+</ul>
+</li>
+<li>生成成本更高</li>
+</ul>
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>无论输入CNN还是GNN，都需要先完成三个步骤</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">原始代码</span><br><span class="line">  ↓</span><br><span class="line">Joern 解析</span><br><span class="line">  ↓</span><br><span class="line">CPG</span><br><span class="line">  ↓</span><br><span class="line">筛选节点和边</span><br><span class="line">  ↓</span><br><span class="line">节点文本归一化</span><br><span class="line">  ↓</span><br><span class="line">将文本转换成向量</span><br></pre></td></tr></tbody></table></figure>
+<p>Joern解析步骤我们就省略了，F&amp;Q数据集每个样本是一个独立函数，这个筛选目标函数也可以省略。、</p>
+<h3 id="节点文本归一化"><a href="#节点文本归一化" class="headerlink" title="节点文本归一化"></a>节点文本归一化</h3><p>也就是说将变量名统一为VAR_1、VAR_2等等。但是不能过度归一化，对于函数名、运算符和常量等等需要保留。</p>
+<h3 id="文本转换为向量"><a href="#文本转换为向量" class="headerlink" title="文本转换为向量"></a>文本转换为向量</h3><p>神经网络不能直接处理字符串，必须将节点文本编码成数值向量。流行的编码方法有两种</p>
+<h4 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CALL memcpy</span><br><span class="line">  ↓</span><br><span class="line">分词</span><br><span class="line">  ↓</span><br><span class="line">["CALL", "memcpy"]</span><br><span class="line">  ↓</span><br><span class="line">词向量平均或池化</span><br><span class="line">  ↓</span><br><span class="line">x_i ∈ R^128</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="CodeBERT"><a href="#CodeBERT" class="headerlink" title="CodeBERT"></a>CodeBERT</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CALL memcpy</span><br><span class="line">  ↓</span><br><span class="line">Tokenizer</span><br><span class="line">  ↓</span><br><span class="line">CodeBERT</span><br><span class="line">  ↓</span><br><span class="line">池化</span><br><span class="line">  ↓</span><br><span class="line">x_i ∈ R^768</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="输入CNN"><a href="#输入CNN" class="headerlink" title="输入CNN"></a>输入CNN</h2><p>普通一维CNN的输入通常是规则张量<script type="math/tex">X \in \mathbb{R}^{L \times d}</script>，其中L是序列长度，d是每个未知的向量维度。对于一个自然语言句子来说，可以转换为：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">我 / 喜欢 / 深度 / 学习</span><br><span class="line">↓</span><br><span class="line">四个词向量</span><br><span class="line">↓</span><br><span class="line">X ∈ R^(4 × d)</span><br></pre></td></tr></tbody></table></figure>
+<p>但程序图并不是序列。因为一个节点可能连接多个节点；不同函数节点数量不同；CFG可能存在循环；PDG中节点没有天然线性顺序。因此要使用CNN必须要先人为规定一种<strong>线性化策略</strong></p>
+<p>文本CNN使用卷积核捕捉响铃token 的局部组合模式，再通过池化获得整体表示。这类架构最初广泛应用于句子级分类</p>
+<p>我们考虑一个例子。它源码如下：</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">copy_data</span><span class="params">(<span class="type">char</span> *src, <span class="type">int</span> n)</span> {</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">16</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n &gt; <span class="number">0</span>) {</span><br><span class="line">        <span class="built_in">memcpy</span>(buf, src, n);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>漏洞在于 n &gt; 16 存在栈溢出问题。</p>
+<p>对此我们有三种中间表示</p>
+<h5 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">METHOD: copy_data</span><br><span class="line">└── BLOCK</span><br><span class="line">    ├── LOCAL: buf[16]</span><br><span class="line">    └── CONTROL_STRUCTURE: if</span><br><span class="line">        ├── CONDITION: n &gt; 0</span><br><span class="line">        │   ├── IDENTIFIER: n</span><br><span class="line">        │   └── LITERAL: 0</span><br><span class="line">        └── CALL: memcpy</span><br><span class="line">            ├── IDENTIFIER: buf</span><br><span class="line">            ├── IDENTIFIER: src</span><br><span class="line">            └── IDENTIFIER: n</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="CFG"><a href="#CFG" class="headerlink" title="CFG"></a>CFG</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ENTRY</span><br><span class="line">  ↓</span><br><span class="line">buf[16]</span><br><span class="line">  ↓</span><br><span class="line">n &gt; 0 ?</span><br><span class="line">  ├── True  → memcpy(buf, src, n) → EXIT</span><br><span class="line">  └── False ─────────────────────→ EXIT</span><br></pre></td></tr></tbody></table></figure>
+<h5 id="PDG"><a href="#PDG" class="headerlink" title="PDG"></a>PDG</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PARAMETER: n</span><br><span class="line">  ├── REACHING_DEF → CONDITION: n &gt; 0</span><br><span class="line">  └── REACHING_DEF → ARGUMENT: n in memcpy</span><br><span class="line"></span><br><span class="line">PARAMETER: src</span><br><span class="line">  └── REACHING_DEF → ARGUMENT: src in memcpy</span><br><span class="line"></span><br><span class="line">CONDITION: n &gt; 0</span><br><span class="line">  └── CDG → CALL: memcpy(buf, src, n)</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="AST输入CNN"><a href="#AST输入CNN" class="headerlink" title="AST输入CNN"></a>AST输入CNN</h3><p>对AST进行前序遍历（根、左、右），我们得到一个线性的序列。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">METHOD copy_data</span><br><span class="line">BLOCK</span><br><span class="line">LOCAL buf[16]</span><br><span class="line">CONTROL_STRUCTURE if</span><br><span class="line">CALL &gt;</span><br><span class="line">IDENTIFIER n</span><br><span class="line">LITERAL 0</span><br><span class="line">CALL memcpy</span><br><span class="line">IDENTIFIER buf</span><br><span class="line">IDENTIFIER src</span><br><span class="line">IDENTIFIER n</span><br></pre></td></tr></tbody></table></figure>
+<p>也就是说是一个长度为11的向量，我们定义每个节点维度是128，那么输入大小就是[11, 128]。</p>
+<p>在这个张量上，我们可以直接输入CNN，然后做卷积。对于卷积操作就不多说了。然后进行最大/平均池化</p>
+<blockquote>
+<p>这样做优点是简单，能够捕捉危险函数和表达式。缺点是AST被压平后树结构会部分丢失，例如不能识别出buf、src、n是memcpy函数的参数。但也有解决方法，就是加入结构标记</p>
+</blockquote>
+<h3 id="CFG输入CNN"><a href="#CFG输入CNN" class="headerlink" title="CFG输入CNN"></a>CFG输入CNN</h3><p>CFG是一个有向图，可以通过DFS获取控制流路径。比如上述例子可以提取两条路径</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Path 1:</span><br><span class="line">ENTRY → buf[16] → n &gt; 0 → memcpy(buf, src, n) → EXIT</span><br><span class="line"></span><br><span class="line">Path 2:</span><br><span class="line">ENTRY → buf[16] → n &gt; 0 → EXIT</span><br></pre></td></tr></tbody></table></figure>
+<p>每条路径都转换成一个节点序列，也就是说这里有两个向量，大小分别是<code>[5, 128]</code>和<code>[4, 128]</code>。我们将这两个向量分别输入同一个CNN，最后聚合。</p>
+<blockquote>
+<p>通过这种方法可以识别控制流中的局部执行模式，但存在路径爆炸问题。</p>
+</blockquote>
+<h3 id="PDG输入CNN"><a href="#PDG输入CNN" class="headerlink" title="PDG输入CNN"></a>PDG输入CNN</h3><p>PDG最适合使用程序切片。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1801.01681?utm_source=chatgpt.com">VulDeePecker</a>提出code gadget就是选取语义相关但不一定在源码中连续的代码行，再将其向量化用于深度学习。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1807.06756?utm_source=chatgpt.com">SySeVR</a>进一步强调了漏洞相关语法信息于语义信息的结合，并将这些信息转换为适合深度学习的向量表示。</p>
+<p>程序切片可以理解为：删除于漏洞无关的代码，只保留可能影响关键操作的语义链条。对于上述例子，我们可以围绕memcpy()函数做PDG反向切片，只保留能够影响它的语句</p>
+<h4 id="PDG切片的构造过程"><a href="#PDG切片的构造过程" class="headerlink" title="PDG切片的构造过程"></a>PDG切片的构造过程</h4><p>首先我们选定危险节点。这一步也叫 <code>sink</code></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CALL memcpy</span><br></pre></td></tr></tbody></table></figure>
+<p>然后我们沿 <code>REACHING_DEF</code> 反向追踪</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">memcpy 的第三个参数 n</span><br><span class="line">  ↑</span><br><span class="line">n 的定义</span><br><span class="line">  ↑</span><br><span class="line">get_user_input()</span><br></pre></td></tr></tbody></table></figure>
+<p>再沿着CDG补充控制条件</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memcpy</span><br><span class="line">  ↑ CDG</span><br><span class="line">n &gt; 0</span><br></pre></td></tr></tbody></table></figure>
+<p>最终得到切片</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">get_user_input()</span><br><span class="line">  → n</span><br><span class="line">  → n &gt; 0</span><br><span class="line">  → memcpy(buf, src, n)</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>和AST先比，PDG输入通常更短，但是语义密度更高。它适合学习漏洞传播模式</p>
+</blockquote>
+<h2 id="输入GNN"><a href="#输入GNN" class="headerlink" title="输入GNN"></a>输入GNN</h2><p>GNN不需要将图强行压平为一维序列。因为它直接接收节点、边、节点特征、边类型。图卷积网络可以直接作用于图结构数据，并通过局部领邻域聚合学习节点表示</p>
+<h3 id="输入张量"><a href="#输入张量" class="headerlink" title="输入张量"></a>输入张量</h3><p>对于一个函数图，定义</p>
+<script type="math/tex; mode=display">
+G = (V, E, X)</script><p>其中V是节点集合、E是边集合、X是节点特征矩阵。假设图中有N（120）个节点，每个节点特征维度为d（160），那么节点特征的大小为[120, 160]，其中特征维度由两部分拼接</p>
+<script type="math/tex; mode=display">
+x_i
+=
+[
+e_i^{\text{text}} ;
+e_i^{\text{type}}
+]</script><p>第一项为文本特征，通过Word2Vec或者CodeBERT得到，维度为128维。第二项是节点类型特征，是对应的Embedding，维度为32。</p>
+<p>在PyTorch Geometric中，图通常使用稀疏边列表表示，参考稀疏矩阵三元组表示。</p>
+<h3 id="将AST输入GNN"><a href="#将AST输入GNN" class="headerlink" title="将AST输入GNN"></a>将AST输入GNN</h3><p>AST通常是有向树的形式，消息默认沿父节点流向子节点。如果我们希望参数信息也能回传给父节点（CALL memcpy节点），可以手动增加反向边。</p>
+<h3 id="将CFG输入GNN"><a href="#将CFG输入GNN" class="headerlink" title="将CFG输入GNN"></a>将CFG输入GNN</h3><p>同样加入反向边</p>
+<h3 id="将PDF输入GNn"><a href="#将PDF输入GNn" class="headerlink" title="将PDF输入GNn"></a>将PDF输入GNn</h3><h3 id="多关系R-GNC"><a href="#多关系R-GNC" class="headerlink" title="多关系R-GNC"></a>多关系R-GNC</h3><h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>对于267_1.c的源代码</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> <span class="title function_">coeff_unpack_golomb</span><span class="params">(GetBitContext *gb, <span class="type">int</span> qfactor, <span class="type">int</span> qoffset)</span></span><br><span class="line"></span><br><span class="line">{</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> coeff = dirac_get_se_golomb(gb);</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> sign = FFSIGN(coeff);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (coeff)</span><br><span class="line"></span><br><span class="line">        coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> coeff;</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这里存在符号整数溢出漏洞和。漏洞处具体在 <code>coeff = sign * ((sign * coeff * qfactor + qoffset) &gt;&gt; 2);</code> 的 <code>sign * coeff * qfactor</code> 这个表达式。因为可以狗仔而已Dirac视频码流使得 <code>dirac_get_se_golomb(gb)</code> 返回异常大的coeff。</p>
+<h3 id="AST-1"><a href="#AST-1" class="headerlink" title="AST"></a>AST</h3><p>完整AST如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">- 107374182400 [METHOD] order=1 line=65 code=static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qoffset) { int coeff = dirac_get_se_golomb(gb); const int sign = FFSIGN(coeff); if (coeff) coeff = sign...</span><br><span class="line">  - 111669149696 [METHOD_PARAMETER_IN] order=1 line=65 code=GetBitContext *gb</span><br><span class="line">  - 115964116992 [METHOD_PARAMETER_OUT] order=1 line=65 code=GetBitContext *gb</span><br><span class="line">  - 111669149697 [METHOD_PARAMETER_IN] order=2 line=65 code=int qfactor</span><br><span class="line">  - 115964116993 [METHOD_PARAMETER_OUT] order=2 line=65 code=int qfactor</span><br><span class="line">  - 111669149698 [METHOD_PARAMETER_IN] order=3 line=65 code=int qoffset</span><br><span class="line">  - 115964116994 [METHOD_PARAMETER_OUT] order=3 line=65 code=int qoffset</span><br><span class="line">  - 25769803776 [BLOCK] order=4 line=67 code={ int coeff = dirac_get_se_golomb(gb); const int sign = FFSIGN(coeff); if (coeff) coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2); return coeff; }</span><br><span class="line">    - 94489280512 [LOCAL] order=1 line=69 code=int coeff</span><br><span class="line">    - 30064771072 [CALL] order=2 line=69 code=coeff = dirac_get_se_golomb(gb)</span><br><span class="line">      - 68719476736 [IDENTIFIER] order=1 line=69 code=coeff</span><br><span class="line">      - 30064771073 [CALL] order=2 line=69 code=dirac_get_se_golomb(gb)</span><br><span class="line">        - 68719476737 [IDENTIFIER] order=1 line=69 code=gb</span><br><span class="line">    - 94489280513 [LOCAL] order=3 line=71 code=const int sign</span><br><span class="line">    - 30064771074 [CALL] order=4 line=71 code=sign = FFSIGN(coeff)</span><br><span class="line">      - 68719476738 [IDENTIFIER] order=1 line=71 code=sign</span><br><span class="line">      - 30064771075 [CALL] order=2 line=71 code=FFSIGN(coeff)</span><br><span class="line">        - 68719476739 [IDENTIFIER] order=1 line=71 code=coeff</span><br><span class="line">    - 47244640256 [CONTROL_STRUCTURE] order=5 line=73 code=if (coeff) coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2);</span><br><span class="line">      - 30064771076 [CALL] order=1 line=73 code=coeff != 0</span><br><span class="line">        - 68719476740 [IDENTIFIER] order=1 line=73 code=coeff</span><br><span class="line">        - 90194313216 [LITERAL] order=2 line=73 code=0</span><br><span class="line">      - 25769803777 [BLOCK] order=2 line=75 code=&lt;empty&gt;</span><br><span class="line">        - 30064771077 [CALL] order=1 line=75 code=coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">          - 68719476741 [IDENTIFIER] order=1 line=75 code=coeff</span><br><span class="line">          - 30064771078 [CALL] order=2 line=75 code=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">            - 68719476742 [IDENTIFIER] order=1 line=75 code=sign</span><br><span class="line">            - 30064771079 [CALL] order=2 line=75 code=(sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">              - 30064771080 [CALL] order=1 line=75 code=sign * coeff * qfactor + qoffset</span><br><span class="line">                - 30064771081 [CALL] order=1 line=75 code=sign * coeff * qfactor</span><br><span class="line">                  - 30064771082 [CALL] order=1 line=75 code=sign * coeff</span><br><span class="line">                    - 68719476743 [IDENTIFIER] order=1 line=75 code=sign</span><br><span class="line">                    - 68719476744 [IDENTIFIER] order=2 line=75 code=coeff</span><br><span class="line">                  - 68719476745 [IDENTIFIER] order=2 line=75 code=qfactor</span><br><span class="line">                - 68719476746 [IDENTIFIER] order=2 line=75 code=qoffset</span><br><span class="line">              - 90194313217 [LITERAL] order=2 line=75 code=2</span><br><span class="line">    - 141733920768 [RETURN] order=6 line=77 code=return coeff;</span><br><span class="line">      - 68719476747 [IDENTIFIER] order=1 line=77 code=coeff</span><br><span class="line">  - 128849018880 [MODIFIER] order=5 line=65 code=&lt;empty&gt;</span><br><span class="line">  - 124554051584 [METHOD_RETURN] order=6 line=65 code=RET</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>我们可以这样读每一行</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">缩进 - 节点ID [节点类型] order=兄弟节点顺序 line=源码行号 code=对应代码片段</span><br></pre></td></tr></tbody></table></figure>
+<p>缩进越深，表示它是上面节点的子节点。我们可以先忽略超长节点ID，只看 节点类型 和 code=，可以缩略成以下整体结构</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">METHOD coeff_unpack_golomb</span><br><span class="line">  METHOD_PARAMETER_IN gb</span><br><span class="line">  METHOD_PARAMETER_OUT gb</span><br><span class="line">  METHOD_PARAMETER_IN qfactor</span><br><span class="line">  METHOD_PARAMETER_OUT qfactor</span><br><span class="line">  METHOD_PARAMETER_IN qoffset</span><br><span class="line">  METHOD_PARAMETER_OUT qoffset</span><br><span class="line">  BLOCK</span><br><span class="line">    LOCAL int coeff</span><br><span class="line">    CALL coeff = dirac_get_se_golomb(gb)</span><br><span class="line">    LOCAL const int sign</span><br><span class="line">    CALL sign = FFSIGN(coeff)</span><br><span class="line">    CONTROL_STRUCTURE if (coeff)</span><br><span class="line">      CALL coeff != 0</span><br><span class="line">      BLOCK</span><br><span class="line">        CALL coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">    RETURN return coeff</span><br><span class="line">  MODIFIER</span><br><span class="line">  METHOD_RETURN RET</span><br></pre></td></tr></tbody></table></figure>
+<p>其中</p>
+<ul>
+<li><p><code>[METHOD]</code> 是函数根节点，对应整个 <code>coeff_unpack_golomb</code>。</p>
+</li>
+<li><p><code>[METHOD_PARAMETER_IN]</code> / <code>[METHOD_PARAMETER_OUT]</code> 成对出现，是 Joern/CPG 为数据流建模准备的，不是源码里真的写了两遍参数。</p>
+</li>
+<li><p><code>[BLOCK]</code> 是函数体 <code>{ ... }</code>。</p>
+</li>
+<li><p><code>[LOCAL]</code> 表示局部变量声明，比如 <code>int coeff</code>、<code>const int sign</code>。</p>
+</li>
+<li><p><code>[CALL]</code> 不只表示普通函数调用，也表示运算符调用。比如赋值 <code>=</code>, 乘法 <code>*</code>, 加法 <code>+</code>, 右移 <code>&gt;&gt;</code> 都会被 Joern 表示成 <code>CALL</code> 节点。</p>
+</li>
+<li><p><code>[CONTROL_STRUCTURE]</code> 是控制结构，比如 <code>if</code>。</p>
+</li>
+</ul>
+<h3 id="CFG-1"><a href="#CFG-1" class="headerlink" title="CFG"></a>CFG</h3><p>完整内容如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">CFG nodes:</span><br><span class="line">  N01: 107374182400 [METHOD] line=65 order=1 code=static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qoffset) { int coeff = dirac_get_se_golomb(gb); const int sign ...</span><br><span class="line">  N02: 68719476736 [IDENTIFIER] line=69 order=1 code=coeff</span><br><span class="line">  N03: 68719476737 [IDENTIFIER] line=69 order=1 code=gb</span><br><span class="line">  N04: 30064771073 [CALL] line=69 order=2 code=dirac_get_se_golomb(gb)</span><br><span class="line">  N05: 30064771072 [CALL] line=69 order=2 code=coeff = dirac_get_se_golomb(gb)</span><br><span class="line">  N06: 68719476738 [IDENTIFIER] line=71 order=1 code=sign</span><br><span class="line">  N07: 68719476739 [IDENTIFIER] line=71 order=1 code=coeff</span><br><span class="line">  N08: 30064771075 [CALL] line=71 order=2 code=FFSIGN(coeff)</span><br><span class="line">  N09: 30064771074 [CALL] line=71 order=4 code=sign = FFSIGN(coeff)</span><br><span class="line">  N10: 68719476740 [IDENTIFIER] line=73 order=1 code=coeff</span><br><span class="line">  N11: 90194313216 [LITERAL] line=73 order=2 code=0</span><br><span class="line">  N12: 30064771076 [CALL] line=73 order=1 code=coeff != 0</span><br><span class="line">  N13: 68719476741 [IDENTIFIER] line=75 order=1 code=coeff</span><br><span class="line">  N14: 68719476747 [IDENTIFIER] line=77 order=1 code=coeff</span><br><span class="line">  N15: 68719476742 [IDENTIFIER] line=75 order=1 code=sign</span><br><span class="line">  N16: 141733920768 [RETURN] line=77 order=6 code=return coeff;</span><br><span class="line">  N17: 68719476743 [IDENTIFIER] line=75 order=1 code=sign</span><br><span class="line">  N18: 124554051584 [METHOD_RETURN] line=65 order=6 code=RET</span><br><span class="line">  N19: 68719476744 [IDENTIFIER] line=75 order=2 code=coeff</span><br><span class="line">  N20: 30064771082 [CALL] line=75 order=1 code=sign * coeff</span><br><span class="line">  N21: 68719476745 [IDENTIFIER] line=75 order=2 code=qfactor</span><br><span class="line">  N22: 30064771081 [CALL] line=75 order=1 code=sign * coeff * qfactor</span><br><span class="line">  N23: 68719476746 [IDENTIFIER] line=75 order=2 code=qoffset</span><br><span class="line">  N24: 30064771080 [CALL] line=75 order=1 code=sign * coeff * qfactor + qoffset</span><br><span class="line">  N25: 90194313217 [LITERAL] line=75 order=2 code=2</span><br><span class="line">  N26: 30064771079 [CALL] line=75 order=2 code=(sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N27: 30064771078 [CALL] line=75 order=2 code=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N28: 30064771077 [CALL] line=75 order=1 code=coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line"></span><br><span class="line">CFG edges:</span><br><span class="line">  N01 -&gt; N02: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  coeff</span><br><span class="line">  N02 -&gt; N03: coeff  ==&gt;  gb</span><br><span class="line">  N03 -&gt; N04: gb  ==&gt;  dirac_get_se_golomb(gb)</span><br><span class="line">  N04 -&gt; N05: dirac_get_se_golomb(gb)  ==&gt;  coeff = dirac_get_se_golomb(gb)</span><br><span class="line">  N05 -&gt; N06: coeff = dirac_get_se_golomb(gb)  ==&gt;  sign</span><br><span class="line">  N06 -&gt; N07: sign  ==&gt;  coeff</span><br><span class="line">  N07 -&gt; N08: coeff  ==&gt;  FFSIGN(coeff)</span><br><span class="line">  N08 -&gt; N09: FFSIGN(coeff)  ==&gt;  sign = FFSIGN(coeff)</span><br><span class="line">  N09 -&gt; N10: sign = FFSIGN(coeff)  ==&gt;  coeff</span><br><span class="line">  N10 -&gt; N11: coeff  ==&gt;  0</span><br><span class="line">  N11 -&gt; N12: 0  ==&gt;  coeff != 0</span><br><span class="line">  N12 -&gt; N13: coeff != 0  ==&gt;  coeff</span><br><span class="line">  N12 -&gt; N14: coeff != 0  ==&gt;  coeff</span><br><span class="line">  N13 -&gt; N15: coeff  ==&gt;  sign</span><br><span class="line">  N14 -&gt; N16: coeff  ==&gt;  return coeff;</span><br><span class="line">  N15 -&gt; N17: sign  ==&gt;  sign</span><br><span class="line">  N16 -&gt; N18: return coeff;  ==&gt;  RET</span><br><span class="line">  N17 -&gt; N19: sign  ==&gt;  coeff</span><br><span class="line">  N19 -&gt; N20: coeff  ==&gt;  sign * coeff</span><br><span class="line">  N20 -&gt; N21: sign * coeff  ==&gt;  qfactor</span><br><span class="line">  N21 -&gt; N22: qfactor  ==&gt;  sign * coeff * qfactor</span><br><span class="line">  N22 -&gt; N23: sign * coeff * qfactor  ==&gt;  qoffset</span><br><span class="line">  N23 -&gt; N24: qoffset  ==&gt;  sign * coeff * qfactor + qoffset</span><br><span class="line">  N24 -&gt; N25: sign * coeff * qfactor + qoffset  ==&gt;  2</span><br><span class="line">  N25 -&gt; N26: 2  ==&gt;  (sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N26 -&gt; N27: (sign * coeff * qfactor + qoffset) &gt;&gt; 2  ==&gt;  sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N27 -&gt; N28: sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N28 -&gt; N14: coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  coeff</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<p>对应流程图如下</p>
+<pre class="mermaid">flowchart TB
+    accTitle: coeff_unpack_golomb CFG
+    accDescr: Simplified control flow for coeff_unpack_golomb, showing the condition branch and the merge at the return statement.
+
+    entry([entry: coeff_unpack_golomb]) --&gt; read_coeff["coeff = dirac_get_se_golomb(gb)"]
+    read_coeff --&gt; read_sign["sign = FFSIGN(coeff)"]
+    read_sign --&gt; test{"coeff != 0?"}
+    test --&gt;|true| scale_coeff["coeff = sign * ((sign * coeff * qfactor + qoffset) &gt;&gt; 2)"]
+    test --&gt;|false| return_coeff["return coeff"]
+    scale_coeff --&gt; return_coeff
+    return_coeff --&gt; exit_node([RET])
+
+    classDef terminal fill:#f3f4f6,stroke:#6b7280,stroke-width:2px,color:#1f2937
+    classDef process fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a5f
+    classDef decision fill:#fef9c3,stroke:#ca8a04,stroke-width:2px,color:#713f12
+
+    class entry,exit_node terminal
+    class read_coeff,read_sign,scale_coeff,return_coeff process
+    class test decision</pre>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Simplified node</th>
+<th>Original Joern CFG nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>entry</code></td>
+<td><code>METHOD</code> node <code>107374182400</code></td>
+</tr>
+<tr>
+<td><code>read_coeff</code></td>
+<td>line 69 identifier/function-call/assignment nodes <code>68719476736</code>, <code>68719476737</code>, <code>30064771073</code>, <code>30064771072</code></td>
+</tr>
+<tr>
+<td><code>read_sign</code></td>
+<td>line 71 identifier/function-call/assignment nodes <code>68719476738</code>, <code>68719476739</code>, <code>30064771075</code>, <code>30064771074</code></td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>line 73 condition nodes <code>68719476740</code>, <code>90194313216</code>, <code>30064771076</code></td>
+</tr>
+<tr>
+<td><code>scale_coeff</code></td>
+<td>line 75 expression and assignment nodes <code>68719476741</code> through <code>30064771077</code></td>
+</tr>
+<tr>
+<td><code>return_coeff</code></td>
+<td>line 77 nodes <code>68719476747</code>, <code>141733920768</code></td>
+</tr>
+<tr>
+<td><code>exit_node</code></td>
+<td><code>METHOD_RETURN</code> node <code>124554051584</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="PDG-1"><a href="#PDG-1" class="headerlink" title="PDG"></a>PDG</h4><p>原始内容如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line">PDG nodes:</span><br><span class="line">  N01: 107374182400 [METHOD] line=65 order=1 code=static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qoffset) { int coeff = dirac_get_se_golomb(gb); const int sign ...</span><br><span class="line">  N02: 111669149696 [METHOD_PARAMETER_IN] line=65 order=1 code=GetBitContext *gb</span><br><span class="line">  N03: 115964116992 [METHOD_PARAMETER_OUT] line=65 order=1 code=GetBitContext *gb</span><br><span class="line">  N04: 111669149697 [METHOD_PARAMETER_IN] line=65 order=2 code=int qfactor</span><br><span class="line">  N05: 115964116993 [METHOD_PARAMETER_OUT] line=65 order=2 code=int qfactor</span><br><span class="line">  N06: 111669149698 [METHOD_PARAMETER_IN] line=65 order=3 code=int qoffset</span><br><span class="line">  N07: 115964116994 [METHOD_PARAMETER_OUT] line=65 order=3 code=int qoffset</span><br><span class="line">  N08: 124554051584 [METHOD_RETURN] line=65 order=6 code=RET</span><br><span class="line">  N09: 68719476736 [IDENTIFIER] line=69 order=1 code=coeff</span><br><span class="line">  N10: 68719476737 [IDENTIFIER] line=69 order=1 code=gb</span><br><span class="line">  N11: 30064771072 [CALL] line=69 order=2 code=coeff = dirac_get_se_golomb(gb)</span><br><span class="line">  N12: 30064771073 [CALL] line=69 order=2 code=dirac_get_se_golomb(gb)</span><br><span class="line">  N13: 68719476738 [IDENTIFIER] line=71 order=1 code=sign</span><br><span class="line">  N14: 68719476739 [IDENTIFIER] line=71 order=1 code=coeff</span><br><span class="line">  N15: 30064771075 [CALL] line=71 order=2 code=FFSIGN(coeff)</span><br><span class="line">  N16: 30064771074 [CALL] line=71 order=4 code=sign = FFSIGN(coeff)</span><br><span class="line">  N17: 30064771076 [CALL] line=73 order=1 code=coeff != 0</span><br><span class="line">  N18: 68719476740 [IDENTIFIER] line=73 order=1 code=coeff</span><br><span class="line">  N19: 90194313216 [LITERAL] line=73 order=2 code=0</span><br><span class="line">  N20: 30064771077 [CALL] line=75 order=1 code=coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N21: 30064771080 [CALL] line=75 order=1 code=sign * coeff * qfactor + qoffset</span><br><span class="line">  N22: 30064771081 [CALL] line=75 order=1 code=sign * coeff * qfactor</span><br><span class="line">  N23: 30064771082 [CALL] line=75 order=1 code=sign * coeff</span><br><span class="line">  N24: 68719476741 [IDENTIFIER] line=75 order=1 code=coeff</span><br><span class="line">  N25: 68719476742 [IDENTIFIER] line=75 order=1 code=sign</span><br><span class="line">  N26: 68719476743 [IDENTIFIER] line=75 order=1 code=sign</span><br><span class="line">  N27: 30064771078 [CALL] line=75 order=2 code=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N28: 30064771079 [CALL] line=75 order=2 code=(sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N29: 68719476744 [IDENTIFIER] line=75 order=2 code=coeff</span><br><span class="line">  N30: 68719476745 [IDENTIFIER] line=75 order=2 code=qfactor</span><br><span class="line">  N31: 68719476746 [IDENTIFIER] line=75 order=2 code=qoffset</span><br><span class="line">  N32: 90194313217 [LITERAL] line=75 order=2 code=2</span><br><span class="line">  N33: 68719476747 [IDENTIFIER] line=77 order=1 code=coeff</span><br><span class="line">  N34: 141733920768 [RETURN] line=77 order=6 code=return coeff;</span><br><span class="line"></span><br><span class="line">PDG edges:</span><br><span class="line">  N17 -&gt; N20 [CDG]: coeff != 0  ==&gt;  coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N17 -&gt; N21 [CDG]: coeff != 0  ==&gt;  sign * coeff * qfactor + qoffset</span><br><span class="line">  N17 -&gt; N22 [CDG]: coeff != 0  ==&gt;  sign * coeff * qfactor</span><br><span class="line">  N17 -&gt; N23 [CDG]: coeff != 0  ==&gt;  sign * coeff</span><br><span class="line">  N17 -&gt; N24 [CDG]: coeff != 0  ==&gt;  coeff</span><br><span class="line">  N17 -&gt; N25 [CDG]: coeff != 0  ==&gt;  sign</span><br><span class="line">  N17 -&gt; N26 [CDG]: coeff != 0  ==&gt;  sign</span><br><span class="line">  N17 -&gt; N27 [CDG]: coeff != 0  ==&gt;  sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N17 -&gt; N28 [CDG]: coeff != 0  ==&gt;  (sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N17 -&gt; N29 [CDG]: coeff != 0  ==&gt;  coeff</span><br><span class="line">  N17 -&gt; N30 [CDG]: coeff != 0  ==&gt;  qfactor</span><br><span class="line">  N17 -&gt; N31 [CDG]: coeff != 0  ==&gt;  qoffset</span><br><span class="line">  N17 -&gt; N32 [CDG]: coeff != 0  ==&gt;  2</span><br><span class="line">  N01 -&gt; N02 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  GetBitContext *gb</span><br><span class="line">  N01 -&gt; N04 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  int qfactor</span><br><span class="line">  N01 -&gt; N06 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  int qoffset</span><br><span class="line">  N01 -&gt; N10 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  gb</span><br><span class="line">  N01 -&gt; N14 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  coeff</span><br><span class="line">  N01 -&gt; N18 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  coeff</span><br><span class="line">  N01 -&gt; N19 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  0</span><br><span class="line">  N01 -&gt; N25 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  sign</span><br><span class="line">  N01 -&gt; N26 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  sign</span><br><span class="line">  N01 -&gt; N29 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  coeff</span><br><span class="line">  N01 -&gt; N30 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  qfactor</span><br><span class="line">  N01 -&gt; N31 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  qoffset</span><br><span class="line">  N01 -&gt; N32 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  2</span><br><span class="line">  N01 -&gt; N33 [REACHING_DEF]: static inline int coeff_unpack_golomb(GetBitContext *gb, int qfactor, int qof...  ==&gt;  coeff</span><br><span class="line">  N02 -&gt; N03 [REACHING_DEF property=gb]: GetBitContext *gb  ==&gt;  GetBitContext *gb</span><br><span class="line">  N02 -&gt; N10 [REACHING_DEF property=gb]: GetBitContext *gb  ==&gt;  gb</span><br><span class="line">  N04 -&gt; N05 [REACHING_DEF property=qfactor]: int qfactor  ==&gt;  int qfactor</span><br><span class="line">  N04 -&gt; N05 [REACHING_DEF property=qfactor]: int qfactor  ==&gt;  int qfactor</span><br><span class="line">  N04 -&gt; N08 [REACHING_DEF property=qfactor]: int qfactor  ==&gt;  RET</span><br><span class="line">  N04 -&gt; N30 [REACHING_DEF property=qfactor]: int qfactor  ==&gt;  qfactor</span><br><span class="line">  N06 -&gt; N07 [REACHING_DEF property=qoffset]: int qoffset  ==&gt;  int qoffset</span><br><span class="line">  N06 -&gt; N07 [REACHING_DEF property=qoffset]: int qoffset  ==&gt;  int qoffset</span><br><span class="line">  N06 -&gt; N08 [REACHING_DEF property=qoffset]: int qoffset  ==&gt;  RET</span><br><span class="line">  N06 -&gt; N31 [REACHING_DEF property=qoffset]: int qoffset  ==&gt;  qoffset</span><br><span class="line">  N09 -&gt; N11 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff = dirac_get_se_golomb(gb)</span><br><span class="line">  N09 -&gt; N14 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff</span><br><span class="line">  N10 -&gt; N03 [REACHING_DEF property=gb]: gb  ==&gt;  GetBitContext *gb</span><br><span class="line">  N10 -&gt; N08 [REACHING_DEF property=gb]: gb  ==&gt;  RET</span><br><span class="line">  N10 -&gt; N12 [REACHING_DEF property=gb]: gb  ==&gt;  dirac_get_se_golomb(gb)</span><br><span class="line">  N11 -&gt; N08 [REACHING_DEF property=coeff = dirac_get_se_golomb(gb)]: coeff = dirac_get_se_golomb(gb)  ==&gt;  RET</span><br><span class="line">  N12 -&gt; N08 [REACHING_DEF property=dirac_get_se_golomb(gb)]: dirac_get_se_golomb(gb)  ==&gt;  RET</span><br><span class="line">  N12 -&gt; N09 [REACHING_DEF property=dirac_get_se_golomb(gb)]: dirac_get_se_golomb(gb)  ==&gt;  coeff</span><br><span class="line">  N12 -&gt; N11 [REACHING_DEF property=dirac_get_se_golomb(gb)]: dirac_get_se_golomb(gb)  ==&gt;  coeff = dirac_get_se_golomb(gb)</span><br><span class="line">  N13 -&gt; N08 [REACHING_DEF property=sign]: sign  ==&gt;  RET</span><br><span class="line">  N13 -&gt; N16 [REACHING_DEF property=sign]: sign  ==&gt;  sign = FFSIGN(coeff)</span><br><span class="line">  N13 -&gt; N26 [REACHING_DEF property=sign]: sign  ==&gt;  sign</span><br><span class="line">  N14 -&gt; N15 [REACHING_DEF property=coeff]: coeff  ==&gt;  FFSIGN(coeff)</span><br><span class="line">  N14 -&gt; N18 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff</span><br><span class="line">  N15 -&gt; N08 [REACHING_DEF property=FFSIGN(coeff)]: FFSIGN(coeff)  ==&gt;  RET</span><br><span class="line">  N15 -&gt; N13 [REACHING_DEF property=FFSIGN(coeff)]: FFSIGN(coeff)  ==&gt;  sign</span><br><span class="line">  N15 -&gt; N16 [REACHING_DEF property=FFSIGN(coeff)]: FFSIGN(coeff)  ==&gt;  sign = FFSIGN(coeff)</span><br><span class="line">  N16 -&gt; N08 [REACHING_DEF property=sign = FFSIGN(coeff)]: sign = FFSIGN(coeff)  ==&gt;  RET</span><br><span class="line">  N17 -&gt; N08 [REACHING_DEF property=coeff != 0]: coeff != 0  ==&gt;  RET</span><br><span class="line">  N18 -&gt; N08 [REACHING_DEF property=coeff]: coeff  ==&gt;  RET</span><br><span class="line">  N18 -&gt; N17 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff != 0</span><br><span class="line">  N18 -&gt; N29 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff</span><br><span class="line">  N18 -&gt; N33 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff</span><br><span class="line">  N19 -&gt; N17 [REACHING_DEF property=0]: 0  ==&gt;  coeff != 0</span><br><span class="line">  N19 -&gt; N18 [REACHING_DEF property=0]: 0  ==&gt;  coeff</span><br><span class="line">  N20 -&gt; N08 [REACHING_DEF property=coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)]: coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  RET</span><br><span class="line">  N21 -&gt; N08 [REACHING_DEF property=sign * coeff * qfactor + qoffset]: sign * coeff * qfactor + qoffset  ==&gt;  RET</span><br><span class="line">  N21 -&gt; N28 [REACHING_DEF property=sign * coeff * qfactor + qoffset]: sign * coeff * qfactor + qoffset  ==&gt;  (sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N22 -&gt; N08 [REACHING_DEF property=sign * coeff * qfactor]: sign * coeff * qfactor  ==&gt;  RET</span><br><span class="line">  N22 -&gt; N21 [REACHING_DEF property=sign * coeff * qfactor]: sign * coeff * qfactor  ==&gt;  sign * coeff * qfactor + qoffset</span><br><span class="line">  N23 -&gt; N08 [REACHING_DEF property=sign * coeff]: sign * coeff  ==&gt;  RET</span><br><span class="line">  N23 -&gt; N22 [REACHING_DEF property=sign * coeff]: sign * coeff  ==&gt;  sign * coeff * qfactor</span><br><span class="line">  N23 -&gt; N30 [REACHING_DEF property=sign * coeff]: sign * coeff  ==&gt;  qfactor</span><br><span class="line">  N24 -&gt; N08 [REACHING_DEF property=coeff]: coeff  ==&gt;  RET</span><br><span class="line">  N24 -&gt; N20 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N24 -&gt; N33 [REACHING_DEF property=coeff]: coeff  ==&gt;  coeff</span><br><span class="line">  N25 -&gt; N08 [REACHING_DEF property=sign]: sign  ==&gt;  RET</span><br><span class="line">  N25 -&gt; N27 [REACHING_DEF property=sign]: sign  ==&gt;  sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N25 -&gt; N28 [REACHING_DEF property=sign]: sign  ==&gt;  (sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N26 -&gt; N23 [REACHING_DEF property=sign]: sign  ==&gt;  sign * coeff</span><br><span class="line">  N26 -&gt; N25 [REACHING_DEF property=sign]: sign  ==&gt;  sign</span><br><span class="line">  N26 -&gt; N29 [REACHING_DEF property=sign]: sign  ==&gt;  coeff</span><br><span class="line">  N27 -&gt; N08 [REACHING_DEF property=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)]: sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  RET</span><br><span class="line">  N27 -&gt; N20 [REACHING_DEF property=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)]: sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  coeff = sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N27 -&gt; N24 [REACHING_DEF property=sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)]: sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)  ==&gt;  coeff</span><br><span class="line">  N28 -&gt; N08 [REACHING_DEF property=(sign * coeff * qfactor + qoffset) &gt;&gt; 2]: (sign * coeff * qfactor + qoffset) &gt;&gt; 2  ==&gt;  RET</span><br><span class="line">  N28 -&gt; N25 [REACHING_DEF property=(sign * coeff * qfactor + qoffset) &gt;&gt; 2]: (sign * coeff * qfactor + qoffset) &gt;&gt; 2  ==&gt;  sign</span><br><span class="line">  N28 -&gt; N27 [REACHING_DEF property=(sign * coeff * qfactor + qoffset) &gt;&gt; 2]: (sign * coeff * qfactor + qoffset) &gt;&gt; 2  ==&gt;  sign*((sign * coeff * qfactor + qoffset) &gt;&gt; 2)</span><br><span class="line">  N29 -&gt; N23 [REACHING_DEF property=coeff]: coeff  ==&gt;  sign * coeff</span><br><span class="line">  N29 -&gt; N26 [REACHING_DEF property=coeff]: coeff  ==&gt;  sign</span><br><span class="line">  N30 -&gt; N05 [REACHING_DEF property=qfactor]: qfactor  ==&gt;  int qfactor</span><br><span class="line">  N30 -&gt; N08 [REACHING_DEF property=qfactor]: qfactor  ==&gt;  RET</span><br><span class="line">  N30 -&gt; N22 [REACHING_DEF property=qfactor]: qfactor  ==&gt;  sign * coeff * qfactor</span><br><span class="line">  N30 -&gt; N23 [REACHING_DEF property=qfactor]: qfactor  ==&gt;  sign * coeff</span><br><span class="line">  N31 -&gt; N07 [REACHING_DEF property=qoffset]: qoffset  ==&gt;  int qoffset</span><br><span class="line">  N31 -&gt; N08 [REACHING_DEF property=qoffset]: qoffset  ==&gt;  RET</span><br><span class="line">  N31 -&gt; N21 [REACHING_DEF property=qoffset]: qoffset  ==&gt;  sign * coeff * qfactor + qoffset</span><br><span class="line">  N32 -&gt; N21 [REACHING_DEF property=2]: 2  ==&gt;  sign * coeff * qfactor + qoffset</span><br><span class="line">  N32 -&gt; N28 [REACHING_DEF property=2]: 2  ==&gt;  (sign * coeff * qfactor + qoffset) &gt;&gt; 2</span><br><span class="line">  N33 -&gt; N34 [REACHING_DEF property=coeff]: coeff  ==&gt;  return coeff;</span><br><span class="line">  N34 -&gt; N08 [REACHING_DEF property=&lt;RET&gt;]: return coeff;  ==&gt;  RET</span><br></pre></td></tr></tbody></table></figure>
+<p>对应可视化如下</p>
+<pre class="mermaid">flowchart LR
+    accTitle: coeff_unpack_golomb PDG
+    accDescr: Simplified program-dependence graph showing data dependencies from parameters and assignments, plus the control dependency from the if condition to the guarded assignment.
+
+    gb_param([gb parameter])
+    qfactor_param([qfactor parameter])
+    qoffset_param([qoffset parameter])
+
+    read_coeff["coeff = dirac_get_se_golomb(gb)"]
+    read_sign["sign = FFSIGN(coeff)"]
+    test{"coeff != 0?"}
+    scale_coeff["coeff = sign * ((sign * coeff * qfactor + qoffset) &gt;&gt; 2)"]
+    return_coeff["return coeff"]
+    exit_node([RET])
+
+    gb_param --&gt;|"data: gb"| read_coeff
+    read_coeff --&gt;|"data: coeff"| read_sign
+    read_coeff --&gt;|"data: coeff"| test
+    read_coeff --&gt;|"data: coeff"| scale_coeff
+    read_sign --&gt;|"data: sign"| scale_coeff
+    qfactor_param --&gt;|"data: qfactor"| scale_coeff
+    qoffset_param --&gt;|"data: qoffset"| scale_coeff
+    test -.-&gt;|"control"| scale_coeff
+    read_coeff --&gt;|"data: coeff if false"| return_coeff
+    scale_coeff --&gt;|"data: coeff if true"| return_coeff
+    return_coeff --&gt;|"return value"| exit_node
+
+    classDef param fill:#f3f4f6,stroke:#6b7280,stroke-width:2px,color:#1f2937
+    classDef process fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a5f
+    classDef decision fill:#fef9c3,stroke:#ca8a04,stroke-width:2px,color:#713f12
+    classDef exit fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d
+
+    class gb_param,qfactor_param,qoffset_param param
+    class read_coeff,read_sign,scale_coeff,return_coeff process
+    class test decision
+    class exit_node exit</pre>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Dependency type</th>
+<th>Meaning in this function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REACHING_DEF</code></td>
+<td>A value definition can reach a later use, such as <code>coeff</code> reaching <code>FFSIGN(coeff)</code> or <code>return coeff</code></td>
+</tr>
+<tr>
+<td><code>CDG</code></td>
+<td>A node is executed only under a control condition, here the line 75 assignment is controlled by <code>coeff != 0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Simplified dependency</th>
+<th>Original Joern relation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gb parameter -&gt; coeff = dirac_get_se_golomb(gb)</code></td>
+<td><code>REACHING_DEF</code> through the <code>gb</code> identifier and call node</td>
+</tr>
+<tr>
+<td><code>coeff = dirac_get_se_golomb(gb) -&gt; sign = FFSIGN(coeff)</code></td>
+<td><code>REACHING_DEF</code> for <code>coeff</code></td>
+</tr>
+<tr>
+<td><code>coeff = dirac_get_se_golomb(gb) -&gt; coeff != 0</code></td>
+<td><code>REACHING_DEF</code> for <code>coeff</code></td>
+</tr>
+<tr>
+<td><code>coeff != 0 -&gt; line 75 assignment</code></td>
+<td><code>CDG</code> from condition node <code>30064771076</code> to line 75 expression nodes</td>
+</tr>
+<tr>
+<td><code>sign</code>, <code>coeff</code>, <code>qfactor</code>, <code>qoffset -&gt; line 75 assignment</code></td>
+<td><code>REACHING_DEF</code> into the scale expression</td>
+</tr>
+<tr>
+<td>initial or updated <code>coeff -&gt; return coeff</code></td>
+<td><code>REACHING_DEF</code> into the return value / method return</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/06/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E4%BC%98%E5%8C%96%E5%99%A8/" rel="prev" title="从梯度下降到优化器">
+      <i class="fa fa-chevron-left"></i> 从梯度下降到优化器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/06/Tricks/" rel="next" title="训练Tricks">
+      训练Tricks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E4%BB%A3%E7%A0%81%E5%88%B0%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">从代码到图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">抽象语法树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Joern-AST"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">Joern AST</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%99%90"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">局限</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E6%B5%81%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">控制流图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Joern-CFG"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">Joern CFG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF-1"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%99%90-1"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">局限</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">程序依赖图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DDG"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">DDG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CDG"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">CDG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF-2"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%80%E9%99%90-2"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">局限</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.4.</span> <span class="nav-text">数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E6%96%87%E6%9C%AC%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.4.1.</span> <span class="nav-text">节点文本归一化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%90%91%E9%87%8F"><span class="nav-number">1.4.2.</span> <span class="nav-text">文本转换为向量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Word2Vec"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">Word2Vec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CodeBERT"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">CodeBERT</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5CNN"><span class="nav-number">1.5.</span> <span class="nav-text">输入CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AST"><span class="nav-number">1.5.0.0.1.</span> <span class="nav-text">AST</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CFG"><span class="nav-number">1.5.0.0.2.</span> <span class="nav-text">CFG</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PDG"><span class="nav-number">1.5.0.0.3.</span> <span class="nav-text">PDG</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AST%E8%BE%93%E5%85%A5CNN"><span class="nav-number">1.5.1.</span> <span class="nav-text">AST输入CNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFG%E8%BE%93%E5%85%A5CNN"><span class="nav-number">1.5.2.</span> <span class="nav-text">CFG输入CNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PDG%E8%BE%93%E5%85%A5CNN"><span class="nav-number">1.5.3.</span> <span class="nav-text">PDG输入CNN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PDG%E5%88%87%E7%89%87%E7%9A%84%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">PDG切片的构造过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5GNN"><span class="nav-number">1.6.</span> <span class="nav-text">输入GNN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%BC%A0%E9%87%8F"><span class="nav-number">1.6.1.</span> <span class="nav-text">输入张量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86AST%E8%BE%93%E5%85%A5GNN"><span class="nav-number">1.6.2.</span> <span class="nav-text">将AST输入GNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86CFG%E8%BE%93%E5%85%A5GNN"><span class="nav-number">1.6.3.</span> <span class="nav-text">将CFG输入GNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86PDF%E8%BE%93%E5%85%A5GNn"><span class="nav-number">1.6.4.</span> <span class="nav-text">将PDF输入GNn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%85%B3%E7%B3%BBR-GNC"><span class="nav-number">1.6.5.</span> <span class="nav-text">多关系R-GNC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.7.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AST-1"><span class="nav-number">1.7.1.</span> <span class="nav-text">AST</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFG-1"><span class="nav-number">1.7.2.</span> <span class="nav-text">CFG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PDG-1"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">PDG</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

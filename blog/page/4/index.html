@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Pocon&#39;s personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pocon">
+<meta property="og:url" content="https://pocon041.github.io/blog/page/4/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="Pocon&#39;s personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn,Machine Learning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/blog/page/4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" blog-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+    <nav class="blog-topbar" aria-label="Blog navigation">
+  <a class="blog-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    <section class="blog-hero" aria-labelledby="blog-title">
+      <div class="blog-hero-copy">
+        <h1 id="blog-title">博博的客</h1>
+        <p>一些学习记录、题解和偶尔冒出来的想法。</p>
+      </div>
+      <div class="blog-hero-panel" aria-label="Blog statistics">
+          <div>
+            <strong>45</strong>
+            <span>Posts</span>
+          </div>
+          <div>
+            <strong>5</strong>
+            <span>Categories</span>
+          </div>
+          <div>
+            <strong>12</strong>
+            <span>Tags</span>
+          </div>
+      </div>
+    </section>
+      <section id="blog-search" class="blog-tools" aria-label="Article search and shortcuts">
+        <div class="blog-searchbar">
+          <span>Search Notes</span>
+          <input id="blog-search-input" type="search" autocomplete="off" placeholder="搜索文章标题、关键词或内容">
+          <button id="blog-search-clear" type="button" hidden>Clear</button>
+        </div>
+        <nav class="blog-lens" aria-label="Article shortcuts">
+            <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">Web Security</a>
+            <a href="/tags/Pwn/">Pwn</a>
+            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">Machine Learning</a>
+            <a href="/archives/">Archive</a>
+        </nav>
+        <p id="blog-search-status" class="blog-search-status" aria-live="polite"></p>
+        <div id="blog-search-results" class="blog-search-results" hidden></div>
+      </section>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/129723978_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">Pwn题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-24 20:27:38" itemprop="dateCreated datePublished" datetime="2024-11-24T20:27:38+08:00">2024-11-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h1 id="从0开始的Pwn生活"><a href="#从0开始的Pwn生活" class="headerlink" title="从0开始的Pwn生活"></a>从0开始的Pwn生活</h1><p>与其说是题解，不如说是萌新初次见面的哦哈呦</p>
+<h1 id="Ret2text"><a href="#Ret2text" class="headerlink" title="Ret2text"></a>Ret2text</h1><p>没得说，复习的时候再写</p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/24/Pwn%E9%A2%98%E8%A7%A3/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/137775897_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">Pwn学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-16 14:43:22" itemprop="dateCreated datePublished" datetime="2024-11-16T14:43:22+08:00">2024-11-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <blockquote>
+<p>来源：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1854y1y7Ro?vd_source=73decf7c030f3abfceb81f802abd8fd0&amp;p=2&amp;spm_id_from=333.788.videopod.episodes">0002.哔哩哔哩-【个人向】CTF pwn 入门-P2[高清版]_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<h1 id="PPT链接"><a href="#PPT链接" class="headerlink" title="PPT链接"></a>PPT链接</h1><p><a target="_blank" rel="noopener" href="https://onedrive.live.com/edit.aspx?resid=4465402B41B4B710!seb0e4dd0494f4f52bef5c10a8eed95ec">PWN.pptx - Microsoft PowerPoint Online</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116150330270.png" alt="image 20241116150330270"></p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/16/Pwn%E5%AD%A6%E4%B9%A0/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/144538290_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/" class="post-title-link" itemprop="url">BUUCTF中SQL注入writeup</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-11 20:06:49" itemprop="dateCreated datePublished" datetime="2024-11-11T20:06:49+08:00">2024-11-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h2 id="NewStarCTF-2023-公开赛道-ez-sql"><a href="#NewStarCTF-2023-公开赛道-ez-sql" class="headerlink" title="[NewStarCTF 2023 公开赛道]ez_sql"></a>[NewStarCTF 2023 公开赛道]ez_sql</h2><ol>
+<li><h5 id="判断闭合方式为-’（单引号）"><a href="#判断闭合方式为-’（单引号）" class="headerlink" title="判断闭合方式为 ’（单引号）"></a>判断闭合方式为 <code>’</code>（单引号）</h5></li>
+<li><h5 id="爆字段数，以成功联合注入"><a href="#爆字段数，以成功联合注入" class="headerlink" title="爆字段数，以成功联合注入"></a>爆字段数，以成功联合注入</h5></li>
+</ol>
+<p>​    <code>?id=1' order by 1 --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-1.png" alt="1-1"></p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/77150895_p0.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/" class="post-title-link" itemprop="url">BUUCTF中SQL注入writeup</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-11 20:06:49" itemprop="dateCreated datePublished" datetime="2024-11-11T20:06:49+08:00">2024-11-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h2 id="NewStarCTF-2023-公开赛道-ez-sql"><a href="#NewStarCTF-2023-公开赛道-ez-sql" class="headerlink" title="[NewStarCTF 2023 公开赛道]ez_sql"></a>[NewStarCTF 2023 公开赛道]ez_sql</h2><ol>
+<li><h5 id="判断闭合方式为-’（单引号）"><a href="#判断闭合方式为-’（单引号）" class="headerlink" title="判断闭合方式为 ’（单引号）"></a>判断闭合方式为 <code>’</code>（单引号）</h5></li>
+<li><h5 id="爆字段数，以成功联合注入"><a href="#爆字段数，以成功联合注入" class="headerlink" title="爆字段数，以成功联合注入"></a>爆字段数，以成功联合注入</h5></li>
+</ol>
+<p>​    <code>?id=1' order by 1 --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-1.png" alt="1-1"></p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/144970207_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/09/SQLi/sql-lab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/09/SQLi/sql-lab/" class="post-title-link" itemprop="url">sqli-lab（一）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-09 23:13:18" itemprop="dateCreated datePublished" datetime="2024-11-09T23:13:18+08:00">2024-11-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h1 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h1><p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/sql1.png" alt="sql1"></p>
+<p>图内补充：<br>table_schema ： 表归属于的数据库</p>
+<p>information_schema：这是一个mysql自带的库，其中保存着关于mysql服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表列的数据类型与访问权限等，所以我们查询这个库</p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/09/SQLi/sql-lab/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/134903417_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="post-title-link" itemprop="url">CTF SHOW WEB</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-09 23:13:18" itemprop="dateCreated datePublished" datetime="2024-11-09T23:13:18+08:00">2024-11-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h1 id="CTF-SHOW"><a href="#CTF-SHOW" class="headerlink" title="CTF SHOW"></a>CTF SHOW</h1><blockquote>
+<p>Web89~150plus</p>
+</blockquote>
+<h2 id="Web89"><a href="#Web89" class="headerlink" title="Web89"></a>Web89</h2><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">"flag.php"</span>);</span><br><span class="line"><span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">'num'</span>])){</span><br><span class="line">    <span class="variable">$num</span> = <span class="variable">$_GET</span>[<span class="string">'num'</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">"/[0-9]/"</span>, <span class="variable">$num</span>)){</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">"no no no!"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$num</span>)){</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/74851178_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%B8%B8%E7%94%A8php%E7%89%B9%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%B8%B8%E7%94%A8php%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">CTF中常用PHP特性总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-09 23:13:18" itemprop="dateCreated datePublished" datetime="2024-11-09T23:13:18+08:00">2024-11-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h2 id="CTF中常用PHP特性总结"><a href="#CTF中常用PHP特性总结" class="headerlink" title="CTF中常用PHP特性总结"></a>CTF中常用PHP特性总结</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gxngxngxn/p/17410173.html">https://www.cnblogs.com/gxngxngxn/p/17410173.html</a></p>
+</blockquote>
+<h2 id="preg-match"><a href="#preg-match" class="headerlink" title="preg_match"></a>preg_match</h2><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="title function_ invoke__">preg_match</span> ( <span class="keyword">string</span> <span class="variable">$pattern</span> , <span class="keyword">string</span> <span class="variable">$subject</span> [, <span class="keyword">array</span> &amp;<span class="variable">$matches</span> [, <span class="keyword">int</span> <span class="variable">$flags</span> = <span class="number">0</span> [, <span class="keyword">int</span> <span class="variable">$offset</span> = <span class="number">0</span> ]]] )</span><br><span class="line">    参数说明：</span><br><span class="line"></span><br><span class="line">    <span class="variable">$pattern</span>: 要搜索的模式，字符串形式。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$subject</span>: 输入字符串。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$matches</span>: 如果提供了参数matches，它将被填充为搜索结果。 <span class="variable">$matches</span>[<span class="number">0</span>]将包含完整模式匹配到的文本， <span class="variable">$matches</span>[<span class="number">1</span>] 将包含第一个捕获子组匹配到的文本，以此类推。</span><br><span class="line"></span><br><span class="line">    <span class="variable">$flags</span>：flags 可以被设置为以下标记值：</span><br><span class="line"></span><br><span class="line">    <span class="comment">#PREG_OFFSET_CAPTURE: 如果传递了这个标记，对于每一个出现的匹配返回时会附加字符串偏移量(相对于目标字符串的)。 注意：这会改变填充到matches参数的数组，使其每个元素成为一个由 第0个元素是匹配到的字符串，第1个元素是该匹配字符串 在目标字符串subject中的偏移量。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#offset: 通常，搜索从目标字符串的开始位置开始。可选参数 offset 用于 指定从目标字符串的某个未知开始搜索(单位是字节)。</span></span><br></pre></td></tr></tbody></table></figure>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/09/php%E7%89%B9%E6%80%A7/%E5%B8%B8%E7%94%A8php%E7%89%B9%E6%80%A7/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/144970207_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/09/Rosetta/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/09/Rosetta/" class="post-title-link" itemprop="url">苹果的罗塞塔石碑 —— Rosetta 2</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-09 13:59:39" itemprop="dateCreated datePublished" datetime="2024-11-09T13:59:39+08:00">2024-11-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h2 id="ARM架构与x86架构"><a href="#ARM架构与x86架构" class="headerlink" title="ARM架构与x86架构"></a>ARM架构与x86架构</h2><p><strong>指令集架构（ISA</strong>）是计算机硬件与软件之间的接口规范，定义了处理器可以执行的基本指令（如算术运算、数据传输、控制转移等）、指令格式、寻址模式以及相关的寄存器和数据类型。简单来说，它就像是处理器的“语言”（<strong>CPU预定义的操作和计算</strong>），让程序员能够编写可以在特定架构上运行的软件，同时也帮助设计处理器的工程师理解如何实现这些指令（简化程序员的工作）。</p>
+<p>那如果要简化程序员的工作，这意味着微处理器的工作十分复杂。<del>甲方只需要提要求就好了，而乙方需要考虑的就多了。</del>那到底是应该简化程序员的工作，还是简化微处理器的工作？</p>
+<p>由此产生了两种想法：<strong>CISC</strong> 和 <strong>RISC</strong></p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/09/Rosetta/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/74851178_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">指令系统</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-06 16:56:13" itemprop="dateCreated datePublished" datetime="2024-11-06T16:56:13+08:00">2024-11-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">计算机</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-zhiling1.png" alt="zhiling1"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling2.png" alt="zhiling2"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling3.png" alt="zhiling3"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/zhiling4.png" alt="zhiling4"></p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/06/%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/134903417_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/06/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/11/06/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="post-title-link" itemprop="url">格式化字符串</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-06 16:56:13" itemprop="dateCreated datePublished" datetime="2024-11-06T16:56:13+08:00">2024-11-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body post-excerpt-body" itemprop="articleBody">
+
+      
+          <div class="post-excerpt-content">
+            <h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><p>格式化字符串是个按部就班的人，直接打印的时候，不管给没给参数，他会按照参数的规则，打印出字符串中给的格式化字符，不管这个参数危不危险</p>
+<p>格式化字符串比较长，不太好直接给printf参数。所以printf中的参数其实是格式化字符串的地址。所以当格式化字符串本身含有某个地址的时候，可以将这个地址的内容打印出来</p>
+<p>于是我们顺着这个地址可以找到真正的字符串在哪里，接着计算地址和字符串的偏移量，从而通过控制格式化字符串达到任意地址读写</p>
+          </div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/11/06/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/#more" rel="contents">
+                展开阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/blog/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/blog/page/5/">5</a><a class="extend next" rel="next" href="/blog/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('blog-search-input');
+        const clearButton = document.getElementById('blog-search-clear');
+        const status = document.getElementById('blog-search-status');
+        const results = document.getElementById('blog-search-results');
+        if (!input || !clearButton || !status || !results) return;
+
+        const blogSearchConfig = {"enabled":true,"id":"blog-search","aria_label":"Article search and shortcuts","shortcuts_label":"Article shortcuts","title":"Search Notes","placeholder":"搜索文章标题、关键词或内容","clear_label":"Clear","path":"/search.xml","max_results":8,"messages":{"idle":"","loading":"正在加载搜索索引...","failed":"搜索索引加载失败。","empty":"无匹配结果。","results":"{count} 篇结果"}};
+        const root = (CONFIG.root || '/').replace(/\/?$/, '/');
+        const configuredPath = String(blogSearchConfig.path || CONFIG.path || 'search.xml');
+        const searchPath = configuredPath.startsWith('/') ? configuredPath : root + configuredPath;
+        const maxResults = Number(blogSearchConfig.max_results || 8);
+        const messages = Object.assign({
+          loading: '正在加载搜索索引...',
+          failed: '搜索索引加载失败。',
+          empty: '无匹配结果。',
+          results: '{count} 篇结果'
+        }, blogSearchConfig.messages || {});
+        let searchData = null;
+        let loading = null;
+        let timer = null;
+
+        const escapeHtml = value => value.replace(/[&<>"']/g, char => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[char]));
+
+        const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        const cleanText = value => (value || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+        const loadSearchData = () => {
+          if (searchData) return Promise.resolve(searchData);
+          if (loading) return loading;
+          status.textContent = messages.loading;
+          loading = fetch(searchPath)
+            .then(response => {
+              if (!response.ok) throw new Error(response.statusText);
+              return response.text();
+            })
+            .then(text => {
+              const xml = new DOMParser().parseFromString(text, 'text/xml');
+              searchData = [...xml.querySelectorAll('entry')].map((entry, index) => {
+                const title = cleanText(entry.querySelector('title')?.textContent);
+                const content = cleanText(entry.querySelector('content')?.textContent);
+                const url = entry.querySelector('url')?.textContent || '#';
+                return {
+                  index,
+                  title,
+                  content,
+                  url,
+                  haystack: `${title} ${content}`.toLowerCase()
+                };
+              }).filter(item => item.title);
+              return searchData;
+            })
+            .catch(() => {
+              status.textContent = messages.failed;
+              return [];
+            });
+          return loading;
+        };
+
+        const highlight = (text, terms) => {
+          let value = escapeHtml(text);
+          terms.filter(Boolean).sort((a, b) => b.length - a.length).forEach(term => {
+            value = value.replace(new RegExp(escapeRegExp(escapeHtml(term)), 'gi'), '<mark>$&</mark>');
+          });
+          return value;
+        };
+
+        const snippetFor = (content, terms) => {
+          const lower = content.toLowerCase();
+          const position = terms.reduce((best, term) => {
+            const current = lower.indexOf(term);
+            if (current === -1) return best;
+            return best === -1 ? current : Math.min(best, current);
+          }, -1);
+          const start = position === -1 ? 0 : Math.max(0, position - 36);
+          const end = Math.min(content.length, start + 132);
+          return content.slice(start, end);
+        };
+
+        const renderResults = items => {
+          results.hidden = false;
+          results.innerHTML = items.map(item => {
+            const snippet = snippetFor(item.content, item.terms);
+            return `<a class="blog-search-result" href="${escapeHtml(item.url)}">
+              <strong>${highlight(item.title, item.terms)}</strong>
+              <span>${highlight(snippet, item.terms)}${snippet.length < item.content.length ? '...' : ''}</span>
+            </a>`;
+          }).join('');
+        };
+
+        const runSearch = () => {
+          const query = input.value.trim();
+          clearButton.hidden = !query;
+          if (!query) {
+            results.hidden = true;
+            results.innerHTML = '';
+            status.textContent = messages.idle || '';
+            return;
+          }
+
+          const terms = query.toLowerCase().split(/[-\s]+/).filter(Boolean);
+          loadSearchData().then(data => {
+            if (input.value.trim() !== query) return;
+            const matched = data.map(item => {
+              let score = 0;
+              terms.forEach(term => {
+                if (item.title.toLowerCase().includes(term)) score += 8;
+                if (item.haystack.includes(term)) score += 1;
+              });
+              return score > 0 ? { ...item, score, terms } : null;
+            }).filter(Boolean).sort((left, right) => right.score - left.score || left.index - right.index);
+
+            if (!matched.length) {
+              results.hidden = true;
+              results.innerHTML = '';
+              status.textContent = messages.empty;
+              return;
+            }
+
+            renderResults(matched.slice(0, maxResults));
+            status.textContent = String(messages.results || '{count} 篇结果').replace('{count}', matched.length);
+          });
+        };
+
+        input.addEventListener('input', () => {
+          window.clearTimeout(timer);
+          timer = window.setTimeout(runSearch, 120);
+        });
+
+        clearButton.addEventListener('click', () => {
+          input.value = '';
+          input.focus();
+          runSearch();
+        });
+
+        document.querySelectorAll('.blog-search-jump').forEach(link => {
+          link.addEventListener('click', () => window.setTimeout(() => input.focus(), 0));
+        });
+      });
+    </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
