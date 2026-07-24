@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一文讲通机器学习的距离、相似度和分布散度在机器学习中，我们经常需要回答一个基础问题：  两个对象到底有多相似，或者多不同？  这里的对象可以是两个特征向量，也可以是两张图片的embedding、两个句子的语义表示，甚至是两个概率分布">
+<meta property="og:type" content="article">
+<meta property="og:title" content="距离度量">
+<meta property="og:url" content="https://pocon041.github.io/2026/05/02/%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="一文讲通机器学习的距离、相似度和分布散度在机器学习中，我们经常需要回答一个基础问题：  两个对象到底有多相似，或者多不同？  这里的对象可以是两个特征向量，也可以是两张图片的embedding、两个句子的语义表示，甚至是两个概率分布">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-02T08:56:13.000Z">
+<meta property="article:modified_time" content="2026-05-02T08:56:13.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/05/02/%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>距离度量 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/129723978_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/05/02/%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          距离度量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-05-02 16:56:13" itemprop="dateCreated datePublished" datetime="2026-05-02T16:56:13+08:00">2026-05-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一文讲通机器学习的距离、相似度和分布散度"><a href="#一文讲通机器学习的距离、相似度和分布散度" class="headerlink" title="一文讲通机器学习的距离、相似度和分布散度"></a>一文讲通机器学习的距离、相似度和分布散度</h1><p>在机器学习中，我们经常需要回答一个基础问题：</p>
+<blockquote>
+<p>两个对象到底有多相似，或者多不同？</p>
+</blockquote>
+<p>这里的对象可以是两个特征向量，也可以是两张图片的embedding、两个句子的语义表示，甚至是两个概率分布</p>
+<p>例如，在图像检索中，我们希望判断两张图片在特征空间是否接近；在聚类中，我们需要判断不同样本是否应当划分到同一个簇；在分类任务中，我们可能需要衡量模型预测分布和真实标签分布之间的差异。</p>
+<p>为了描述这些关系，机器学习经常会用距离来度量。严格来说，距离、相似度、相异度和散度并不是完全相同的概念</p>
+<h4 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h4><p>距离用于衡量两个对象的差异程度，值越小差异越小。具有</p>
+<ul>
+<li>非负性、</li>
+<li>同一性（两个对象完全相同，或具有可比性）、</li>
+<li>对称性（x到y的距离的与y到x的距离）、</li>
+<li>三角不等式（x到y的距离不超过x到y+y到z的距离）</li>
+</ul>
+<p>满足者四个条件的距离，称为度量。</p>
+<p>距离往往同时关注方向和长度，而相似度往往只关注方向</p>
+<h4 id="相似度"><a href="#相似度" class="headerlink" title="相似度"></a>相似度</h4><p>相似度通常值越大，对象差异越小。它衡量的是两个向量方向上的接近程度：方向一致是1，垂直是0，相反是-1</p>
+<h4 id="相异度"><a href="#相异度" class="headerlink" title="相异度"></a>相异度</h4><p>实际应用中通常将相似度转换为一个”越小越相似“的量，比如说 <code>1-cos(x,y)</code>。这个量通常不满足三角不等式，但经常用于损失函数的设计中，用于惩罚两个向量之间的偏差</p>
+<h4 id="散度"><a href="#散度" class="headerlink" title="散度"></a>散度</h4><p>前面的距离和相似度通常用于比较两个向量，但我们经常需要比较两个概率分布。最经典的是KL散度，我们会在下面讲到，KL散度不满足对称性</p>
+<h1 id="基于绝对位移的向量距离"><a href="#基于绝对位移的向量距离" class="headerlink" title="基于绝对位移的向量距离"></a>基于绝对位移的向量距离</h1><h2 id="范数距离"><a href="#范数距离" class="headerlink" title="范数距离"></a>范数距离</h2><p>这个再深度学习中比较常见。L1距离一般称为曼哈顿距离，L2距离就是下面的欧式距离。两者都属于Minkowski距离的特殊情况</p>
+<p>一般形式为：</p>
+<script type="math/tex; mode=display">
+d_p(x,y)
+=
+\left(
+\sum_{i=1}^{D}
+|x_i-y_i|^p
+\right)^{\frac{1}{p}}</script><h2 id="欧式距离"><a href="#欧式距离" class="headerlink" title="欧式距离"></a>欧式距离</h2><script type="math/tex; mode=display">
+d_{\text{Euc}}(x,y)
+=
+\sqrt{
+(x_1-y_1)^2+
+(x_2-y_2)^2
+}</script><h4 id="假设"><a href="#假设" class="headerlink" title="假设"></a>假设</h4><ul>
+<li><p>每一个维度的量纲相近</p>
+</li>
+<li><p>每一个维度的重要性完全相同</p>
+</li>
+<li>特征维度之间不存在相关性</li>
+</ul>
+<h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><h5 id="量纲问题"><a href="#量纲问题" class="headerlink" title="量纲问题"></a>量纲问题</h5><p>这个问题从直觉上来看就是说，如果有维度A、B，维度A波动本来就大，那么在A、B同样大小的偏差下，A不应该被过度惩罚。</p>
+<p>量纲问题很好解决：标准化（不是平时的minmax归一化）。最常用的方法是除以每个维度的标准差$\sigma_i$，则标准化距离为：</p>
+<script type="math/tex; mode=display">
+d(x,y)
+=
+\sqrt{
+\sum_{i=1}^{D}
+\frac{(x_i-y_i)^2}{\sigma_i^2}
+}</script><p>标准化欧式距离可以写成矩阵形式</p>
+<script type="math/tex; mode=display">
+d^2(x,y)
+=
+(x-y)^\top
+W
+(x-y)</script><p>其中 ：</p>
+<script type="math/tex; mode=display">
+W=
+\begin{bmatrix}
+\frac{1}{\sigma_1^2} & 0 & \cdots & 0\\
+0 & \frac{1}{\sigma_2^2} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \frac{1}{\sigma_D^2}
+\end{bmatrix}</script><p>这也是加权欧式距离的表示，权重是方差的倒数</p>
+<hr>
+<h2 id="马氏距离"><a href="#马氏距离" class="headerlink" title="马氏距离"></a>马氏距离</h2><p>上述欧式距离只能解决量纲问题，但无法解决维度相关性问题。</p>
+<h4 id="什么是特征间的相关性？"><a href="#什么是特征间的相关性？" class="headerlink" title="什么是特征间的相关性？"></a>什么是特征间的相关性？</h4><p>比如说有两个特征：花瓣长度、花瓣宽度</p>
+<p>现实中花瓣越长，通常也会越宽，存在正相关。如果我们统计下来，也许会获得这样一张图</p>
+<pre class="mermaid">xychart
+    title "花瓣长度与花瓣宽度分析"
+    x-axis ["0.5", "1.0", "1.5", "2.0", "2.5", "3.0"]
+    y-axis "花瓣长度 (cm)" 0 --&gt; 8
+    line [1.4, 3.0, 4.5, 5.5, 6.1, 7.3]</pre>
+<p>假设我们这里拟合 <code>y = 2x+1</code> ，那么沿着这条直线，也就是主要趋势偏移是数据中最常见的变化。而垂直于这条直线偏移就显得十分异常</p>
+<p>也就是说这里有两种移动方向，一个是平行于直线，一个是垂直于直线。这两种方向在移动长度相同的情况下，距离本应该是区分很大的，但是如果用欧式距离来算是相同的</p>
+<h4 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h4><p>上述问题说明，数据分布允许我们沿某些方向自由变化，但不允许我们沿另一些方向自由变化。协方差矩阵就用于描述数据沿哪些方向变化。</p>
+<p>我们设随机向量为：</p>
+<script type="math/tex; mode=display">
+X=
+\begin{bmatrix}
+X_1\\
+X_2\\
+\vdots\\
+X_D
+\end{bmatrix}</script><p>均值为：</p>
+<script type="math/tex; mode=display">
+\mu
+=
+\mathbb E[X]</script><p>协方差矩阵为：</p>
+<script type="math/tex; mode=display">
+\Sigma
+=
+\mathbb E
+\left[
+(X-\mu)(X-\mu)^\top
+\right]</script><p>在二维情况下为：</p>
+<script type="math/tex; mode=display">
+\Sigma
+=
+\begin{bmatrix}
+\operatorname{Var}(X_1)
+&
+\operatorname{Cov}(X_1,X_2)
+\\
+\operatorname{Cov}(X_2,X_1)
+&
+\operatorname{Var}(X_2)
+\end{bmatrix}</script><p>其中对角线元素表示自身波动程度，也就是该维度的方差。非对角线元素表示两个特征是否同步变化。当如果该元素大于0，也就是正相关；反之为负相关。元素的绝对值大小统一量纲后表示相关性程度，如果接近0说明它们在线性意义下缺少明显相关性。</p>
+<h4 id="马氏距离-1"><a href="#马氏距离-1" class="headerlink" title="马氏距离"></a>马氏距离</h4><script type="math/tex; mode=display">
+d_M(x,\mu)
+=
+\sqrt{
+(x-\mu)^\top
+\Sigma^{-1}
+(x-\mu)
+}</script><p>所以针对相关性问题，这里的加权矩阵式上述协方差矩阵的逆。这里和加权欧式距离有些相似，对角元素是意义的，关键在于非对角元素让他可以处理特征相关性。</p>
+<p>为什么求逆，其实蛮好理解。对于对角元素来说，方差大的移动距离大惩罚应该小，所以应该求倒数。对于非对角元素，可以应用特征分解$\Sigma<br>=<br>Q\Lambda Q^\top$，这里不多做解释，整体来说可以说明马氏距离做了两件事</p>
+<ul>
+<li>旋转坐标系：消除不同维度之间的相关性</li>
+<li>按方差缩放：消除不同方向上的量纲</li>
+</ul>
+<p>所以有一个很直观的看待方式：马氏距离是白化后的欧式距离。原始空间中数据可能是一个倾斜椭圆，白化以后变成近似圆形。然后在圆形中计算欧式距离</p>
+<hr>
+<h1 id="从距离到概率模型"><a href="#从距离到概率模型" class="headerlink" title="从距离到概率模型"></a>从距离到概率模型</h1><h2 id="高斯分布"><a href="#高斯分布" class="headerlink" title="高斯分布"></a>高斯分布</h2><h4 id="马氏距离和高斯分布的关系"><a href="#马氏距离和高斯分布的关系" class="headerlink" title="马氏距离和高斯分布的关系"></a>马氏距离和高斯分布的关系</h4><p>多元高斯分布的概率密度为</p>
+<script type="math/tex; mode=display">
+p(x)
+=
+\frac{
+1
+}{
+(2\pi)^{D/2}
+|\Sigma|^{1/2}
+}
+e^
+\left[
+-\frac12
+(x-\mu)^\top
+\Sigma^{-1}
+(x-\mu)
+\right]</script><p>可见指数部分就是上述马氏距离的平方。也就是说，对于高斯分布，距离均值的马氏距离越小，概率密度越高。</p>
+<p>所以马氏距离的等距离线和高斯分布的等密度线都是椭圆。</p>
+<h4 id="负对数似然"><a href="#负对数似然" class="headerlink" title="负对数似然"></a>负对数似然</h4><p>对高斯密度取负对数</p>
+<script type="math/tex; mode=display">
+-\log p(x)
+=
+\frac12
+d_M^2(x,\mu)
++
+\frac12
+\log |\Sigma|
++
+\frac{D}{2}\log(2\pi)</script><p>得到三项。其中第一项即马氏距离，衡量样本距离中心有多远，第二项用于描述高斯的分布，第三项是个常数</p>
+<p>第二项很重要，因为假设两个高斯分布A和B，A非常集中（高瘦）而B矮胖，同一个样本到两者中心的马氏距离可能相似，但如果高斯B的覆盖范围极大，它在任何一个局部位置上的概率密度反而更低。</p>
+<p>所以：当不同类别的协方差不同，只比较马氏距离还不够，严格来说应该比较完整的高斯似然</p>
+<p>那么从欧氏距离到现在，我们可以建立三种模型</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>协方差假设</th>
+<th>几何形状</th>
+<th>决策边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最近质心</td>
+<td>$\sigma^2I$</td>
+<td>球形</td>
+<td>线性</td>
+</tr>
+<tr>
+<td>LDA</td>
+<td>所有类别共享 $\Sigma$</td>
+<td>相同形状椭球</td>
+<td>线性</td>
+</tr>
+<tr>
+<td>QDA</td>
+<td>每类独立 $\Sigma_k$</td>
+<td>不同形状椭球</td>
+<td>二次</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="GMM"><a href="#GMM" class="headerlink" title="GMM"></a>GMM</h2><p>单个高斯只能描述一个大致单峰的簇，而局部特征可能存在多种模式，这些特征未必形成一个椭圆形簇，而可能形成多个子簇。但单个高斯很难拟合这种多峰结构。所以我们引入了GMM</p>
+<h4 id="高斯混合模型"><a href="#高斯混合模型" class="headerlink" title="高斯混合模型"></a>高斯混合模型</h4><p>GMM假设数据并非来自一个高斯分布，而是来自多个高斯分布的混合</p>
+<script type="math/tex; mode=display">
+p(x)
+=
+\sum_{k=1}^{K}
+\pi_k
+\mathcal N
+(x\mid\mu_k,\Sigma_k)</script><p>其中</p>
+<ul>
+<li>K是高斯成分数量</li>
+<li>$\pi_k$是第 k 个成分的权重，大于零且sum为1</li>
+<li>$\mu_k$是第 k 个高斯中心</li>
+<li>$\sum_k$是第 k 个高斯协方差矩阵 </li>
+</ul>
+<p>GMM的生成过程在直觉上可以理解成：先随机选择一个高斯成分，再从该高斯成分中采样一个数据点。这个高斯成分可以认为是一个隐变量</p>
+<blockquote>
+<p>说到隐变量，自然想到变分推断，以及ELBO等等。这里先点到为止，以后再说。</p>
+</blockquote>
+<h4 id="与马氏距离的关系"><a href="#与马氏距离的关系" class="headerlink" title="与马氏距离的关系"></a>与马氏距离的关系</h4><script type="math/tex; mode=display">
+-\log
+\left[
+\pi_k
+\mathcal N
+(x\mid\mu_k,\Sigma_k)
+\right]
+=
+\frac12d_k^2(x)
++
+\frac12\log|\Sigma_k|
+-
+\log\pi_k
++
+C</script><p>也就是说，判断某个点更像哪个成分时，需要综合到该成分中心的马氏距离；该成分的协方差大小；改成份本身出现的先验概率</p>
+<p>这里不再讲述EM算法通过交替优化学习GMM</p>
+<h4 id="K-means"><a href="#K-means" class="headerlink" title="K-means"></a>K-means</h4><p>K均值可以看作GMM的一个简化极限情况，即假设所有高斯具有相同权重，相同球形协方差，并采用硬分配（GMM采用软分配，可以直觉上理解为label smoothing）</p>
+<hr>
+<h1 id="基于方向的相似度"><a href="#基于方向的相似度" class="headerlink" title="基于方向的相似度"></a>基于方向的相似度</h1><p>距离往往受到方向和长度两个因素的影响。当我们不关心绝对长度，而关心方向是否接近。比如说句子语义是否相似；对比学习的正负样本是否容易区分等等</p>
+<h2 id="点积"><a href="#点积" class="headerlink" title="点积"></a>点积</h2><p>点积往往也叫做内积。这里数学知识都清楚，我们从直觉来简单讲讲就好</p>
+<p>就是说我们：</p>
+<script type="math/tex; mode=display">
+x^\top y
+=
+\|x\|_2
+\|y\|_2
+\cos\theta</script><p>方向越接近cos越小，值越大。但同时收到模长和方向两个因素影响.</p>
+<p>为了消除模长的干扰，一种最简单的方法就是L2归一化，也就是将向量归一化为单位向量再计算点积。</p>
+<h2 id="余弦相似度"><a href="#余弦相似度" class="headerlink" title="余弦相似度"></a>余弦相似度</h2><script type="math/tex; mode=display">
+\cos(x,y)
+=
+\frac{
+x^\top y
+}{
+\|x\|_2\|y\|_2
+}</script><p>这就像是对点积进行另一种归一化对吧。为了除零错误我们通常在分母添加一个小正数</p>
+<p>常见的余弦距离定义为：</p>
+<script type="math/tex; mode=display">
+d_{\cos}(x,y)
+=
+1-\cos(x,y)</script><p>这样值的范围为0到1</p>
+<p>关注两个向量之间的夹角，而不是绝对长度。但经过L2归一化后，余弦距离和欧式距离排序是等价的</p>
+<p>实际应用中我们往往会除以一个温度参数 $\tau$，尤其是在对比学习中：</p>
+<script type="math/tex; mode=display">
+s(x,y)
+=
+\frac{
+\operatorname{cos}(x,y)
+}{
+\tau
+}</script><p>例如，再一组候选样本中，可以根据相似度构造softmax概率</p>
+<script type="math/tex; mode=display">
+p_i
+=
+\frac{
+\exp
+\left(
+\operatorname{cos}(x,y_i)/\tau
+\right)
+}{
+\sum_j
+\exp
+\left(
+\operatorname{cos}(x,y_j)/\tau
+\right)
+}</script><p>温度参数决定了概率分布的尖锐程度。$\tau$ 越小，相似度差距越大，softmax分布越尖锐。直觉上这就好比对比学习中的拉近正样本</p>
+<h2 id="角距离"><a href="#角距离" class="headerlink" title="角距离"></a>角距离</h2><script type="math/tex; mode=display">
+x^\top y
+=
+\|x\|_2
+\|y\|_2
+\cos\theta</script><p>不过多解释，相比余弦相似度满足三角不等式，且保留取值非负（0~pi），可以视为严格意义上的度量</p>
+<hr>
+<h1 id="概率分布之间的差异度量"><a href="#概率分布之间的差异度量" class="headerlink" title="概率分布之间的差异度量"></a>概率分布之间的差异度量</h1><p>这一块我觉得很信息论这门课有很大联系。OUC的大家可以试着选修信息论基础这门课，可以作为机器学习入门。不过z老师的话比较喜欢吹牛，不太会讲到重点上来（呵呵）</p>
+<p>这是前言，现在回到正题</p>
+<p>一个概率分布本身也可以写成向量。比如说离散分布。这样我们理论上可以计算两个概率向量之间的欧式距离，这在某些情况下没有问题，但概率分布具有额外的语义：</p>
+<ul>
+<li>每个元素表示概率质量</li>
+<li>所有元素之和必须为 1</li>
+<li>某些为止概率为0时，含义特殊</li>
+<li>又是还需要考虑概率质量从一个位置转移到另一个位置的代价</li>
+</ul>
+<p>基础知识有：信息量（-logp）、熵（$-\sum_{i=1}^Dp_ilogp_i$）</p>
+<h2 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a>交叉熵</h2><p>我们假设真实分布是P，但我们使用另一个分布Q来描述数据，那么交叉熵定义为</p>
+<script type="math/tex; mode=display">
+H(P,Q)
+=
+-\sum_{i=1}^{D}
+p_i\log q_i</script><p>用于衡量：当真实数据分布服从 P，但我们使用 Q 进行预测或编码时，平均需要付出多少代价。如果 Q 对真实高概率事件也给出较高概率，那么交叉熵偏小。如果 Q 对高概率事件给出很低概率，那么交叉熵会显著增大。</p>
+<h2 id="KL散度"><a href="#KL散度" class="headerlink" title="KL散度"></a>KL散度</h2><p>对于离散分布 P 和 Q，KL散度定义为</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{KL}}(P\|Q)
+=
+\sum_{i=1}^{D}
+p_i
+\log
+\frac{p_i}{q_i}</script><p>也可以写成期望形式</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{KL}}(P\|Q)
+=
+\mathbb E_{x\sim P}
+\left[
+\log
+\frac{p(x)}{q(x)}
+\right]</script><p>它衡量的是，当真实分布是 P， 但我们使用Q去近似P时，会额外付出多少信息代价。</p>
+<p>从这个式子可以看出但且仅当两个分布完全相同时，KL散度才为0，但KL散度并不是严格意义上的距离，因为它通常不满足对称性。直观上来说，方向本身是KL散度定义的一部分，用Q描述P和用P描述Q这两个问题本身不相同。</p>
+<p>对于连续分布来说，我们将求和变为积分即可</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{KL}}(P\|Q)
+=
+\int
+p(x)
+\log
+\frac{p(x)}{q(x)}
+\,dx</script><h4 id="正向KL和反向KL"><a href="#正向KL和反向KL" class="headerlink" title="正向KL和反向KL"></a>正向KL和反向KL</h4><p>正向KL指<script type="math/tex">D_{\mathrm{KL}}(P\|Q)</script>，此时KL往往更倾向于尽量<strong>覆盖真实分布中的所有模式</strong>。因为如果真实分布 P 在某个区域存在概率质量，但近似分布 Q 完全忽略这个区域，惩罚会非常大。</p>
+<p>反向KL指<script type="math/tex">D_{\mathrm{KL}}(Q\|P)</script>，此时KL往往更倾向于<strong>聚焦在少数高概率区域</strong>，因为如果近似分布 Q 将概率质量分配到真实分布 P 概率很低的位置，同样会收到较大惩罚。这个方法通常用于变分近似，也是变分近似有时容易忽略次要模式的原因之一</p>
+<h4 id="零概率问题"><a href="#零概率问题" class="headerlink" title="零概率问题"></a>零概率问题</h4><p>假设某个位置满足 $p<em>i \gt 0$，但$q_i = 0$，则<script type="math/tex">p_i
+\log
+\frac{p_i}{q_i}
+\rightarrow
++\infty</script>，因此$$D</em>{\mathrm{KL}}(P|Q)<br>=<br>+\infty$$</p>
+<p>它的含义是：真实分布认为某个事件可能发生，但是近似分布认为这个事情绝对不可能发生。</p>
+<h4 id="KL散度与交叉熵的关系"><a href="#KL散度与交叉熵的关系" class="headerlink" title="KL散度与交叉熵的关系"></a>KL散度与交叉熵的关系</h4><p>我们讲KL散度展开后得到</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{KL}}(P\|Q)
+=
+\sum_i
+p_i\log p_i
+-
+\sum_i
+p_i\log q_i</script><p>其中第一项是分布P的熵的相反数，第二项是交叉熵</p>
+<p>因此我们可以写成</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{KL}}(P\|Q)
+=
+H(P,Q)
+-
+H(P)</script><p>其中这个H(P)是真实分布的熵，与模型无关。这一点解释了交叉熵：最小化交叉熵，等价于最小化真实分布 P 与模型预测分布 Q 之间的KL散度。</p>
+<h2 id="JS散度"><a href="#JS散度" class="headerlink" title="JS散度"></a>JS散度</h2><p>针对KL散度不对称。零概率问题，提出Jesen-Shannon 散度</p>
+<p>我们构造一个混合分布</p>
+<script type="math/tex; mode=display">
+M
+=
+\frac{1}{2}
+\left(
+P+Q
+\right)</script><p>然后分别计算 P 和 Q 到混合分布 M 的KL散度</p>
+<script type="math/tex; mode=display">
+D_{\mathrm{JS}}(P,Q)
+=
+\frac{1}{2}
+D_{\mathrm{KL}}(P\|M)
++
+\frac{1}{2}
+D_{\mathrm{KL}}(Q\|M)</script><h4 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h4><p>满足对称性（直觉上来说，就是构造一个中间分布，让两个分布都向一个共同的参考点靠拢）、非负性、不一定满足三角不等式，但平方根可以构成严格上的距离</p>
+<blockquote>
+<p>另外还有TV距离和Hellinger距离，这里不多讲述。以上都主要关注概率质量的数值差异，而忽略了集合信息，即概率质量的移动距离</p>
+</blockquote>
+<h2 id="Wasserstein距离"><a href="#Wasserstein距离" class="headerlink" title="Wasserstein距离"></a>Wasserstein距离</h2><p>Wasserstein距离也称为最优传输距离，推土机距离。它将概率分布想象成一堆沙土</p>
+<p>在这个背景下，我们们将分布 P 搬运成分布 Q，每次搬运都需要付出成本。</p>
+<script type="math/tex; mode=display">
+成本 = 搬运质量 \times 搬运距离</script><p>那么Wasserstein距离衡量的是将一个分布搬运成另一个分布所需的最小总成本</p>
+<h4 id="一阶Wasserstein距离"><a href="#一阶Wasserstein距离" class="headerlink" title="一阶Wasserstein距离"></a>一阶Wasserstein距离</h4><script type="math/tex; mode=display">
+W_1(P,Q)
+=
+\inf_{\gamma\in\Pi(P,Q)}
+\mathbb E_{(x,y)\sim\gamma}
+\left[
+\|x-y\|
+\right]</script><p>其中 <script type="math/tex">\Pi(P,Q)</script> 表示所有满足边缘分布分别为 P 和 Q的联合分布集合。这里的 $\gamma$ 可以理解成一种搬运方案：</p>
+<ul>
+<li>从哪些位置搬运</li>
+<li>搬运到哪些位置</li>
+<li>每次搬运多少概率质量</li>
+</ul>
+<p>Wasserstein距离会在所有可能方案中寻找总成本最低的一种</p>
+<p>对于一维分布，一阶Wasserstein距离还可以写成</p>
+<script type="math/tex; mode=display">
+W_1(P,Q)
+=
+\int_{-\infty}^{+\infty}
+|F_P(x)-F_Q(x)|
+\,dx</script><p>这说明 W 距离不仅比较概率质量是否相同，还关心概率质量在空间中相隔多远。</p>
+<h2 id="MMD"><a href="#MMD" class="headerlink" title="MMD"></a>MMD</h2><p>前面各种方法都需要知道概率分布，或者至少能够估计概率密度。但如果从样本触发，显式估计高维概率密度十分困难。MMD不直接拟合概率密度，而是比较两组样本在某个函数空间中的统计特征是否一致</p>
+<p>MMD定义为：</p>
+<script type="math/tex; mode=display">
+\operatorname{MMD}_{\mathcal F}(P,Q)
+=
+\sup_{f\in\mathcal F}
+\left|
+\mathbb E_{x\sim P}[f(x)]
+-
+\mathbb E_{y\sim Q}[f(y)]
+\right|</script><script type="math/tex; mode=display">
+直觉上，它找一个函数 f，使得 P 和 Q 在该函数下的期望差异最大。如果连最容易区分两个分布的函数都无法将它们区分开，那么两个分布比较接近。
+
+#### 基于核函数的形式
+
+使用核函数后，MMD的平方可以写为</script><p>\operatorname{MMD}^2(P,Q)<br>=<br>\mathbb E<em>{x,x’\sim P}<br>[k(x,x’)]<br>+<br>\mathbb E</em>{y,y’\sim Q}<br>[k(y,y’)]<br>-<br>2<br>\mathbb E_{x\sim P,y\sim Q}<br>[k(x,y)]</p>
+<p>$$<br>其中 $k(x,y)$ 表示核函数。</p>
+<p>由于MMD可以直接通过样本估计，因此常用于生成模型评估、域适应、分布对齐、表征学习和两样本检验。</p>
+<blockquote>
+<p>个人直觉见解！</p>
+<p>无论是核函数、Masked AutoEncoder还是归一化流、GMM，虽然从定义上看是不同的机器学习、表征学习和概率生成模型，但在本质上代表的是空间映射和流形对齐</p>
+<p>它们都解决了这个问题：在原始数据空间（X）中，对象往往是高度耦合、冗余并且不具有可比性的。为了让它们可比，我们需要找到一个算子，让其转换到一个可比的隐空间中，在这个空间里我们可以用机器简单的度量标准（欧式距离、内积、高斯似然等等）来进行精确比较。</p>
+<p>核函数：让原本在低维空间中无法用线性平面区分的对象，在映射后的特征空间变得线性可比</p>
+<p>MAE：用极高遮掩比率和非对称架构，丢弃冗余高频噪声，提取低频抽象语义，获得鲁棒语义表征</p>
+<p>归一化流：构建双射变换，将复杂的数据的数据分布严格变换到一个检验的先验分布（一般是标准高斯分布）</p>
+</blockquote>
+<h1 id="离散对象距离"><a href="#离散对象距离" class="headerlink" title="离散对象距离"></a>离散对象距离</h1><p>待施工</p>
+<h2 id="Hamming距离"><a href="#Hamming距离" class="headerlink" title="Hamming距离"></a>Hamming距离</h2><h2 id="Jaccard距离"><a href="#Jaccard距离" class="headerlink" title="Jaccard距离"></a>Jaccard距离</h2><h2 id="编辑距离"><a href="#编辑距离" class="headerlink" title="编辑距离"></a>编辑距离</h2><h1 id="深度学习中的度量学习"><a href="#深度学习中的度量学习" class="headerlink" title="深度学习中的度量学习"></a>深度学习中的度量学习</h1>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/04/02/%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B/" rel="prev" title="Joern的部署和使用">
+      <i class="fa fa-chevron-left"></i> Joern的部署和使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/05/24/DDPM/" rel="next" title="DDPM推导">
+      DDPM推导 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E6%96%87%E8%AE%B2%E9%80%9A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E8%B7%9D%E7%A6%BB%E3%80%81%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%92%8C%E5%88%86%E5%B8%83%E6%95%A3%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">一文讲通机器学习的距离、相似度和分布散度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">相似度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%BC%82%E5%BA%A6"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">相异度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%A3%E5%BA%A6"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">散度</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%BB%9D%E5%AF%B9%E4%BD%8D%E7%A7%BB%E7%9A%84%E5%90%91%E9%87%8F%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.</span> <span class="nav-text">基于绝对位移的向量距离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8C%83%E6%95%B0%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.1.</span> <span class="nav-text">范数距离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AC%A7%E5%BC%8F%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.2.</span> <span class="nav-text">欧式距离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%87%E8%AE%BE"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">假设</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%87%8F%E7%BA%B2%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.0.2.1.</span> <span class="nav-text">量纲问题</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A9%AC%E6%B0%8F%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.3.</span> <span class="nav-text">马氏距离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%B9%E5%BE%81%E9%97%B4%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7%EF%BC%9F"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">什么是特征间的相关性？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8F%E6%96%B9%E5%B7%AE%E7%9F%A9%E9%98%B5"><span class="nav-number">2.3.0.2.</span> <span class="nav-text">协方差矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A9%AC%E6%B0%8F%E8%B7%9D%E7%A6%BB-1"><span class="nav-number">2.3.0.3.</span> <span class="nav-text">马氏距离</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E8%B7%9D%E7%A6%BB%E5%88%B0%E6%A6%82%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">从距离到概率模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83"><span class="nav-number">3.1.</span> <span class="nav-text">高斯分布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A9%AC%E6%B0%8F%E8%B7%9D%E7%A6%BB%E5%92%8C%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">马氏距离和高斯分布的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B4%9F%E5%AF%B9%E6%95%B0%E4%BC%BC%E7%84%B6"><span class="nav-number">3.1.0.2.</span> <span class="nav-text">负对数似然</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GMM"><span class="nav-number">3.2.</span> <span class="nav-text">GMM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%B7%B7%E5%90%88%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">高斯混合模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8E%E9%A9%AC%E6%B0%8F%E8%B7%9D%E7%A6%BB%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.0.2.</span> <span class="nav-text">与马氏距离的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#K-means"><span class="nav-number">3.2.0.3.</span> <span class="nav-text">K-means</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%96%B9%E5%90%91%E7%9A%84%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">4.</span> <span class="nav-text">基于方向的相似度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E7%A7%AF"><span class="nav-number">4.1.</span> <span class="nav-text">点积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%99%E5%BC%A6%E7%9B%B8%E4%BC%BC%E5%BA%A6"><span class="nav-number">4.2.</span> <span class="nav-text">余弦相似度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%92%E8%B7%9D%E7%A6%BB"><span class="nav-number">4.3.</span> <span class="nav-text">角距离</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83%E4%B9%8B%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82%E5%BA%A6%E9%87%8F"><span class="nav-number">5.</span> <span class="nav-text">概率分布之间的差异度量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%86%B5"><span class="nav-number">5.1.</span> <span class="nav-text">交叉熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KL%E6%95%A3%E5%BA%A6"><span class="nav-number">5.2.</span> <span class="nav-text">KL散度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%90%91KL%E5%92%8C%E5%8F%8D%E5%90%91KL"><span class="nav-number">5.2.0.1.</span> <span class="nav-text">正向KL和反向KL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%B6%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.0.2.</span> <span class="nav-text">零概率问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#KL%E6%95%A3%E5%BA%A6%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%86%B5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">5.2.0.3.</span> <span class="nav-text">KL散度与交叉熵的关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS%E6%95%A3%E5%BA%A6"><span class="nav-number">5.3.</span> <span class="nav-text">JS散度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">5.3.0.1.</span> <span class="nav-text">性质</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Wasserstein%E8%B7%9D%E7%A6%BB"><span class="nav-number">5.4.</span> <span class="nav-text">Wasserstein距离</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E9%98%B6Wasserstein%E8%B7%9D%E7%A6%BB"><span class="nav-number">5.4.0.1.</span> <span class="nav-text">一阶Wasserstein距离</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MMD"><span class="nav-number">5.5.</span> <span class="nav-text">MMD</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E5%AF%B9%E8%B1%A1%E8%B7%9D%E7%A6%BB"><span class="nav-number">6.</span> <span class="nav-text">离散对象距离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hamming%E8%B7%9D%E7%A6%BB"><span class="nav-number">6.1.</span> <span class="nav-text">Hamming距离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jaccard%E8%B7%9D%E7%A6%BB"><span class="nav-number">6.2.</span> <span class="nav-text">Jaccard距离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB"><span class="nav-number">6.3.</span> <span class="nav-text">编辑距离</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0"><span class="nav-number">7.</span> <span class="nav-text">深度学习中的度量学习</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
