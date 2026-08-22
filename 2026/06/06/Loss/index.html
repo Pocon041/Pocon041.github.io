@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="损失函数Loss的意义一个模型可以看成一个带参数的函数：  \hat{y}&#x3D;f_\theta(x)其中 x 是输入，$\theta$ 是模型参数，$\hat{y}$是模型输出， $y$ 是标签也就是说我们希望模型给出的结果。训练的目的就是寻找一组更合适的参数 $\theta$ ，让y_hat更接近 y（argmin）。但模型自己不可能知道自己输出的合不合适，因此我们需要一个量来评价“这个输出到底有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="损失函数">
+<meta property="og:url" content="https://pocon041.github.io/2026/06/06/Loss/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="损失函数Loss的意义一个模型可以看成一个带参数的函数：  \hat{y}&#x3D;f_\theta(x)其中 x 是输入，$\theta$ 是模型参数，$\hat{y}$是模型输出， $y$ 是标签也就是说我们希望模型给出的结果。训练的目的就是寻找一组更合适的参数 $\theta$ ，让y_hat更接近 y（argmin）。但模型自己不可能知道自己输出的合不合适，因此我们需要一个量来评价“这个输出到底有">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-06T06:43:22.000Z">
+<meta property="article:modified_time" content="2026-06-06T06:43:22.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/06/06/Loss/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>损失函数 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/74851178_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/06/06/Loss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          损失函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-06 14:43:22" itemprop="dateCreated datePublished" datetime="2026-06-06T14:43:22+08:00">2026-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h1><h2 id="Loss的意义"><a href="#Loss的意义" class="headerlink" title="Loss的意义"></a>Loss的意义</h2><p>一个模型可以看成一个带参数的函数：</p>
+<script type="math/tex; mode=display">
+\hat{y}=f_\theta(x)</script><p>其中 x 是输入，$\theta$ 是模型参数，$\hat{y}$是模型输出， $y$ 是标签也就是说我们希望模型给出的结果。训练的目的就是寻找一组更合适的参数 $\theta$ ，让y_hat更接近 y（argmin）。但模型自己不可能知道自己输出的合不合适，因此我们需要一个量来评价“这个输出到底有多差”。这个量就是Loss</p>
+<p>简单来说，Loss是一个函数</p>
+<script type="math/tex; mode=display">
+\ell(\hat{y},y)\in \mathbb{R}</script><p>它将输出和标签的关系压缩成一个标量。习惯上我们设定Loss越小输出结果越理想，同时一般Loss我们习惯设置非负。</p>
+<p>要让输出尽可能接近标签，我们只能修改参数 θ，所以也就是说，Loss将任务目标统一成一个 数值目标，用于判断 参数 $\theta<em>1$ 和 $\theta_2$ 谁更符合当前任何要求。但一个模型可能有很多输出维度和参数，如果没有一个统一标准，我们没有办法回答哪个参数更好。Loss将高维的输出压缩成一个数值<script type="math/tex">\mathcal L(\theta)</script>，此时模型训练问题才能写成$$\theta^\star<br>=<br>\arg\min</em>\theta \mathcal L(\theta)$$。因此Loss的一个本质是：<strong>Loss是任务要求的标量化表示</strong>。它将不同输出映射为可以比较的标量从而建立（参数）优劣排序。</p>
+<p>至于如何在可能的参数中，寻找Loss更小的参数，这属于后续的梯度下降部分。</p>
+<h2 id="从度量到Loss"><a href="#从度量到Loss" class="headerlink" title="从度量到Loss"></a>从度量到Loss</h2><p>在<a href="https://pocon041.github.io/2026/05/02/%E8%B7%9D%E7%A6%BB%E5%BA%A6%E9%87%8F/#more">前文</a>中我们讨论了度量。度量首先描述的是关系。假设模型先把输入映射到特征空间，此时我们得到两个表示<script type="math/tex">z_i,\;z_j</script>，并计算距离/相似度/核函数<script type="math/tex">f(z_i,z_j)</script>。</p>
+<p>但是，度量本身还不能够称为Loss，因为度量只能得到一个标量，而不能告诉我们这个结果是好还是坏。具体好坏取决于我们的任务目标。Loss在度量得到的结果中必须加一个判断：这种关系是否符合我们的目标。具体来说，我们可以通过以下五个过程将度量转换成Loss</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>表示</td>
+<td>模型把输入映射到某个空间</td>
+</tr>
+<tr>
+<td>度量或相似性</td>
+<td>描述样本之间的关系</td>
+</tr>
+<tr>
+<td>任务偏好</td>
+<td>规定希望关系变大还是变小</td>
+</tr>
+<tr>
+<td>违反程度</td>
+<td>判断当前关系偏离目标多少</td>
+</tr>
+<tr>
+<td>惩罚函数</td>
+<td>将违反程度映射成 Loss</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h4><p>假设真实值和预测值的距离是<script type="math/tex">d(\hat y,y)=|\hat y-y|</script>，这个时候我们可以直接将这个距离当作Loss（MAE），也可以进一步做平方（MSE）。</p>
+<p>这里可以体现出，同一个距离，可以构造出不同的Loss。这里MAE和MSE使用的就是同一种基础误差，但惩罚曲线不同。MSE主要是线性惩罚，而MSE对于大误差会收到额外误差。</p>
+<h4 id="对比学习"><a href="#对比学习" class="headerlink" title="对比学习"></a>对比学习</h4><p>简单来说，我们希望同类样本距离尽可能小，异类样本距离至少超过一个间隔，没有达到这个要求就需要惩罚</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{\text{contrastive}}
+=
+y_{ij}d_{ij}^2
++
+(1-y_{ij})
+\left[\max(0,m-d_{ij})\right]^2</script><p>这里第一项是同类样本的距离，第二项是异类样本的惩罚。</p>
+<p>这就体现了从距离 到 关系判断 再到 违反程度 最后到Loss。</p>
+<h4 id="Ranking-Loss"><a href="#Ranking-Loss" class="headerlink" title="Ranking Loss"></a>Ranking Loss</h4><p>此时从距离扩展到了评分。我们不直接比较两个样本之间的距离，而是比较模型给出的分数。</p>
+<p>比如异常检测时，模型为每个样本输出风险分数，我们希望漏洞样本的风险高于正常样本</p>
+<script type="math/tex; mode=display">
+s(x^+) > s(x^-)</script><p>并要求进一步拉开间隔 m，于是当前违反程度可以写成</p>
+<script type="math/tex; mode=display">
+v
+=
+m-s(x^+)+s(x^-)</script><p>最终我们可以得到Ranking Loss</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{\text{rank}}
+=
+\max
+\left(
+0,\;
+m-s(x^+)+s(x^-)
+\right)</script><p>当然也可以用softplus。这里没有直接使用几何距离，但底层思想相同：先定义关系，再惩罚违反关系的程度。</p>
+<h2 id="为什么不能直接优化真实目标"><a href="#为什么不能直接优化真实目标" class="headerlink" title="为什么不能直接优化真实目标"></a>为什么不能直接优化真实目标</h2><p>平时我们评估输出好不好，通常依靠指标：Precision，F1，ACC等等。那为什么不直接用这个指标作为损失，而是构造一个<strong>代理损失</strong></p>
+<p>关于这个我觉得还是挺好想的。直观来说是：真实目标是决策结果，但训练需要的是可学习的局部信号。</p>
+<p>不过度展开，简单来说，我们训练是一个逐步改进的过程，参数位于一个连续空间中，训练过程需要不断比较邻近参数，也就是说我们需要知道距离正确的程度。而如果仅仅靠真实目标，我们只有true和false的最终答案，无法找到参数最优的改变方向和步长。</p>
+<blockquote>
+<p>这块具体需要最优化理论的相关知识</p>
+</blockquote>
+<p>所以我们引入代理 Loss，构造一个更适合学习的地形，牺牲了只看最终结果的简洁性，换取了更丰富的局部信息</p>
+<h4 id="0-1-Loss到代理Loss"><a href="#0-1-Loss到代理Loss" class="headerlink" title="0-1 Loss到代理Loss"></a>0-1 Loss到代理Loss</h4><p>对于二分类任务，如果我们直接将目标作为损失函数，那么Loss如下</p>
+<script type="math/tex; mode=display">
+\ell_{0\text{-}1}(y,s)
+=
+\begin{cases}
+1, & ys\le 0 \\
+0, & ys>0
+\end{cases}</script><p>其中<script type="math/tex">s_\theta(x)\in \mathbb{R}</script>是模型输出的连续分数，然后通过阈值<script type="math/tex">\hat y
+=
+\mathbb{I}[s_\theta(x)>0]</script>得到最终决策。我们直接目标是y_hat = y。</p>
+<p>ys也就是margin，表示决策边界。</p>
+<h5 id="HInge-Loss"><a href="#HInge-Loss" class="headerlink" title="HInge Loss"></a>HInge Loss</h5><script type="math/tex; mode=display">
+\ell_{\text{hinge}}(m)
+=
+\max(0,1-m)</script><p>不仅要求分类正确，还要距离决策边界足够远。这里具体可以参见 <code>SVM</code></p>
+<p>这里一系列我先略。总的来说，一个好的代理Loss要满足以下标准</p>
+<ul>
+<li>方向一致：Loss降低时，真实目标通常也改善</li>
+<li>局部可辨别：参数发生小变化时，Loss应能反映改善还是恶化</li>
+<li>结构匹配：单样本分类用单点Loss，相对排序用Pairwise Loss，分布对齐用分布级Loss</li>
+</ul>
+<p>另外，还有一个我呢提就是一些指标比较复杂，比如F1分数，涉及到了整个数据集，这个时候往往需要涉及不同形式的多种代理目标</p>
+<h2 id="Loss的三种基本粒度"><a href="#Loss的三种基本粒度" class="headerlink" title="Loss的三种基本粒度"></a>Loss的三种基本粒度</h2><p>Loss的粒度回答的是一次计算Loss时，我们约束的对象是什么层次的</p>
+<h3 id="单点Loss"><a href="#单点Loss" class="headerlink" title="单点Loss"></a>单点Loss</h3><p>单点Loss用于判断一个样本是否符合目标，如<script type="math/tex">\ell(\hat y_i,y_i)</script>，它只关心当前样本本身，不需要参考其他样本。</p>
+<p>常见例子如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>单点 Loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回归</td>
+<td>MSE、MAE、Huber Loss</td>
+</tr>
+<tr>
+<td>分类</td>
+<td>Cross Entropy、BCE</td>
+</tr>
+<tr>
+<td>图像重建</td>
+<td>像素级 L1、L2 Loss</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>直观上来说，每一个样本都有一个相对明确的答案。模型只需要逐个样本对照答案，修正自己的输出。</p>
+<p>单点Loss能够回答这个样本预测的正确程度，但不能回答样本之间的相对结构是否合理。例如，模型可以把猫狗样本分类正确，并在特征空间中放得很远；也可以把猫狗样本放得很近，只在分类头的最后一层勉强将其分开。也就是说，如果我们关系特征空间的结构，仅仅靠单点Loss还不够。</p>
+<blockquote>
+<p>CE的设计就很好解释了上述为什么目标不能作为Loss的原因。这里补充几个不得不说的，就是一些基于CE的魔改，比如说Focal Loss，让模型减少在已经掌握的简单样本上重复花费精力，将更多注意力转向困难样本，本质是动态样本加权，权重设计是：<script type="math/tex">\mathcal L_{\text{focal}}
+=
+-(1-p_t)^\gamma \log p_t</script></p>
+</blockquote>
+<h3 id="关系级Loss"><a href="#关系级Loss" class="headerlink" title="关系级Loss"></a>关系级Loss</h3><p>有些任务的核心并不是单个样本的绝对输出是多少，而是两个样本之间应该满足什么关系。比如说同类样本更接近，异类样本更远，A类样本的评分分数应该大于B类，查询图片应该比无关图片更接近正确图片。</p>
+<p>此时，Loss的输入不再只是一个样本，而是多个样本</p>
+<h4 id="Pairwise"><a href="#Pairwise" class="headerlink" title="Pairwise"></a>Pairwise</h4><p>直观上来说，正样本（同类样本）我们希望它们的距离尽量近，而负样本的距离能够拉开（大于等于margin）。这也是对比学习的思想</p>
+<h4 id="Triplet"><a href="#Triplet" class="headerlink" title="Triplet"></a>Triplet</h4><p>在上述思想上进一步比较三个样本</p>
+<ul>
+<li>Anchor：基准样本 <script type="math/tex">x_a</script></li>
+<li>Positive：正样本（与基准相似的样本<script type="math/tex">x_p</script>）</li>
+<li>Negative：负样本（与基准不同的样本<script type="math/tex">x_n</script>）</li>
+</ul>
+<p>我们希望：<script type="math/tex">d(z_a,z_p)+m
+<
+d(z_a,z_n)</script></p>
+<p>这对应的就是Triplet Loss</p>
+<script type="math/tex; mode=display">
+d(z_a,z_p)+m
+<
+d(z_a,z_n)</script><p>它不要求两个样本的距离必须等于多少，而是要求正样本应当比负样本更接近。是一种相对约束</p>
+<h4 id="Ranking-Loss-1"><a href="#Ranking-Loss-1" class="headerlink" title="Ranking Loss"></a>Ranking Loss</h4><p>有时候不关心特征距离而是评分顺序。比如说异常样本的评分应该高于正常样本。也就是对于评分函数 s，设计Loss</p>
+<script type="math/tex; mode=display">
+\mathcal L_{\text{rank}}
+=
+\max
+\left(
+0,\;
+m-s(x^+)+s(x^-)
+\right)</script><p>相对于分类Loss来说，Ranking loss更关心预测得分的相对关系。也就是说，我们不关心具体的特征值是多少，我们只需要关心样本之间的距离是否足够接近或者足够远离</p>
+<p>Ranking Loss的目的是去预测样本之间的相对距离，这个任务也常常被称为度量学习</p>
+<blockquote>
+<p>其实吧，我认为其实没有分得这么开。Ranking Loss常常用于图像检索，而我认为对于细粒度图像分类来说，其实比起分类更像是检索问题。</p>
+</blockquote>
+<h3 id="分布级Loss"><a href="#分布级Loss" class="headerlink" title="分布级Loss"></a>分布级Loss</h3><p>假设我们有一组生成图像，我们不能要求每张AIGC图像都能找到原型真实图像与之对应。我们真正希望的是生成样本整体上应当落在真实数据分布附近。</p>
+<p>这点可以结合最近兴起的流形假说来扩展思考。</p>
+<p>常见例子有KL上散度、MMD、Wasserstein Distance。这里在度量里都讲过了，不过多叙述</p>
+<h2 id="经典Loss推导"><a href="#经典Loss推导" class="headerlink" title="经典Loss推导"></a>经典Loss推导</h2><p>额不想推，主要讲讲对比学习类的。</p>
+<h3 id="头"><a href="#头" class="headerlink" title="头"></a>头</h3><p>对比学习思想是</p>
+<script type="math/tex; mode=display">
+d_{mn}\rightarrow 0
+\\
+d_{ij}\ge m</script><p>正样本相对近，负样本相对远，负样本的违反程度是 <script type="math/tex">d_{ij}\ge m</script>，如果满足我们的最小距离 margin 就不再惩罚，因此使用hinge：</p>
+<script type="math/tex; mode=display">
+\mathcal L^-_{ij}
+=
+\left[\max(0,m-d_{ij})\right]^2</script><p>最终合并得到Contrastive Loss</p>
+<script type="math/tex; mode=display">
+\mathcal L_{ij}
+=
+y_{ij}d_{ij}^2
++
+(1-y_{ij})
+\left[\max(0,m-d_{ij})\right]^2</script><h3 id="Triplet-Loss"><a href="#Triplet-Loss" class="headerlink" title="Triplet Loss"></a>Triplet Loss</h3><p>公式不必多说，也就是多加了一个基准样本。从我的直觉上来说的话，上面的Pair-wise比起传统分类多了一种相对排序的思想，即正负样本需要保持相对距离；而Triplane多了一种检索的意味，不过同样也是排序的思想。</p>
+<h3 id="infoNCE"><a href="#infoNCE" class="headerlink" title="infoNCE"></a>infoNCE</h3><p>一个batch中有多个负样本，而上述Loss都只能选一个负样本。infoNCE将问题改写成一次候选识别任务，让正样本和bactch中所有样本同时比较。</p>
+<p>我们给定Anchor：<script type="math/tex">z_i</script>，以及一组候选样本：<script type="math/tex">\{z_k\}_{k\in A(i)}</script>，假设其中只有一个候选样本是正样本：<script type="math/tex">z_p</script></p>
+<p>我们先计算每个候选者与 <script type="math/tex">z_i</script> 的相似度：<script type="math/tex">s_{ik}
+=
+\operatorname{sim}(z_i,z_k)</script></p>
+<p>我们的目标是：正样本的相似度应当高于所有负样本</p>
+<h4 id="从排序改写成分类"><a href="#从排序改写成分类" class="headerlink" title="从排序改写成分类"></a>从排序改写成分类</h4><p>我们将相似度放入Softmax，得到</p>
+<script type="math/tex; mode=display">
+P(k\mid i)
+=
+\frac{
+\exp(s_{ik}/\tau)
+}{
+\sum_{a\in A(i)}
+\exp(s_{ia}/\tau)
+}</script><p>这个函数可以理解成，在所有候选样本中，模型认为第 k 个样本是正样本的概率。对于这个概率，我们计算负对数似然，得到：</p>
+<script type="math/tex; mode=display">
+\mathcal L_i^{\text{InfoNCE}}
+=
+-\log
+\frac{
+\exp(s_{ip}/\tau)
+}{
+\sum_{a\in A(i)}
+\exp(s_{ia}/\tau)
+}</script><p>此时要想降低Loss有两条途径。一是提高正样本的相似度，二是降低负样本的相似度。同时需要注意到，负样本的影响并不是相同的</p>
+<p>我们设<script type="math/tex">q_{ik}=s_{ik}/\tau</script>，那么对于一个负样本，其梯度权重大致与</p>
+<script type="math/tex; mode=display">
+\frac{\exp(q_{ik})}
+{\sum_a \exp(q_{ia})}</script><p>成正比，那么和<script type="math/tex">z_i</script>很不相似的容易负样本，影响接近于0，而于<script type="math/tex">z_i</script>很相似的困难负样本，会自动获得更大权重。</p>
+<h3 id="SupCon"><a href="#SupCon" class="headerlink" title="SupCon"></a>SupCon</h3><p>infoNCE充分利用所有负样本，那么SupCon就利用所有正样本。当然前提是我们事先知道batch内所有样本的标签。</p>
+<p>对于每一个正样本，我们都可以计算一次infoNCE：</p>
+<script type="math/tex; mode=display">
+-\log
+\frac{
+\exp(s_{ip}/\tau)
+}{
+\sum_{a\neq i}
+\exp(s_{ia}/\tau)
+}</script><p>然后对所有正样本取平均</p>
+<script type="math/tex; mode=display">
+\mathcal L_i^{\text{SupCon}}
+=
+-\frac{1}{|P(i)|}
+\sum_{p\in P(i)}
+\log
+\frac{
+\exp(s_{ip}/\tau)
+}{
+\sum_{a\neq i}
+\exp(s_{ia}/\tau)
+}</script><p>注意标准的Supcon在对数外面取平均，因为这样每一个同类正样本都应该获得较高相似度，更有利于形成紧致的类内结构。如果将求平均放到对数内部的话，如下所示：</p>
+<script type="math/tex; mode=display">
+-\log
+\left[
+\frac{1}{|P(i)|}
+\sum_{p\in P(i)}
+P(p\mid i)
+\right]</script><p>此时只要求分配给全部Positive的总概率足够大，可能导致模型走捷径，将很高概率分配给一个容易的正样本，而忽略其他困难样本。</p>
+<h2 id="Loss的组合使用"><a href="#Loss的组合使用" class="headerlink" title="Loss的组合使用"></a>Loss的组合使用</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/05/24/DDPM/" rel="prev" title="DDPM推导">
+      <i class="fa fa-chevron-left"></i> DDPM推导
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/06/%E9%A1%B9%E7%9B%AE%E4%B8%80/" rel="next" title="细粒度图像分类挑战">
+      细粒度图像分类挑战 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">Loss的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E5%BA%A6%E9%87%8F%E5%88%B0Loss"><span class="nav-number">1.2.</span> <span class="nav-text">从度量到Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E5%BD%92"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">回归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">对比学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ranking-Loss"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">Ranking Loss</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%9B%B4%E6%8E%A5%E4%BC%98%E5%8C%96%E7%9C%9F%E5%AE%9E%E7%9B%AE%E6%A0%87"><span class="nav-number">1.3.</span> <span class="nav-text">为什么不能直接优化真实目标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-1-Loss%E5%88%B0%E4%BB%A3%E7%90%86Loss"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">0-1 Loss到代理Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HInge-Loss"><span class="nav-number">1.3.0.1.1.</span> <span class="nav-text">HInge Loss</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss%E7%9A%84%E4%B8%89%E7%A7%8D%E5%9F%BA%E6%9C%AC%E7%B2%92%E5%BA%A6"><span class="nav-number">1.4.</span> <span class="nav-text">Loss的三种基本粒度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%82%B9Loss"><span class="nav-number">1.4.1.</span> <span class="nav-text">单点Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E7%BA%A7Loss"><span class="nav-number">1.4.2.</span> <span class="nav-text">关系级Loss</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pairwise"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">Pairwise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Triplet"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">Triplet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ranking-Loss-1"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">Ranking Loss</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E7%BA%A7Loss"><span class="nav-number">1.4.3.</span> <span class="nav-text">分布级Loss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8Loss%E6%8E%A8%E5%AF%BC"><span class="nav-number">1.5.</span> <span class="nav-text">经典Loss推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%B4"><span class="nav-number">1.5.1.</span> <span class="nav-text">头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Triplet-Loss"><span class="nav-number">1.5.2.</span> <span class="nav-text">Triplet Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#infoNCE"><span class="nav-number">1.5.3.</span> <span class="nav-text">infoNCE</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E6%8E%92%E5%BA%8F%E6%94%B9%E5%86%99%E6%88%90%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">从排序改写成分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SupCon"><span class="nav-number">1.5.4.</span> <span class="nav-text">SupCon</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loss%E7%9A%84%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-number">1.6.</span> <span class="nav-text">Loss的组合使用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

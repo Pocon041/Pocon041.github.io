@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Pocon&#39;s blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pocon">
+<meta property="og:url" content="https://pocon041.github.io/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="Pocon&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-14T16:00:00.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn,Machine Learning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pocon | Pocon
+</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class="portfolio-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content page portfolio-page">
+            
+
+    <section class="portfolio-home academic-home">
+      <nav class="academic-topbar" aria-label="Homepage navigation">
+        <a class="academic-mark" href="/">Pocon</a>
+        <div data-snake-nav-root>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/blog/">Blog</a>
+            <details class="academic-more-nav" data-snake-more>
+              <summary>More</summary>
+              <div>
+                  <a href="#projects" data-snake-label="Projects">Projects</a>
+                  <a href="/archives/" data-snake-label="Archive">Archive</a>
+                  <a href="/categories/" data-snake-label="Categories">Categories</a>
+                  <a href="/tags/" data-snake-label="Tags">Tags</a>
+                  <a href="/gallery/" data-snake-label="Gallery">Gallery</a>
+                  <a href="/music/" data-snake-label="Music">Music</a>
+              </div>
+            </details>
+        </div>
+      </nav>
+
+      <div class="snake-background" aria-hidden="true">
+        <canvas id="homepage-snake"></canvas>
+        <div class="snake-hint">Eat any real word on the page. Motto opens the black hole.</div>
+      </div>
+      <div class="snake-foreground" aria-hidden="true">
+        <canvas id="homepage-snake-foreground"></canvas>
+      </div>
+
+      <div class="academic-layout">
+        <aside class="academic-sidebar" aria-label="Profile">
+            <img class="profile-avatar" src="https://github.com/Pocon041.png?size=240" alt="Pocon avatar">
+          <h1>Pocon</h1>
+          <p class="profile-role">Computer security, systems, machine learning and 3D vision.</p>
+            <dl class="profile-facts">
+                <div>
+                  <dt data-github-repo-count>16</dt>
+                  <dd>Public repos</dd>
+                </div>
+                <div>
+                  <dt>45</dt>
+                  <dd>Technical notes</dd>
+                </div>
+            </dl>
+            <div class="profile-links">
+                <a href="https://github.com/Pocon041" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+                <a href="/blog/"><i class="fa fa-book-open"></i> Blog</a>
+                <a href="/archives/"><i class="fa fa-archive"></i> Archive</a>
+            </div>
+            <div class="profile-keywords" aria-label="Focus keywords">
+                <span>Web Security</span>
+                <span>Pwn</span>
+                <span>Systems</span>
+                <span>ML</span>
+                <span>3D Vision</span>
+            </div>
+        </aside>
+
+        <main class="academic-main">
+          <section class="academic-intro" id="about" aria-labelledby="intro-title">
+            <div class="intro-copy">
+              <p class="section-kicker">Personal site</p>
+              <h2 id="intro-title">Zhonghao Chen.</h2>
+              <p class="intro-lead">I'm currently a third-year student at Ocean University of China. My main interests mainly lie in computer vision and binary exploitation.</p>
+                <p class="intro-motto" data-snake-motto>Know thyself, and you shall find thy way.</p>
+                <div class="intro-actions">
+                    <a class="text-link strong" href="https://github.com/Pocon041?tab=repositories" target="_blank" rel="noopener">View GitHub repositories</a>
+                    <a class="text-link" href="/blog/">Read technical notes</a>
+                </div>
+            </div>
+          </section>
+            <section class="academic-section interest-section" id="focus" aria-labelledby="focus-title">
+              <div class="section-titleline">
+                <p class="section-kicker">Currently into</p>
+                <h2 id="focus-title">Research and Engineering Interests</h2>
+              </div>
+              <div class="interest-list">
+                  <article>
+                    <h3>Computer Vision</h3>
+                    <p>My research primarily focuses on computer vision, with a strong emphasis on multimedia forensics, particularly AI-generated image and deepfake detection. I possess a solid foundation in generative models and vision backbones, alongside a working knowledge of 3D vision and reconstruction techniques.</p>
+                  </article>
+                  <article>
+                    <h3>Computer Security</h3>
+                    <p>I dedicated my sophomore year to intensive Capture The Flag (CTF) training, specializing in Binary Exploitation (Pwn). This rigorous experience significantly honed my problem-solving skills and provided me with a deep, practical understanding of vulnerability analysis and advanced exploitation techniques.</p>
+                  </article>
+              </div>
+            </section>
+            <section class="academic-section" id="projects" aria-labelledby="projects-title">
+              <div class="section-titleline with-link">
+                <div>
+                  <p class="section-kicker">Built and studied</p>
+                  <h2 id="projects-title">Projects</h2>
+                </div>
+                  <a class="text-link" href="https://github.com/Pocon041?tab=repositories" target="_blank" rel="noopener">All repositories</a>
+              </div>
+
+              <div class="work-list">
+                  <article class="work-item">
+                    <div class="work-index">01</div>
+                    <div class="work-body">
+                      <p class="work-type">3D Reconstruction / Computer Vision</p>
+                      <h3><a href="https://github.com/Pocon041/OpenLRM" target="_blank" rel="noopener">OpenLRM</a></h3>
+                      <p>An implementation-oriented reconstruction project used as the main signal for 3D vision, graphics learning and research-code reading.</p>
+                        <div class="work-meta">
+                            <span>3D Vision</span>
+                            <span>Reconstruction</span>
+                            <span>Research Code</span>
+                        </div>
+                    </div>
+                  </article>
+                  <article class="work-item">
+                    <div class="work-index">02</div>
+                    <div class="work-body">
+                      <p class="work-type">Python / 3D Engineering</p>
+                      <h3><a href="https://github.com/Pocon041/3D-store" target="_blank" rel="noopener">3D-store</a></h3>
+                      <p>A project space for 3D-related experiments, implementation notes and engineering organization.</p>
+                        <div class="work-meta">
+                            <span>Python</span>
+                            <span>3D</span>
+                        </div>
+                    </div>
+                  </article>
+                  <article class="work-item">
+                    <div class="work-index">03</div>
+                    <div class="work-body">
+                      <p class="work-type">Image Forensics / Vision</p>
+                      <h3><a href="https://github.com/Pocon041/Image_Manipulation_Localization" target="_blank" rel="noopener">Image Manipulation Localization</a></h3>
+                      <p>Computer vision work focused on localizing manipulated regions and recording related model experiments.</p>
+                        <div class="work-meta">
+                            <span>Computer Vision</span>
+                            <span>Localization</span>
+                        </div>
+                    </div>
+                  </article>
+              </div>
+                <div class="recent-projects">
+                  <div class="section-titleline compact">
+                    <p class="section-kicker">Recently touched</p>
+                    <h2>Recent Repositories</h2>
+                  </div>
+                  <div class="repo-list" id="github-projects" data-github-projects>
+                      <article class="repo-item">
+                        <h3><a href="https://github.com/Pocon041/OUC-Typst-Template" target="_blank" rel="noopener">OUC-Typst-Template</a></h3>
+                        <p>Typst template repository.</p>
+                        <span>Typst</span>
+                      </article>
+                      <article class="repo-item">
+                        <h3><a href="https://github.com/Pocon041/C-based-GCN" target="_blank" rel="noopener">C-based-GCN</a></h3>
+                        <p>Graph neural network work with C as the primary language.</p>
+                        <span>C</span>
+                      </article>
+                  </div>
+                </div>
+            </section>
+            <section class="academic-section" id="writing" aria-labelledby="writing-title">
+              <div class="section-titleline with-link">
+                <div>
+                  <p class="section-kicker">Notes</p>
+                  <h2 id="writing-title">Technical Notes</h2>
+                </div>
+                  <a class="text-link" href="/blog/">All posts</a>
+              </div>
+
+              <div class="note-list">
+                  <a href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">
+                    <span>Network Security</span>
+                    <strong>CTF, Web and vulnerability practice notes</strong>
+                  </a>
+                  <a href="/tags/Pwn/">
+                    <span>Pwn</span>
+                    <strong>Binary exploitation records and writeups</strong>
+                  </a>
+                  <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+                    <span>Machine Learning</span>
+                    <strong>Model-learning notes and experiments</strong>
+                  </a>
+                  <a href="/archives/">
+                    <span>Archive</span>
+                    <strong>Browse everything by date and topic</strong>
+                  </a>
+              </div>
+            </section>
+        </main>
+      </div>
+    </section>
+
+    <script>
+      (function() {
+        var canvas = document.getElementById('homepage-snake');
+        var foregroundCanvas = document.getElementById('homepage-snake-foreground');
+        if (!canvas || !canvas.getContext) return;
+
+        var backgroundContext = canvas.getContext('2d');
+        var foregroundContext = foregroundCanvas && foregroundCanvas.getContext ? foregroundCanvas.getContext('2d') : null;
+        var context = backgroundContext;
+        var root = document.querySelector('.academic-home');
+        var hint = document.querySelector('.snake-hint');
+        var navRoot = document.querySelector('[data-snake-nav-root]');
+        var moreNav = document.querySelector('[data-snake-more]');
+        var cell = 22;
+        var columns = 0;
+        var rows = 0;
+        var snake = [];
+        var nodes = [];
+        var sparks = [];
+        var collected = [];
+        var mottoUnlocked = false;
+        var loop = 1;
+        var growLeft = 0;
+        var userControlled = false;
+        var direction = { x: 1, y: 0 };
+        var pending = { x: 1, y: 0 };
+        var lastMove = 0;
+        var speed = 102;
+        var idleTurns = 0;
+        var breach = null;
+        var lastScroll = 0;
+        var keywords = [];
+        var edibleCounter = 0;
+        var wordColors = [
+          'rgba(139, 30, 63, 0.72)',
+          'rgba(29, 78, 216, 0.66)',
+          'rgba(15, 118, 110, 0.68)',
+          'rgba(161, 98, 7, 0.70)',
+          'rgba(126, 34, 206, 0.64)',
+          'rgba(194, 65, 12, 0.66)'
+        ];
+        var edibleSelectors = [
+          '#intro-title',
+          '.section-kicker',
+          '.intro-lead',
+          '.intro-actions a',
+          '.profile-role',
+          '.profile-links a',
+          '.profile-keywords span',
+          '.section-titleline h2',
+          '.interest-list h3',
+          '.interest-list p',
+          '.work-type',
+          '.work-body h3 a',
+          '.work-body > p:not(.work-type)',
+          '.work-meta span',
+          '.note-list a span',
+          '.note-list a strong'
+        ];
+        var palette = {
+          grid: 'rgba(23, 32, 51, 0.045)',
+          rail: 'rgba(139, 30, 63, 0.42)',
+          railGlow: 'rgba(139, 30, 63, 0.16)',
+          head: 'rgba(23, 32, 51, 0.86)',
+          paper: 'rgba(255, 255, 255, 0.92)',
+          unlocked: 'rgba(15, 118, 110, 0.72)'
+        };
+
+        function colorFor(index) {
+          return wordColors[index % wordColors.length];
+        }
+
+        function createWordElement(target, text) {
+          var span = document.createElement('span');
+          span.className = 'snake-edible-word';
+          if (target.kind === 'motto') span.classList.add('is-motto');
+          span.dataset.snakeWord = target.label;
+          span.textContent = text;
+          span.style.setProperty('--snake-word-color', target.color);
+          return span;
+        }
+
+        function isInsideEdible(node) {
+          var element = node.parentElement;
+          while (element) {
+            if (element.classList && element.classList.contains('snake-edible-word')) return true;
+            element = element.parentElement;
+          }
+          return false;
+        }
+
+        function makeTarget(text, options) {
+          var cleanText = String(text || '').replace(/\s+/g, ' ').trim();
+          var index = edibleCounter;
+          edibleCounter += 1;
+          return {
+            label: (options && options.label) || cleanText + '-' + index,
+            text: cleanText,
+            kind: options && options.kind,
+            color: (options && options.color) || colorFor(index),
+            growth: (options && options.growth) || Math.min(4, Math.max(1, Math.ceil(cleanText.length / 8)))
+          };
+        }
+
+        function wrapMotto() {
+          var element = document.querySelector('[data-snake-motto]');
+          if (!element) return null;
+          if (element.querySelector('.snake-edible-word')) return null;
+          var mottoText = element.textContent;
+          if (!mottoText || !mottoText.trim()) return null;
+          var target = makeTarget(mottoText, {
+            label: 'motto',
+            kind: 'motto',
+            color: 'rgba(3, 6, 14, 0.78)',
+            growth: 6
+          });
+          element.textContent = '';
+          target.element = createWordElement(target, mottoText);
+          element.appendChild(target.element);
+          return target;
+        }
+
+        function tokenAllowed(token) {
+          var clean = String(token || '').trim();
+          if (!clean) return false;
+          if (/^[0-9]+$/.test(clean)) return clean.length > 1;
+          if (/^[A-Za-z]$/.test(clean)) return false;
+          return clean.length >= 2;
+        }
+
+        function wrapTextNodeWords(node, targets) {
+          var text = node.nodeValue;
+          var tokenPattern = /[A-Za-z0-9][A-Za-z0-9+#./-]*|[\u4e00-\u9fff]{2,}/g;
+          var match;
+          var last = 0;
+          var pieces = [];
+          while ((match = tokenPattern.exec(text)) !== null) {
+            var token = match[0];
+            if (!tokenAllowed(token)) continue;
+            if (match.index > last) pieces.push(document.createTextNode(text.slice(last, match.index)));
+            var target = makeTarget(token);
+            target.element = createWordElement(target, token);
+            targets.push(target);
+            pieces.push(target.element);
+            last = match.index + token.length;
+          }
+          if (!pieces.length) return;
+          if (last < text.length) pieces.push(document.createTextNode(text.slice(last)));
+          pieces.forEach(function(piece) {
+            node.parentNode.insertBefore(piece, node);
+          });
+          node.parentNode.removeChild(node);
+        }
+
+        function collectTextNodes(rootElement) {
+          var textNodes = [];
+          var walker = document.createTreeWalker(rootElement, NodeFilter.SHOW_TEXT, {
+            acceptNode: function(node) {
+              if (isInsideEdible(node)) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          });
+          var node = walker.nextNode();
+          while (node) {
+            textNodes.push(node);
+            node = walker.nextNode();
+          }
+          return textNodes;
+        }
+
+        function wrapSelectorWords(selector, targets) {
+          document.querySelectorAll(selector).forEach(function(element) {
+            if (element.closest('[data-snake-motto]')) return;
+            collectTextNodes(element).forEach(function(node) {
+              wrapTextNodeWords(node, targets);
+            });
+          });
+        }
+
+        function prepareEdibleText() {
+          var targets = [];
+          var motto = wrapMotto();
+          if (motto) targets.push(motto);
+          edibleSelectors.forEach(function(selector) {
+            wrapSelectorWords(selector, targets);
+          });
+          return targets.map(function(target) {
+            return Object.assign({}, target, {
+              short: target.text ? target.text.slice(0, 2) : target.label.slice(0, 2)
+            });
+          });
+        }
+
+        function restoreEdibleText() {
+          keywords.forEach(function(keyword) {
+            if (keyword.kind === 'motto' && mottoUnlocked) return;
+            if (keyword.element) keyword.element.classList.remove('snake-word-eaten');
+          });
+        }
+
+        function isCollected(label) {
+          return collected.indexOf(label) !== -1;
+        }
+
+        function menuSelector(label) {
+          return '.academic-more-nav a[data-snake-label="' + label.replace(/"/g, '\\"') + '"]';
+        }
+
+        function updateCollectedState() {
+          document.querySelectorAll('.academic-more-nav [data-snake-label]').forEach(function(link) {
+            link.classList.toggle('snake-collected-link', isCollected(link.dataset.snakeLabel));
+          });
+          if (!hint) return;
+          var remaining = Math.max(0, keywords.length - collected.length);
+          if (mottoUnlocked) {
+            hint.textContent = collected.length + ' words eaten. Black hole is open.';
+          } else if (collected.length >= keywords.length) {
+            hint.textContent = 'Page text restored. New words are ready.';
+          } else if (collected.length) {
+            hint.textContent = collected.length + ' words eaten, ' + remaining + ' still on the page. Find the motto.';
+          } else {
+            hint.textContent = 'Eat any real word on the page. Motto opens the black hole.';
+          }
+        }
+
+        function resize() {
+          var ratio = window.devicePixelRatio || 1;
+          resizeCanvas(canvas, backgroundContext, ratio);
+          if (foregroundCanvas && foregroundContext) resizeCanvas(foregroundCanvas, foregroundContext, ratio);
+          columns = Math.max(12, Math.floor(window.innerWidth / cell));
+          rows = Math.max(12, Math.floor(window.innerHeight / cell));
+          layoutNodes();
+          resetSnake();
+        }
+
+        function resizeCanvas(targetCanvas, targetContext, ratio) {
+          targetCanvas.width = Math.ceil(window.innerWidth * ratio);
+          targetCanvas.height = Math.ceil(window.innerHeight * ratio);
+          targetCanvas.style.width = window.innerWidth + 'px';
+          targetCanvas.style.height = window.innerHeight + 'px';
+          targetContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function usingContext(targetContext, callback) {
+          if (!targetContext) return;
+          var previous = context;
+          context = targetContext;
+          callback();
+          context = previous;
+        }
+
+        function layoutNodes() {
+          nodes = keywords.map(function(keyword, index) {
+            var element = keyword.element || (keyword.selector ? document.querySelector(keyword.selector) : null);
+            var x = keyword.x;
+            var y = keyword.y;
+            var width = cell;
+            var height = cell;
+            var visible = false;
+            if (element) {
+              var rect = element.getBoundingClientRect();
+              width = rect.width;
+              height = rect.height;
+              visible = isRectVisible(rect, 96);
+              x = (rect.left + rect.width / 2) / Math.max(window.innerWidth, 1);
+              y = (rect.top + rect.height / 2) / Math.max(window.innerHeight, 1);
+            } else if (typeof x !== 'number' || typeof y !== 'number') {
+              x = .18 + (index % 5) * .16;
+              y = .24 + Math.floor(index / 5) * .18;
+            }
+            return Object.assign({}, keyword, {
+              element: element,
+              width: width,
+              height: height,
+              visible: visible,
+              x: Math.max(3, Math.min(columns - 4, Math.round(columns * x))),
+              y: Math.max(5, Math.min(rows - 4, Math.round(rows * y)))
+            });
+          });
+        }
+
+        function resetSnake() {
+          var startX = Math.max(3, Math.round(columns * .12));
+          var startY = Math.max(6, Math.round(rows * .48));
+          snake = [
+            { x: startX, y: startY },
+            { x: startX - 1, y: startY },
+            { x: startX - 2, y: startY }
+          ];
+          direction = { x: 1, y: 0 };
+          pending = { x: 1, y: 0 };
+          sparks = [];
+          breach = null;
+          growLeft = 0;
+          updateCollectedState();
+        }
+
+        function setDirection(next) {
+          if (next.x + direction.x === 0 && next.y + direction.y === 0) return;
+          pending = next;
+          idleTurns = 0;
+          userControlled = true;
+          if (root) root.classList.add('snake-active');
+        }
+
+        function activeNodes() {
+          return nodes.filter(function(node) {
+            return !isCollected(node.label)
+              && node.element
+              && node.visible
+              && !node.element.classList.contains('snake-word-eaten');
+          });
+        }
+
+        function nearestNode(head) {
+          var available = activeNodes();
+          if (!available.length) return null;
+          available.sort(function(a, b) {
+            var da = Math.abs(a.x - head.x) + Math.abs(a.y - head.y);
+            var db = Math.abs(b.x - head.x) + Math.abs(b.y - head.y);
+            return da - db;
+          });
+          return available[0];
+        }
+
+        function blackHoleAnchor() {
+          var element = document.querySelector('.snake-edible-word.is-motto') || document.querySelector('[data-snake-motto]');
+          if (element) {
+            var rect = element.getBoundingClientRect();
+            return {
+              x: rect.left + rect.width / 2,
+              y: rect.top + rect.height / 2
+            };
+          }
+          return {
+            x: window.innerWidth - 42,
+            y: Math.max(150, Math.min(window.innerHeight - 150, window.innerHeight * .52))
+          };
+        }
+
+        function touchesBlackHole(part) {
+          if (!mottoUnlocked || !part) return false;
+          var anchor = blackHoleAnchor();
+          var center = point(part);
+          return Math.hypot(center.x - anchor.x, center.y - anchor.y) < cell * 2.2;
+        }
+
+        function isScrolling() {
+          return performance.now() - lastScroll < 140;
+        }
+
+        function isRectVisible(rect, margin) {
+          var edge = typeof margin === 'number' ? margin : 0;
+          return rect.width > 0
+            && rect.height > 0
+            && rect.right >= -edge
+            && rect.left <= window.innerWidth + edge
+            && rect.bottom >= -edge
+            && rect.top <= window.innerHeight + edge;
+        }
+
+        function touchesNode(part, item) {
+          if (!part || !item || !item.element) return false;
+          var rect = item.element.getBoundingClientRect();
+          if (!isRectVisible(rect, 8)) return false;
+          var center = point(part);
+          var padding = cell * .42;
+          return center.x >= rect.left - padding
+            && center.x <= rect.right + padding
+            && center.y >= rect.top - padding
+            && center.y <= rect.bottom + padding;
+        }
+
+        function autoTurn(head) {
+          if (userControlled) return;
+          idleTurns += 1;
+          if (idleTurns % 5 !== 0) return;
+          var target = nearestNode(head);
+          var options = [
+            { x: 1, y: 0 },
+            { x: -1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: -1 }
+          ].filter(function(next) {
+            if (next.x + direction.x === 0 && next.y + direction.y === 0) return false;
+            var test = { x: head.x + next.x, y: head.y + next.y };
+            return test.x >= 0 && test.y >= 0 && test.x < columns && test.y < rows && !snake.some(function(part) {
+              return part.x === test.x && part.y === test.y;
+            });
+          });
+          if (!options.length) return;
+          options.sort(function(a, b) {
+            var da = target ? Math.abs(target.x - (head.x + a.x)) + Math.abs(target.y - (head.y + a.y)) : Math.random();
+            var db = target ? Math.abs(target.x - (head.x + b.x)) + Math.abs(target.y - (head.y + b.y)) : Math.random();
+            return da - db;
+          });
+          pending = options[0];
+        }
+
+        function step(time) {
+          if (breach) {
+            draw(time);
+            requestAnimationFrame(step);
+            return;
+          }
+          if (userControlled && isScrolling()) {
+            draw(time);
+            requestAnimationFrame(step);
+            return;
+          }
+          if (time - lastMove < speed) {
+            draw(time);
+            requestAnimationFrame(step);
+            return;
+          }
+          lastMove = time;
+          direction = pending;
+          var head = snake[0];
+          autoTurn(head);
+          var next = { x: head.x + direction.x, y: head.y + direction.y };
+
+          var hitBoundary = next.x < 0 || next.y < 0 || next.x >= columns || next.y >= rows;
+          var hitSelf = snake.some(function(part) {
+            return part.x === next.x && part.y === next.y;
+          });
+          if (hitBoundary || hitSelf) {
+            resetSnake();
+            requestAnimationFrame(step);
+            return;
+          }
+
+          snake.unshift(next);
+          var node = nodes.find(function(item) {
+            return !isCollected(item.label) && touchesNode(next, item);
+          });
+          if (node && userControlled) {
+            collectNode(node);
+          } else if (growLeft > 0) {
+            growLeft -= 1;
+          } else {
+            snake.pop();
+          }
+          if (userControlled && touchesBlackHole(snake[0])) {
+            startBreach(snake[0]);
+            requestAnimationFrame(step);
+            return;
+          }
+          draw(time);
+          requestAnimationFrame(step);
+        }
+
+        function collectNode(item) {
+          collected.push(item.label);
+          if (item.element) {
+            item.element.classList.add('snake-word-eaten');
+          }
+          if (item.kind === 'motto') {
+            mottoUnlocked = true;
+          }
+          growLeft += Math.max(0, Number(item.growth || 1) - 1);
+          burst(item);
+          flyToSnake(item);
+          updateCollectedState();
+          if (hint) {
+            if (item.kind === 'motto') {
+              hint.textContent = 'Motto eaten. The black hole is awake.';
+            } else if (collected.length >= keywords.length) {
+              hint.textContent = 'Loop ' + loop + ' cleared. The words are coming back.';
+            } else {
+              hint.textContent = (item.text || 'word') + ' eaten. Length +' + Math.max(1, Number(item.growth || 1)) + '.';
+            }
+          }
+          if (collected.length >= keywords.length) {
+            completeLoop();
+          }
+        }
+
+        function completeLoop() {
+          window.setTimeout(function() {
+            loop += 1;
+            restoreEdibleText();
+            collected = mottoUnlocked ? ['motto'] : [];
+            speed = Math.max(72, 102 - (loop - 1) * 5);
+            layoutNodes();
+            resetSnake();
+            updateCollectedState();
+          }, 820);
+        }
+
+        function burst(item) {
+          var origin = itemCenter(item);
+          var originX = origin.x;
+          var originY = origin.y;
+          for (var index = 0; index < 42; index += 1) {
+            var angle = Math.random() * Math.PI * 2;
+            var velocity = 1.6 + Math.random() * 4.2;
+            sparks.push({
+              x: originX,
+              y: originY,
+              vx: Math.cos(angle) * velocity,
+              vy: Math.sin(angle) * velocity,
+              life: 34 + Math.random() * 20,
+              max: 54,
+              color: item.color
+            });
+          }
+        }
+
+        function promotedSelector(label) {
+          return '.academic-topbar a[data-snake-promoted="' + label.replace(/"/g, '\\"') + '"]';
+        }
+
+        function ensurePromotedLink(item) {
+          var existing = document.querySelector(promotedSelector(item.label));
+          if (existing) return existing;
+          if (!navRoot || !moreNav) return null;
+          var link = document.createElement('a');
+          link.className = 'snake-promoted-link is-pending';
+          link.href = item.url;
+          link.textContent = item.label;
+          link.dataset.snakePromoted = item.label;
+          link.style.setProperty('--snake-token-color', item.color);
+          navRoot.insertBefore(link, moreNav);
+          return link;
+        }
+
+        function flyToPromotedNav(item) {
+          var source = itemCenter(item);
+          var sourceX = source.x;
+          var sourceY = source.y;
+          var link = document.querySelector(menuSelector(item.label));
+          var target = ensurePromotedLink(item);
+          var rect = target ? target.getBoundingClientRect() : null;
+          if (!rect) return;
+          var targetX = rect.left + rect.width / 2;
+          var targetY = rect.top + rect.height / 2;
+          var token = document.createElement('span');
+          token.className = 'snake-flight-token';
+          token.textContent = item.label;
+          token.style.left = sourceX + 'px';
+          token.style.top = sourceY + 'px';
+          token.style.setProperty('--snake-token-color', item.color);
+          document.body.appendChild(token);
+
+          var arcY = Math.min(sourceY, targetY) - 90 - Math.random() * 60;
+          var animation = token.animate([
+            { left: sourceX + 'px', top: sourceY + 'px', opacity: 0, transform: 'translate(-50%, -50%) scale(.74)' },
+            { left: sourceX + 'px', top: sourceY + 'px', opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+            { left: ((sourceX + targetX) / 2) + 'px', top: arcY + 'px', opacity: .96, transform: 'translate(-50%, -50%) scale(1.08) rotate(-5deg)' },
+            { left: targetX + 'px', top: targetY + 'px', opacity: 0, transform: 'translate(-50%, -50%) scale(.46) rotate(7deg)' }
+          ], {
+            duration: 900,
+            easing: 'cubic-bezier(.16, 1, .3, 1)'
+          });
+
+          animation.onfinish = function() {
+            token.remove();
+            if (link) link.classList.add('snake-collected-link');
+            if (target) {
+              target.classList.remove('is-pending');
+              target.classList.add('is-visible');
+              target.classList.remove('snake-target-pulse');
+              void target.offsetWidth;
+              target.classList.add('snake-target-pulse');
+              window.setTimeout(function() {
+                target.classList.remove('snake-target-pulse');
+              }, 950);
+            }
+          };
+        }
+
+        function flyToSnake(item) {
+          if (!snake.length) return;
+          var source = itemCenter(item);
+          var sourceX = source.x;
+          var sourceY = source.y;
+          var head = point(snake[0]);
+          var token = document.createElement('span');
+          token.className = 'snake-flight-token snake-text-token';
+          token.textContent = itemDisplay(item);
+          token.style.left = sourceX + 'px';
+          token.style.top = sourceY + 'px';
+          token.style.setProperty('--snake-token-color', item.color);
+          document.body.appendChild(token);
+          var animation = token.animate([
+            { left: sourceX + 'px', top: sourceY + 'px', opacity: 0, transform: 'translate(-50%, -50%) scale(.74)' },
+            { left: sourceX + 'px', top: sourceY + 'px', opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+            { left: head.x + 'px', top: head.y + 'px', opacity: .96, transform: 'translate(-50%, -50%) scale(.72) rotate(-8deg)' },
+            { left: head.x + 'px', top: head.y + 'px', opacity: 0, transform: 'translate(-50%, -50%) scale(.28) rotate(10deg)' }
+          ], {
+            duration: 620,
+            easing: 'cubic-bezier(.16, 1, .3, 1)'
+          });
+          animation.onfinish = function() {
+            token.remove();
+          };
+        }
+
+        function startBreach(next) {
+          var anchor = blackHoleAnchor();
+          breach = {
+            x: Math.max(42, Math.min(window.innerWidth - 42, anchor.x)),
+            y: Math.max(96, Math.min(window.innerHeight - 96, anchor.y)),
+            start: performance.now()
+          };
+          if (hint) hint.textContent = 'Falling into life...';
+          if (root) root.classList.add('snake-breaching');
+          window.setTimeout(function() {
+            window.location.href = '/life/';
+          }, 980);
+        }
+
+        function drawRoundedRect(px, py, width, height, color, radius) {
+          context.fillStyle = color;
+          context.beginPath();
+          if (context.roundRect) {
+            context.roundRect(px, py, width, height, radius);
+          } else {
+            context.rect(px, py, width, height);
+          }
+          context.fill();
+        }
+
+        function point(part) {
+          return {
+            x: part.x * cell + cell / 2,
+            y: part.y * cell + cell / 2
+          };
+        }
+
+        function itemCenter(item) {
+          if (item && item.element) {
+            var rect = item.element.getBoundingClientRect();
+            if (rect.width || rect.height) {
+              return {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+              };
+            }
+          }
+          return point(item);
+        }
+
+        function itemDisplay(item) {
+          if (!item) return '';
+          return item.kind === 'motto' ? 'motto' : (item.text || item.label);
+        }
+
+        function drawGrid() {
+          context.strokeStyle = palette.grid;
+          context.lineWidth = 1;
+          for (var x = 0; x <= columns; x += 2) {
+            context.beginPath();
+            context.moveTo(x * cell + .5, 0);
+            context.lineTo(x * cell + .5, window.innerHeight);
+            context.stroke();
+          }
+          for (var y = 0; y <= rows; y += 2) {
+            context.beginPath();
+            context.moveTo(0, y * cell + .5);
+            context.lineTo(window.innerWidth, y * cell + .5);
+            context.stroke();
+          }
+        }
+
+        function drawMapLines() {
+          if (!userControlled || !snake.length) return;
+          if (isScrolling()) return;
+          var head = point(snake[0]);
+          var nearby = activeNodes().filter(function(node) {
+            var center = itemCenter(node);
+            node.distanceToHead = Math.hypot(center.x - head.x, center.y - head.y);
+            return node.distanceToHead < 170;
+          }).sort(function(a, b) {
+            return a.distanceToHead - b.distanceToHead;
+          }).slice(0, 4);
+          context.save();
+          context.setLineDash([2, 14]);
+          context.strokeStyle = 'rgba(23, 32, 51, .05)';
+          context.lineWidth = 1;
+          nearby.forEach(function(node) {
+            var center = itemCenter(node);
+            context.beginPath();
+            context.moveTo(head.x, head.y);
+            context.lineTo(center.x, center.y);
+            context.stroke();
+          });
+          context.restore();
+        }
+
+        function drawNodes(time, foreground) {
+          if (!userControlled || !snake.length) return;
+          if (isScrolling()) return;
+          var head = point(snake[0]);
+          var visibleNodes = activeNodes().filter(function(node) {
+            var center = itemCenter(node);
+            node.distanceToHead = Math.hypot(center.x - head.x, center.y - head.y);
+            return node.distanceToHead < 190;
+          }).sort(function(a, b) {
+            return a.distanceToHead - b.distanceToHead;
+          }).slice(0, foreground ? 8 : 5);
+
+          visibleNodes.forEach(function(node) {
+            var center = itemCenter(node);
+            var pulse = 1 + Math.sin((time || 0) / 260 + node.x * .13) * .05;
+            var radius = Math.max(5, Math.min(12, Math.max(node.width || cell, node.height || cell) / 3));
+            context.save();
+            context.globalAlpha = foreground ? .28 : .08;
+            context.strokeStyle = node.color;
+            context.lineWidth = 1;
+            context.setLineDash([]);
+            context.shadowColor = node.color;
+            context.shadowBlur = foreground ? 8 : 0;
+            context.beginPath();
+            context.arc(center.x, center.y, radius * pulse, 0, Math.PI * 2);
+            context.stroke();
+            if (foreground && node.distanceToHead < 92) {
+              context.globalAlpha = .42;
+              context.fillStyle = node.color;
+              context.beginPath();
+              context.arc(center.x, center.y, 2.4, 0, Math.PI * 2);
+              context.fill();
+            }
+            context.restore();
+          });
+        }
+
+        function drawSnake(foreground) {
+          if (!snake.length) return;
+          var path = snake.map(point);
+          context.save();
+          context.lineCap = 'round';
+          context.lineJoin = 'round';
+          if (foreground) {
+            context.shadowColor = 'rgba(255, 255, 255, .82)';
+            context.shadowBlur = 18;
+            context.strokeStyle = 'rgba(255, 255, 255, .78)';
+            context.lineWidth = 18;
+            context.beginPath();
+            path.slice().reverse().forEach(function(part, index) {
+              if (index === 0) context.moveTo(part.x, part.y);
+              else context.lineTo(part.x, part.y);
+            });
+            context.stroke();
+          }
+          context.shadowColor = foreground ? 'rgba(139, 30, 63, .34)' : palette.railGlow;
+          context.shadowBlur = foreground ? 18 : 16;
+          context.strokeStyle = foreground ? 'rgba(139, 30, 63, .40)' : palette.railGlow;
+          context.lineWidth = foreground ? 15 : 20;
+          context.beginPath();
+          path.slice().reverse().forEach(function(part, index) {
+            if (index === 0) context.moveTo(part.x, part.y);
+            else context.lineTo(part.x, part.y);
+          });
+          context.stroke();
+          context.shadowBlur = 0;
+          context.strokeStyle = foreground ? 'rgba(139, 30, 63, .86)' : palette.rail;
+          context.lineWidth = foreground ? 7 : 10;
+          context.beginPath();
+          path.slice().reverse().forEach(function(part, index) {
+            if (index === 0) context.moveTo(part.x, part.y);
+            else context.lineTo(part.x, part.y);
+          });
+          context.stroke();
+          context.restore();
+
+          snake.forEach(function(part, index) {
+            if (!index || !collected.length) return;
+            var keyword = keywords.find(function(item) {
+              return item.label === collected[(index - 1) % collected.length];
+            });
+            if (!keyword) return;
+            var spot = point(part);
+            context.fillStyle = keyword.color;
+            if (foreground) {
+              context.shadowColor = keyword.color;
+              context.shadowBlur = 10;
+            }
+            context.beginPath();
+            context.arc(spot.x, spot.y, foreground ? 4.8 : 4.2, 0, Math.PI * 2);
+            context.fill();
+            context.shadowBlur = 0;
+          });
+
+          var head = point(snake[0]);
+          context.fillStyle = palette.head;
+          context.shadowColor = foreground ? 'rgba(255, 255, 255, .86)' : 'rgba(23, 32, 51, .26)';
+          context.shadowBlur = foreground ? 18 : 12;
+          context.beginPath();
+          context.arc(head.x, head.y, foreground ? 11.4 : 9.8, 0, Math.PI * 2);
+          context.fill();
+          context.shadowBlur = 0;
+          context.fillStyle = '#fff';
+          context.beginPath();
+          context.arc(head.x + direction.x * 3.2 - direction.y * 2, head.y + direction.y * 3.2 + direction.x * 2, 2.2, 0, Math.PI * 2);
+          context.fill();
+        }
+
+        function updateAndDrawSparks() {
+          sparks = sparks.filter(function(spark) {
+            spark.x += spark.vx;
+            spark.y += spark.vy;
+            spark.vx *= .96;
+            spark.vy *= .96;
+            spark.life -= 1;
+            var alpha = Math.max(0, spark.life / spark.max);
+            context.globalAlpha = alpha;
+            drawRoundedRect(spark.x - 3, spark.y - 3, 6, 6, spark.color, 999);
+            context.globalAlpha = 1;
+            return spark.life > 0;
+          });
+        }
+
+        function drawBlackHole(time) {
+          if (!mottoUnlocked && !breach) return;
+          var now = time || performance.now();
+          var anchor = blackHoleAnchor();
+          var x = breach ? breach.x : anchor.x;
+          var y = breach ? breach.y : anchor.y;
+          var open = breach ? Math.min(1, (now - breach.start) / 760) : .42 + Math.sin(now / 520) * .08;
+          var radius = 20 + open * 42;
+
+          context.save();
+          if (breach) {
+            var veil = context.createRadialGradient(x, y, 16, x, y, Math.max(window.innerWidth, window.innerHeight) * .76);
+            veil.addColorStop(0, 'rgba(3, 6, 14, .18)');
+            veil.addColorStop(.34, 'rgba(3, 6, 14, .10)');
+            veil.addColorStop(1, 'rgba(3, 6, 14, 0)');
+            context.fillStyle = veil;
+            context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+          }
+
+          for (var ring = 0; ring < 4; ring += 1) {
+            context.save();
+            context.translate(x, y);
+            context.rotate(now / (850 + ring * 130) + ring * .72);
+            context.scale(1.9 + ring * .18 + open * .55, .38 + ring * .055);
+            context.strokeStyle = ring % 2
+              ? 'rgba(15, 118, 110, ' + (.22 + open * .18).toFixed(3) + ')'
+              : 'rgba(139, 30, 63, ' + (.28 + open * .22).toFixed(3) + ')';
+            context.lineWidth = 2.2 - ring * .24;
+            context.shadowColor = ring % 2 ? 'rgba(15, 118, 110, .25)' : 'rgba(139, 30, 63, .30)';
+            context.shadowBlur = 18 + open * 18;
+            context.beginPath();
+            if (context.ellipse) {
+              context.ellipse(0, 0, radius + ring * 8, radius * .82 + ring * 4, 0, 0, Math.PI * 2);
+            } else {
+              context.arc(0, 0, radius + ring * 8, 0, Math.PI * 2);
+            }
+            context.stroke();
+            context.restore();
+          }
+
+          for (var mote = 0; mote < 22; mote += 1) {
+            var angle = now / (420 + mote * 7) + mote * .62;
+            var orbit = radius + 12 + (mote % 6) * 7;
+            var px = x + Math.cos(angle) * orbit * (1.25 + open * .62);
+            var py = y + Math.sin(angle) * orbit * .42;
+            var size = 1.4 + (mote % 4) * .42;
+            context.fillStyle = mote % 3 === 0 ? 'rgba(15, 118, 110, .62)' : 'rgba(139, 30, 63, .62)';
+            context.beginPath();
+            context.arc(px, py, size, 0, Math.PI * 2);
+            context.fill();
+          }
+
+          var glow = context.createRadialGradient(x, y, radius * .12, x, y, radius * 1.35);
+          glow.addColorStop(0, 'rgba(2, 6, 16, 1)');
+          glow.addColorStop(.36, 'rgba(3, 6, 14, .98)');
+          glow.addColorStop(.62, 'rgba(139, 30, 63, .18)');
+          glow.addColorStop(1, 'rgba(139, 30, 63, 0)');
+          context.shadowColor = 'rgba(3, 6, 14, .58)';
+          context.shadowBlur = 18 + open * 28;
+          context.fillStyle = glow;
+          context.beginPath();
+          context.arc(x, y, radius * 1.32, 0, Math.PI * 2);
+          context.fill();
+          context.shadowBlur = 0;
+
+          context.fillStyle = 'rgba(255, 255, 255, ' + (.22 + open * .16).toFixed(3) + ')';
+          context.beginPath();
+          context.arc(x - radius * .28, y - radius * .24, 2.4 + open * 2, 0, Math.PI * 2);
+          context.fill();
+
+          context.fillStyle = 'rgba(23, 32, 51, .82)';
+          context.font = '900 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          context.textAlign = 'right';
+          context.fillText(breach ? 'event horizon' : 'singularity', Math.min(window.innerWidth - 24, x - radius - 12), y - radius - 16);
+          context.restore();
+        }
+
+        function draw(time) {
+          usingContext(backgroundContext, function() {
+            context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            drawGrid();
+            drawMapLines();
+            drawNodes(time, false);
+            if (!userControlled || !foregroundContext) {
+              drawBlackHole(time);
+              drawSnake(false);
+              updateAndDrawSparks();
+            }
+          });
+
+          usingContext(foregroundContext, function() {
+            context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            if (!userControlled && !breach) return;
+            drawBlackHole(time);
+            drawNodes(time, true);
+            drawSnake(true);
+            updateAndDrawSparks();
+          });
+        }
+
+        keywords = prepareEdibleText();
+        if (!keywords.length) return;
+
+        window.addEventListener('keydown', function(event) {
+          var key = event.key.toLowerCase();
+          var map = {
+            arrowup: { x: 0, y: -1 },
+            w: { x: 0, y: -1 },
+            arrowdown: { x: 0, y: 1 },
+            s: { x: 0, y: 1 },
+            arrowleft: { x: -1, y: 0 },
+            a: { x: -1, y: 0 },
+            arrowright: { x: 1, y: 0 },
+            d: { x: 1, y: 0 }
+          };
+          if (!map[key]) return;
+          event.preventDefault();
+          setDirection(map[key]);
+        });
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('scroll', function() {
+          lastScroll = performance.now();
+          layoutNodes();
+        }, { passive: true });
+        resize();
+        requestAnimationFrame(step);
+      })();
+
+      (function() {
+        var githubConfig = {"username":"Pocon041","max_repos":6,"date_locale":"en","default_meta":"Repository","empty_description":"No description yet. Click through to inspect the repository.","ignored":["Pocon041","blogimage","blogimage2","Pocon041.github.io"]};
+        var container = document.querySelector('[data-github-projects]');
+        var counter = document.querySelector('[data-github-repo-count]');
+        if (!window.fetch || !githubConfig.username) return;
+
+        var ignored = {};
+        (githubConfig.ignored || []).forEach(function(name) {
+          ignored[name] = true;
+        });
+
+        function formatDate(value) {
+          if (!value) return '';
+          try {
+            return new Intl.DateTimeFormat(githubConfig.date_locale || 'en', {
+              year: 'numeric',
+              month: 'short'
+            }).format(new Date(value));
+          } catch (error) {
+            return '';
+          }
+        }
+
+        function escapeHtml(value) {
+          return String(value).replace(/[&<>"']/g, function(character) {
+            return {
+              '&': '&amp;',
+              '<': '&lt;',
+              '>': '&gt;',
+              '"': '&quot;',
+              "'": '&#39;'
+            }[character];
+          });
+        }
+
+        function renderRepo(repo) {
+          var description = repo.description || githubConfig.empty_description || 'No description yet. Click through to inspect the repository.';
+          var language = repo.language || githubConfig.default_meta || 'Repository';
+          var updated = formatDate(repo.pushed_at);
+          var stars = Number(repo.stargazers_count || 0);
+          var meta = language + (stars ? ' / ' + stars + ' star' + (stars > 1 ? 's' : '') : '') + (updated ? ' / ' + updated : '');
+          return [
+            '<article class="repo-item">',
+            '<h3><a href="' + escapeHtml(repo.html_url) + '" target="_blank" rel="noopener">' + escapeHtml(repo.name) + '</a></h3>',
+            '<p>' + escapeHtml(description) + '</p>',
+            '<span>' + escapeHtml(meta) + '</span>',
+            '</article>'
+          ].join('');
+        }
+
+        if (counter) {
+          fetch('https://api.github.com/users/' + encodeURIComponent(githubConfig.username))
+            .then(function(response) {
+              if (!response.ok) throw new Error('GitHub profile failed');
+              return response.json();
+            })
+            .then(function(profile) {
+              if (typeof profile.public_repos === 'number') {
+                counter.textContent = String(profile.public_repos);
+              }
+            })
+            .catch(function() {});
+        }
+
+        if (!container) return;
+
+        fetch('https://api.github.com/users/' + encodeURIComponent(githubConfig.username) + '/repos?per_page=100&sort=updated')
+          .then(function(response) {
+            if (!response.ok) throw new Error('GitHub API failed');
+            return response.json();
+          })
+          .then(function(repos) {
+            var projects = repos
+              .filter(function(repo) {
+                return !repo.fork && !ignored[repo.name];
+              })
+              .slice(0, Number(githubConfig.max_repos || 6));
+            if (projects.length) {
+              container.innerHTML = projects.map(renderRepo).join('');
+            }
+          })
+          .catch(function() {
+            container.classList.add('is-fallback');
+          });
+      })();
+    </script>
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
