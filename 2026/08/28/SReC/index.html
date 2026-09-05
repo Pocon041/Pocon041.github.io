@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="论文笔记：Lossless Image Compression through Super-Resolution前置知识熵编码一个符号 x 索要编码长度大约是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文笔记：Lossless Image Compression through Super-Resolution">
+<meta property="og:url" content="https://pocon041.github.io/2026/08/28/SReC/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="论文笔记：Lossless Image Compression through Super-Resolution前置知识熵编码一个符号 x 索要编码长度大约是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260828210239040.png">
+<meta property="article:published_time" content="2026-08-28T08:56:13.000Z">
+<meta property="article:modified_time" content="2026-08-28T08:56:13.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260828210239040.png">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/08/28/SReC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>论文笔记：Lossless Image Compression through Super-Resolution | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/144538290_p0_master1200.jpg'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/08/28/SReC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文笔记：Lossless Image Compression through Super-Resolution
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-08-28 16:56:13" itemprop="dateCreated datePublished" datetime="2026-08-28T16:56:13+08:00">2026-08-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="论文笔记：Lossless-Image-Compression-through-Super-Resolution"><a href="#论文笔记：Lossless-Image-Compression-through-Super-Resolution" class="headerlink" title="论文笔记：Lossless Image Compression through Super-Resolution"></a>论文笔记：Lossless Image Compression through Super-Resolution</h1><h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><h4 id="熵编码"><a href="#熵编码" class="headerlink" title="熵编码"></a>熵编码</h4><p>一个符号 x 索要编码长度大约是</p>
+<script type="math/tex; mode=display">
+L(x) \approx -\log_2P(x)</script><p>其中 P(x) 为 符号 x 出现的概率。直觉上来看，其实就是出现频率越高的字符，用更少的bit数表示，可以使得平均码长更短。</p>
+<blockquote>
+<p>想想数据结构学的哈夫曼树</p>
+</blockquote>
+<h4 id="香农信源编码定理"><a href="#香农信源编码定理" class="headerlink" title="香农信源编码定理"></a>香农信源编码定理</h4><p>一个随机信源产生的数据，如果进行无损编码，那么平均码长不能低于</p>
+<script type="math/tex; mode=display">
+H(X) = -\sum_{i=1}^mp_i\log_2p_i</script><p>比特。注意并不是说任何一条数据都一定能压到H(X)，而是说长期平均意义下的。</p>
+<h4 id="算术编码"><a href="#算术编码" class="headerlink" title="算术编码"></a>算术编码</h4><p>哈夫曼编码是对单个符号进行编码，当得到理论下界是小数时，实际需要向上取整。而算术编码可以将很多符号联合起来编码，从而平均下来平均码长尽可能达到理论下界。</p>
+<p>具体来说，假设P(B)=0.6，P(A) = 0.4。那么B：[0, 0.6），A：[0.6, 1）。如果编码BA，那么第一段编码 B，新的区间宽度W=0.6，得到B：[0, 0.36），A：[0.36, 0.6），所以BA -&gt; [0.36, 0.6）。如果编码BAB，那么算出BA后，新的区间长度为0.24，接下来同样的做法，略</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
+<li>学习自然图像分布$P_\theta(x)$，最小化交叉熵等价于最小化实际熵编码长度。</li>
+<li>传统PixelCNN由于强自回归依赖，导致解码非常慢。为了将方法介于完全独立预测和逐像素自回归之间，作者将图像分成“粗信息 + 细节”。给定低分辨率版本，让模型预测高分辨率版本，训练$H(X<em>{HR} |X</em>{LR} &lt;H(X_{HR})$。形式上是超分辨率模型</li>
+<li>传统超分模型预测的结果是确定的。但是对于一个低分辨率图，可能存在无数个高分辨率图能下采样成它，所以SReC需要预测整个概率分布。但从低分辨率还原的超分图必须是确定的，所以对于这个一对多问题，需要额外加入bitstream，在encode时使用算术编码加入，decode中根据这个bitstream就能够知道选哪一个超分图。</li>
+<li>构建下采样图像金字塔。每次长宽除以二，相当于做2*2，步长为2的平均池化。那么下采样后的一个像素对应其原图的一个2*2的block。同时不难发现，我们只需要预测超分图对应block的前三个像素即可，并且四个像素的取值都是有范围的，预测出一个像素之后，剩下的两个范围会进一步缩小</li>
+<li>对于每个block内，为了保持内部的像素相关性，block内也同样有自回归，对应下图中的三个CNN</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/Pocon041/blogimage2@main/image-20260828210239040.png" alt="image-20260828210239040"></p>
+<p>整个流程为：</p>
+<ol>
+<li>对原图$x^{(0)}$进行三次下采样得到对应的低分辨率图$x^{(1)}$,$x^{(2)}$,$x^{(3)}$，以及做平均池化得到的精确平均值矩阵（有小数部分）$y^{(1)}$,$y^{(2)}$,$y^{(3)}$，x-y得到round操作丢弃的小数部分 $r$。即$y^{(1)} = x^{(1)} + r^{(1)}$，且 r 只有四种取值</li>
+<li>从最低分辨率$x^{(3)}$往回编码。先让$x^{(3)}$加上$r^{(3)}$后，得到$y^{(3)}$，预测$P_\theta (x^{(2)}|y^{(3)})$。更具体来说，对于每个block内，先用 y 预测得到a，接着按自回归过程依据a和y预测得到b…得到a，b和c后直接计算得到d。</li>
+<li>重复第二步，知道编码得到原图</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/06/202666%E9%9A%8F%E7%AC%94/" rel="prev" title="2026-6-6 随笔">
+      <i class="fa fa-chevron-left"></i> 2026-6-6 随笔
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%EF%BC%9ALossless-Image-Compression-through-Super-Resolution"><span class="nav-number">1.</span> <span class="nav-text">论文笔记：Lossless Image Compression through Super-Resolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%86%B5%E7%BC%96%E7%A0%81"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">熵编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A6%99%E5%86%9C%E4%BF%A1%E6%BA%90%E7%BC%96%E7%A0%81%E5%AE%9A%E7%90%86"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">香农信源编码定理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%9C%AF%E7%BC%96%E7%A0%81"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">算术编码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
