@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"pocon041.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="伪装目标检测与inpainting篡改定位The Making and Breaking of CamouflageThe Making and Breaking of Camouflage通过重构保真度$S_{R_j}$和边界可见性分数$S_b$来量化一个图像的伪装程度。 重建保真度评分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="伪装目标检测与inpainting篡改定位">
+<meta property="og:url" content="https://pocon041.github.io/2026/11/02/COD%E4%B8%8Einpainting%E7%AF%A1%E6%94%B9%E5%AE%9A%E4%BD%8D/index.html">
+<meta property="og:site_name" content="Pocon">
+<meta property="og:description" content="伪装目标检测与inpainting篡改定位The Making and Breaking of CamouflageThe Making and Breaking of Camouflage通过重构保真度$S_{R_j}$和边界可见性分数$S_b$来量化一个图像的伪装程度。 重建保真度评分">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-11-02T08:56:13.000Z">
+<meta property="article:modified_time" content="2026-11-02T08:56:13.000Z">
+<meta property="article:author" content="Pocon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://pocon041.github.io/2026/11/02/COD%E4%B8%8Einpainting%E7%AF%A1%E6%94%B9%E5%AE%9A%E4%BD%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>伪装目标检测与inpainting篡改定位 | Pocon</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body class=" post-shell" itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pocon</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-blog">
+
+    <a href="/blog/" rel="section"><i class="fa fa-pencil-alt fa-fw"></i>Blog</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/#projects" rel="section"><i class="fa fa-code fa-fw"></i>Projects</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+  <nav class="post-topbar" aria-label="Post navigation">
+  <a class="post-brand" href="/">Pocon</a>
+  <div>
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/blog/">Blog</a>
+    <a href="/archives/">Archive</a>
+    <a href="/categories/">Categories</a>
+    <a href="/tags/">Tags</a>
+    <a href="/gallery/">Gallery</a>
+    <a href="/music/">Music</a>
+  </div>
+</nav>
+
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block has-post-cover" style="--post-cover-image: url('/images/post-covers/77972927_p0.png'); --post-cover-overlay: linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.74) 52%, rgba(255, 255, 255, 0.58) 100%); --post-cover-position: center; --post-cover-size: cover; --post-cover-repeat: no-repeat; --post-cover-blend-mode: normal" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://pocon041.github.io/2026/11/02/COD%E4%B8%8Einpainting%E7%AF%A1%E6%94%B9%E5%AE%9A%E4%BD%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Pocon">
+      <meta itemprop="description" content="Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pocon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          伪装目标检测与inpainting篡改定位
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2026-11-02 16:56:13" itemprop="dateCreated datePublished" datetime="2026-11-02T16:56:13+08:00">2026-11-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="伪装目标检测与inpainting篡改定位"><a href="#伪装目标检测与inpainting篡改定位" class="headerlink" title="伪装目标检测与inpainting篡改定位"></a>伪装目标检测与inpainting篡改定位</h1><h2 id="The-Making-and-Breaking-of-Camouflage"><a href="#The-Making-and-Breaking-of-Camouflage" class="headerlink" title="The Making and Breaking of Camouflage"></a>The Making and Breaking of Camouflage</h2><p>The Making and Breaking of Camouflage通过重构保真度$S_{R_j}$和边界可见性分数$S_b$来量化一个图像的伪装程度。</p>
+<h3 id="重建保真度评分"><a href="#重建保真度评分" class="headerlink" title="重建保真度评分"></a>重建保真度评分</h3><p>直观来说就是，前景应该能被邻接的图像块重建。如果一个目标的视觉属性能够被周围背景中的局部纹理很好地表示，那么它就具有较高地前景-背景相似性，也就更容易实现伪装。</p>
+<p>论文中的计算分了三步</p>
+<h4 id="第一步：划分前景和背景"><a href="#第一步：划分前景和背景" class="headerlink" title="第一步：划分前景和背景"></a>第一步：划分前景和背景</h4><script type="math/tex; mode=display">
+m_{fg} = erode(m)
+\\
+m_{bg} = 1-dilate(m)
+\\
+I_{fg}，I_{bg}=m_{fg}\odot I，m_{bg}\odot I</script><p>其中 $I$ 是给定的图像，$m$是其对于的分割掩码。具体操作利用了腐蚀和膨胀。通过这里我们得到了一个trimap。</p>
+<h4 id="第二步：利用背景重建前景"><a href="#第二步：利用背景重建前景" class="headerlink" title="第二步：利用背景重建前景"></a>第二步：利用背景重建前景</h4><p>我们从$I<em>{bg}$中寻找与$I</em>{fg}$尽可能相似的局部图像块，然后用这些背景图像块替换前景图像块。这里采用的方法并不基于神经网络进行图像修复，而是采用传统的基于Patch 的匹配与替换方法。具体来说，是一种局部纹理匹配方法，方法如下：</p>
+<p>假设我们从前景取了一个Patch：$P_i^{fg}\in \mathbb{R}^{7\times7\times3}$，然后从背景提取了一系列候选Patch：$P_1^{bg}，P_2^{bg}，…,P_K^{bg}$。我们 通过RGB最近邻匹配 计算前景与背景之间patch的距离，选择距离最小的patch来覆盖前景。此时我们就得到了重建后的前景</p>
+<script type="math/tex; mode=display">
+\hat{I}_{fg} = \Psi_{I_{bg}}(I_{fg})</script><h4 id="第三步：计算重建误差"><a href="#第三步：计算重建误差" class="headerlink" title="第三步：计算重建误差"></a>第三步：计算重建误差</h4><p>接下来我们将重建后地前景与原始前景进行比较，判断哪些像素可以认为是被成功重建的。具体来说，我们计算重建fg和原始fg逐像素的欧氏距离， 如果距离小于一个阈值，那么就认为重建成功。具体如下：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+    R_f(i, j) = \begin{cases}
+    1, & d(i, j) < 0.2 \|I_{fg}(i, j)\|_2 \\
+    0, & \text{otherwise}
+    \end{cases}
+\end{equation}</script><p>这里右边的阈值分为两部分，0.2是作者设置的一个超参，$||I_{fg}(i, j)|_2$是真实该像素点RGB向量的L2范数，使误差变为相对于原始像素数值尺度的大小，而不是单纯的差值。</p>
+<p>最后进行统计，将所有像素加起来求平均</p>
+<script type="math/tex; mode=display">
+S_{Rf}(I, m) = \frac{1}{N_{fg}} \sum_{(i,j) \in I_{fg}} R_f(i, j)</script><p>评分高意味着大部分前景像素能够从背景中找到足够的纹理进行重建，伪装程度高。</p>
+<h3 id="边界可见性评分"><a href="#边界可见性评分" class="headerlink" title="边界可见性评分"></a>边界可见性评分</h3><p>论文认为即使一个动物的颜色和纹理与背景高度一致，只要它的轮廓仍然清晰可见，人眼依然可能发现它。所以我们不能只计算前景和背景的相似性。</p>
+<h4 id="第一步：提取两种边界区域"><a href="#第一步：提取两种边界区域" class="headerlink" title="第一步：提取两种边界区域"></a>第一步：提取两种边界区域</h4><p>分为伪装目标边界和原始图像轮廓。</p>
+<h5 id="伪装目标边界"><a href="#伪装目标边界" class="headerlink" title="伪装目标边界"></a>伪装目标边界</h5><script type="math/tex; mode=display">
+m_b = dilate(m) - erode(m)</script><p>$m_b$ 就是我们想要标的边界</p>
+<h5 id="原始图像轮廓"><a href="#原始图像轮廓" class="headerlink" title="原始图像轮廓"></a>原始图像轮廓</h5><p>使用现成的轮廓提取方法(Off-the-shelf Contour Extraction Method)，直接对原始图像进行罗阔提取，得到的是图像中各种边缘信息，包括伪装目标与背景之间的边缘、伪装目标内部的纹理、背景纹理的边缘。</p>
+<h4 id="第二步：比较两种边界"><a href="#第二步：比较两种边界" class="headerlink" title="第二步：比较两种边界"></a>第二步：比较两种边界</h4><p>提取出的原始图像边界和伪装目标边界越<strong>不一致</strong>，伪装效果越好。懂意思就好，具体不说了。</p>
+<h2 id="Inpainting图像篡改定位"><a href="#Inpainting图像篡改定位" class="headerlink" title="Inpainting图像篡改定位"></a>Inpainting图像篡改定位</h2><p>上述思想高度借鉴了Inpainting。对于一个好的Inpainting图像，填充区域与周围背景有较高的纹理一致性，背景Patch更容易匹配篡改区域。</p>
+<p>也就是说，Inpainting的一个目标就是让被篡改区域与周围环境保持视觉一致性，而COD中的伪装目标同样具有较高的前景-背景视觉一致性。这是数据集上Inpainting与COD的联系。</p>
+<p>同样他们也是大致是一个low-level的问题， explicit visual prompting for low-level structure segmentations将这两个问题（包括但不仅限于）归纳到一起，但并未讨论两者如何联合学习。我们先从频域来讨论两者如何来联系。</p>
+<p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/CVPR2022/html/Zhong_Detecting_Camouflaged_Object_in_Frequency_Domain_CVPR_2022_paper.html">FDCOD(cvpr2022)</a> 主张COD的任务目标不仅是模拟单一RGB域中的人类视觉能力，而是要超越人类的生物视觉。例如动物在处理视觉场景时会利用更多的波段。同时发现现有方法仅仅利用图像的RGB域信息，其提升比不上backbone的升级。所以作者将频域线索融入到CNN中，并设计一种频率损失函数。</p>
+<p>图像篡改检测的结果</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>IML-only</th>
+<th>Joint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F1@.5</td>
+<td>.6073</td>
+<td><strong>.6202</strong></td>
+</tr>
+<tr>
+<td>IoU@.5</td>
+<td>.5396</td>
+<td><strong>.5563</strong></td>
+</tr>
+<tr>
+<td>AUC</td>
+<td>.9440</td>
+<td><strong>.9494</strong></td>
+</tr>
+<tr>
+<td>Oracle F1</td>
+<td>.7319</td>
+<td><strong>.7324</strong></td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>.8006</td>
+<td><strong>.8282</strong></td>
+</tr>
+<tr>
+<td>Recall</td>
+<td>.6068</td>
+<td><strong>.6112</strong></td>
+</tr>
+<tr>
+<td>FPR</td>
+<td>.0106</td>
+<td><strong>.0093</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>COD的结果</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>COD-only</th>
+<th>Joint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-measure</td>
+<td><strong>.8677</strong></td>
+<td>.8674</td>
+</tr>
+<tr>
+<td>Mean E-measure</td>
+<td>.9267</td>
+<td><strong>.9284</strong></td>
+</tr>
+<tr>
+<td>wF</td>
+<td><strong>.7813</strong></td>
+<td>.7789</td>
+</tr>
+<tr>
+<td>MAE</td>
+<td><strong>.0242</strong></td>
+<td>.0243</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/08/28/SReC/" rel="prev" title="论文笔记：Lossless Image Compression through Super-Resolution">
+      <i class="fa fa-chevron-left"></i> 论文笔记：Lossless Image Compression through Super-Resolution
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/11/27/%E4%BF%9D%E7%A0%94%E6%80%BB%E7%BB%93/" rel="next" title="23届计算机保研末9低rk">
+      23届计算机保研末9低rk <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.post-shell .post-body p').forEach(paragraph => {
+        if (paragraph.textContent.trim().toLowerCase() === '[toc]') {
+          paragraph.remove();
+        }
+      });
+
+      const copyText = async text => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const result = document.execCommand('copy');
+        textarea.remove();
+        return result;
+      };
+
+      document.querySelectorAll('.post-shell .post-body figure.highlight, .post-shell .post-body > pre:not(.mermaid)').forEach(block => {
+        if (block.querySelector('.post-code-copy')) return;
+        block.classList.add('post-code-copyable');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-code-copy';
+        button.textContent = 'Copy';
+        button.addEventListener('click', async () => {
+          const codeElement = block.matches('figure.highlight') ? block.querySelector('.code') : block;
+          const code = (codeElement ? codeElement.innerText : '').replace(/\n$/, '');
+          try {
+            await copyText(code);
+            button.textContent = 'Copied';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          } catch (error) {
+            button.textContent = 'Failed';
+            window.setTimeout(() => {
+              button.textContent = 'Copy';
+            }, 1200);
+          }
+        });
+        block.appendChild(button);
+      });
+
+      const viewer = document.createElement('div');
+      viewer.className = 'post-image-viewer';
+      viewer.innerHTML = '<button type="button" class="post-image-viewer-close">Close</button><img alt="">';
+      document.body.appendChild(viewer);
+      const viewerImage = viewer.querySelector('img');
+      const viewerState = {
+        scale: 1,
+        x: 0,
+        y: 0,
+        minScale: 1,
+        maxScale: 6,
+        isDragging: false,
+        isPinching: false,
+        startX: 0,
+        startY: 0,
+        originX: 0,
+        originY: 0,
+        touchDistance: 0,
+        touchScale: 1,
+        touchCenterX: 0,
+        touchCenterY: 0
+      };
+      const clampViewerScale = scale => Math.min(viewerState.maxScale, Math.max(viewerState.minScale, scale));
+      const applyViewerTransform = () => {
+        viewerImage.style.setProperty('--viewer-scale', viewerState.scale);
+        viewerImage.style.setProperty('--viewer-x', `${viewerState.x}px`);
+        viewerImage.style.setProperty('--viewer-y', `${viewerState.y}px`);
+      };
+      const resetViewerState = () => {
+        viewerState.scale = 1;
+        viewerState.x = 0;
+        viewerState.y = 0;
+        viewerState.isDragging = false;
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = 1;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+        viewer.classList.remove('is-dragging');
+        applyViewerTransform();
+      };
+      const zoomViewerAt = (clientX, clientY, nextScale) => {
+        const oldScale = viewerState.scale;
+        const scale = clampViewerScale(nextScale);
+        if (scale === oldScale) return;
+
+        const rect = viewerImage.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const ratio = scale / oldScale;
+        viewerState.x -= (clientX - centerX) * (ratio - 1);
+        viewerState.y -= (clientY - centerY) * (ratio - 1);
+        viewerState.scale = scale;
+
+        if (viewerState.scale === 1) {
+          viewerState.x = 0;
+          viewerState.y = 0;
+        }
+        applyViewerTransform();
+      };
+      const closeViewer = () => {
+        viewer.classList.remove('is-active', 'is-dragging');
+        document.documentElement.classList.remove('post-image-viewer-open');
+        resetViewerState();
+      };
+      const openViewer = image => {
+        resetViewerState();
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt || '';
+        viewer.classList.add('is-active');
+        document.documentElement.classList.add('post-image-viewer-open');
+      };
+      const touchDistance = touches => Math.hypot(
+        touches[0].clientX - touches[1].clientX,
+        touches[0].clientY - touches[1].clientY
+      );
+      const touchCenter = touches => ({
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      });
+
+      document.querySelectorAll('.post-shell .post-body img').forEach(image => {
+        image.tabIndex = 0;
+        image.addEventListener('click', event => {
+          event.preventDefault();
+          openViewer(image);
+        });
+        image.addEventListener('keydown', event => {
+          if (event.key === 'Enter') {
+            image.click();
+          }
+        });
+      });
+
+      viewer.addEventListener('wheel', event => {
+        if (!viewer.classList.contains('is-active')) return;
+        event.preventDefault();
+        const factor = event.deltaY < 0 ? 1.14 : 0.88;
+        zoomViewerAt(event.clientX, event.clientY, viewerState.scale * factor);
+      }, { passive: false });
+
+      viewerImage.addEventListener('dblclick', event => {
+        event.preventDefault();
+        resetViewerState();
+      });
+
+      viewerImage.addEventListener('pointerdown', event => {
+        if (!viewer.classList.contains('is-active') || event.button > 0 || viewerState.isPinching) return;
+        if (event.pointerType === 'touch' && event.isPrimary === false) return;
+        event.preventDefault();
+        viewerState.isDragging = true;
+        viewerState.startX = event.clientX;
+        viewerState.startY = event.clientY;
+        viewerState.originX = viewerState.x;
+        viewerState.originY = viewerState.y;
+        viewer.classList.add('is-dragging');
+        viewerImage.setPointerCapture(event.pointerId);
+      });
+
+      viewerImage.addEventListener('pointermove', event => {
+        if (!viewerState.isDragging || viewerState.isPinching) return;
+        viewerState.x = viewerState.originX + event.clientX - viewerState.startX;
+        viewerState.y = viewerState.originY + event.clientY - viewerState.startY;
+        applyViewerTransform();
+      });
+
+      const stopViewerDrag = event => {
+        if (!viewerState.isDragging) return;
+        viewerState.isDragging = false;
+        viewer.classList.remove('is-dragging');
+        if (event && viewerImage.hasPointerCapture(event.pointerId)) {
+          viewerImage.releasePointerCapture(event.pointerId);
+        }
+      };
+      viewerImage.addEventListener('pointerup', stopViewerDrag);
+      viewerImage.addEventListener('pointercancel', stopViewerDrag);
+
+      viewerImage.addEventListener('touchstart', event => {
+        if (event.touches.length !== 2) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.isPinching = true;
+        viewerState.isDragging = false;
+        viewerState.touchDistance = touchDistance(event.touches);
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        viewer.classList.remove('is-dragging');
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchmove', event => {
+        if (event.touches.length !== 2 || !viewerState.touchDistance) return;
+        event.preventDefault();
+        const center = touchCenter(event.touches);
+        viewerState.x += center.x - viewerState.touchCenterX;
+        viewerState.y += center.y - viewerState.touchCenterY;
+        viewerState.touchCenterX = center.x;
+        viewerState.touchCenterY = center.y;
+        applyViewerTransform();
+        const nextScale = viewerState.touchScale * (touchDistance(event.touches) / viewerState.touchDistance);
+        zoomViewerAt(center.x, center.y, nextScale);
+      }, { passive: false });
+
+      viewerImage.addEventListener('touchend', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewerImage.addEventListener('touchcancel', () => {
+        viewerState.isPinching = false;
+        viewerState.touchDistance = 0;
+        viewerState.touchScale = viewerState.scale;
+        viewerState.touchCenterX = 0;
+        viewerState.touchCenterY = 0;
+      });
+
+      viewer.addEventListener('click', event => {
+        if (event.target === viewer || event.target.classList.contains('post-image-viewer-close')) {
+          closeViewer();
+        }
+      });
+      window.addEventListener('keyup', event => {
+        if (event.key === 'Escape') {
+          closeViewer();
+        }
+      });
+    });
+  </script>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%AA%E8%A3%85%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E4%B8%8Einpainting%E7%AF%A1%E6%94%B9%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.</span> <span class="nav-text">伪装目标检测与inpainting篡改定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Making-and-Breaking-of-Camouflage"><span class="nav-number">1.1.</span> <span class="nav-text">The Making and Breaking of Camouflage</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%BB%BA%E4%BF%9D%E7%9C%9F%E5%BA%A6%E8%AF%84%E5%88%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">重建保真度评分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%92%E5%88%86%E5%89%8D%E6%99%AF%E5%92%8C%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">第一步：划分前景和背景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%A9%E7%94%A8%E8%83%8C%E6%99%AF%E9%87%8D%E5%BB%BA%E5%89%8D%E6%99%AF"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">第二步：利用背景重建前景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E8%AE%A1%E7%AE%97%E9%87%8D%E5%BB%BA%E8%AF%AF%E5%B7%AE"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">第三步：计算重建误差</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%95%8C%E5%8F%AF%E8%A7%81%E6%80%A7%E8%AF%84%E5%88%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">边界可见性评分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E6%8F%90%E5%8F%96%E4%B8%A4%E7%A7%8D%E8%BE%B9%E7%95%8C%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">第一步：提取两种边界区域</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%AA%E8%A3%85%E7%9B%AE%E6%A0%87%E8%BE%B9%E7%95%8C"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">伪装目标边界</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E5%9B%BE%E5%83%8F%E8%BD%AE%E5%BB%93"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">原始图像轮廓</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E6%AF%94%E8%BE%83%E4%B8%A4%E7%A7%8D%E8%BE%B9%E7%95%8C"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">第二步：比较两种边界</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inpainting%E5%9B%BE%E5%83%8F%E7%AF%A1%E6%94%B9%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.2.</span> <span class="nav-text">Inpainting图像篡改定位</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pocon</p>
+  <div class="site-description" itemprop="description">Pocon's personal blog about Computer Vision, CTF, Multimedia Forensics, Web Security, Pwn and Machine Learning.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pocon</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+    
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+    
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+if (mermaidBlocks.length) {
+  mermaidBlocks.forEach(block => {
+    block.querySelectorAll('.post-code-copy').forEach(button => button.remove());
+  });
+
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+    if (mermaid.run) {
+      mermaid.run({ querySelector: 'pre.mermaid' });
+    } else {
+      mermaid.init(undefined, mermaidBlocks);
+    }
+  }, window.mermaid);
+}
+</script>
+
+
+  
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
